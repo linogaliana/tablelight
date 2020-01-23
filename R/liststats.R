@@ -13,6 +13,7 @@ liststats <- function(object, ...){
 
 
 #' @rdname liststats
+#' @importFrom Hmisc capitalize
 #' @export
 liststats.light.zeroinfl <- function(object, ...){
 
@@ -177,7 +178,8 @@ liststats.default <- function(object, ...){
   return(df)
 }
 
-
+#' @rdname stats::nobs
+#' @importFrom stats nobs
 #' @export
 nobs.zeroinfl <- function(object, ...) return(object$n)
 
