@@ -511,7 +511,8 @@ light_table.default <- function(
 
     body_table <- reshape2::melt(
       data.frame(text_coeff), id.vars = "variable",
-      variable.name = "obj"
+      variable.name = "obj",
+      factorsAsStrings=FALSE
     )
 
     list_variables_model <-  unique(body_table[,'variable'])
