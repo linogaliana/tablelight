@@ -5,6 +5,8 @@
 #' @param ... Additional arguments
 #' @return A character vector with names
 #'  that can be passed to latex
+#' @importFrom stats logLik
+#' @importFrom stats BIC
 #' @export
 liststats <- function(object, ...){
   UseMethod("liststats")
@@ -178,7 +180,7 @@ liststats.default <- function(object, ...){
   return(df)
 }
 
-#' @rdname stats::nobs
+#' @rdname nobs
 #' @importFrom stats nobs
 #' @export
 nobs.zeroinfl <- function(object, ...) return(object$n)

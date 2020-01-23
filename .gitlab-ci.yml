@@ -22,7 +22,6 @@ variables:
   R_LIBS_USER: "$CI_PROJECT_DIR/ci/lib"
   CHECK_DIR: "$CI_PROJECT_DIR/ci/logs"
   BUILD_LOGS_DIR: "$CI_PROJECT_DIR/ci/logs/$CI_PROJECT_NAME.Rcheck"
-  CODECOV_TOKEN: "c1101b3e-9bab-4c94-843c-2faa6b809598"
   CXX1X: "g++"
   CXX1XSTD: "-std=c++0x"
   CFLAGS: "-Wall -pedantic -fdiagnostics-color=always"
