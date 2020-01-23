@@ -46,17 +46,18 @@
 #'
 #' model_list <- lapply(list(fm_zip, fm_zip2,
 #'                           glm_model, fm_zip3,
-#'                           fm_zip5), gravity::strip)
+#'                           fm_zip5), texlight::strip)
 #'
 #' cat(
-#'   gravity:::light_table(model_list = model_list,
+#'   texlight::light_table(models = model_list,
 #'                         covariate.labels = c("x1","x2")),
 #'   sep = "\n"
 #' )
 #'
 #' @importFrom qdap mgsub
+#' @importFrom reshape2 melt
+#' @importFrom stats na.omit
 #' @export
-#'
 
 light_table <- function(object, ...){
   UseMethod("light_table")
