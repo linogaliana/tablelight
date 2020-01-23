@@ -12,6 +12,7 @@ listcoeff <- function(object, ...){
 }
 
 #' @rdname listcoeff
+#' @export
 listcoeff.light.zeroinfl <- function(object, ...){
 
   if (!inherits(object, "light.zeroinfl")) stop("Object is not light.zeroinfl")
@@ -27,6 +28,8 @@ listcoeff.light.zeroinfl <- function(object, ...){
   return(allcoeffs)
 }
 
+#' @rdname listcoeff
+#' @export
 listcoeff.light.glm <- function(object, ...){
 
   if (!inherits(object, "light.glm")) stop("Object is not light.glm")
