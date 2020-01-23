@@ -32,7 +32,8 @@ testthat::test_that(
   "add_link = TRUE does not modify other rows",
   testthat::expect_equal(
     stats_ols_bis[stats_ols_bis$val != "", c('stat','val')],
-    stats_ols[, c('stat','val')]
+    stats_ols[, c('stat','val')],
+    check.attributes = FALSE
   )
 )
 
@@ -75,10 +76,10 @@ testthat::test_that(
 # GLM.NB OBJECT ---------------------
 
 
-glmnb <- MASS::glm.nb(
-  I(round(Sepal.Length)) ~ Sepal.Width,
-  data = iris
-)
+quine <- MASS::quine
+
+glmnb <- MASS::glm.nb(Days ~ Sex/(Age + Eth*Lrn), data = quine)
+
 
 
 stats_glmnb <- texlight::liststats(glmnb)
@@ -128,20 +129,24 @@ testthat::test_that(
 
 # ZEROINFL OBJECT ---------------------
 
-## POISSON COUNT DISTRIBUTION ========
+## NEGBIN COUNT DISTRIBUTION ============
 
-iris$y <- iris$`Sepal.Length`
-iris$y[sample(seq_len(nrow(iris)),
-              .1*nrow(iris),
-              replace = FALSE)] <- 0
+quine$y <- quine$Days
 
-zeroinfl <- pscl::zeroinfl(
-  I(round(y)) ~ Sepal.Width,
-  data = iris
+quine$y[sample(seq_len(nrow(quine)),
+               .4*nrow(quine),
+               replace = FALSE)] <- 0
+
+zeroinfl_negbin <- pscl::zeroinfl(
+  y ~ Sex/(Age + Eth*Lrn),
+  data = quine,
+  dist = "negbin"
 )
 
-stats_zeroinfl <- texlight::liststats(zeroinfl)
-stats_zeroinfl <- texlight::liststats(zeroinfl, add_link = TRUE,
+
+
+stats_zeroinfl_negbin <- texlight::liststats(zeroinfl_negbin)
+stats_bis_zeroinfl_negbin <- texlight::liststats(zeroinfl_negbin, add_link = TRUE,
                                        add_alpha = TRUE)
 
 
@@ -149,17 +154,92 @@ stats_zeroinfl <- texlight::liststats(zeroinfl, add_link = TRUE,
 testthat::test_that(
   "Default method gives information for glm.nb objects",
   testthat::expect_equal(
-    nrow(na.omit(zeroinfl)),
-    nrow(zeroinfl)
+    nrow(na.omit(zeroinfl_negbin)),
+    nrow(zeroinfl_negbin)
+  )
+)
+
+testthat::test_that(
+  "If you add argument add_link = TRUE, count distribution added but no selection distribution",
+  testthat::expect_equal(
+    as.character(stats_bis_zeroinfl_negbin[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
+                                       pattern = "(Count|Selection)"),'val']),
+    c("Negative Binomial", 'Logit')
   )
 )
 
 
-## NEGATIVE BINOMIAL COUNT DISTRIBUTION ========
-
-zeroinfl2 <- pscl::zeroinfl(
-  I(round(y)) ~ Sepal.Width,
-  data = iris,
-  dist = "negbin"
+testthat::test_that(
+  "If you add argument add_alpha = TRUE, dispersion parameter is returned",{
+    testthat::expect_equal(
+      length(as.character(stats_glmnb_bis[grepl(x = as.character(stats_glmnb_bis$stat),
+                                                pattern = "alpha"),'stat'])
+      ),
+      1L
+    )
+    testthat::expect_equal(
+      as.character(
+        stats_glmnb_bis[grepl(x = as.character(stats_glmnb_bis$stat),
+                              pattern = "alpha"),'val']
+      ),
+      as.character(
+        format(1/glmnb$theta, digits = 3L, nsmall = 3L)
+      )
+    )
+  }
 )
 
+
+## POISSON COUNT DISTRIBUTION ============
+
+zeroinfl_negbin <- pscl::zeroinfl(
+  y ~ Sex/(Age + Eth*Lrn),
+  data = quine,
+  dist = "poisson"
+)
+
+
+
+stats_zeroinfl_negbin <- texlight::liststats(zeroinfl_negbin)
+stats_bis_zeroinfl_negbin <- texlight::liststats(zeroinfl_negbin, add_link = TRUE,
+                                                 add_alpha = TRUE)
+
+
+
+testthat::test_that(
+  "Default method gives information for glm.nb objects",
+  testthat::expect_equal(
+    nrow(na.omit(zeroinfl_negbin)),
+    nrow(zeroinfl_negbin)
+  )
+)
+
+testthat::test_that(
+  "If you add argument add_link = TRUE, count distribution added but no selection distribution",
+  testthat::expect_equal(
+    as.character(stats_bis_zeroinfl_negbin[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
+                                                 pattern = "(Count|Selection)"),'val']),
+    c("Poisson", 'Logit')
+  )
+)
+
+
+testthat::test_that(
+  "If you add argument add_alpha = TRUE, dispersion parameter is returned",{
+    testthat::expect_equal(
+      length(as.character(stats_glmnb_bis[grepl(x = as.character(stats_glmnb_bis$stat),
+                                                pattern = "alpha"),'stat'])
+      ),
+      1L
+    )
+    testthat::expect_equal(
+      as.character(
+        stats_glmnb_bis[grepl(x = as.character(stats_glmnb_bis$stat),
+                              pattern = "alpha"),'val']
+      ),
+      as.character(
+        format(1/glmnb$theta, digits = 3L, nsmall = 3L)
+      )
+    )
+  }
+)

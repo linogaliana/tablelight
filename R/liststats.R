@@ -113,18 +113,21 @@ liststats.default <- function(object, ...){
 
   if ('add_link' %in% names(args)){
 
-    if (inherits(object, "glm")){
-      # Sometimes, link is given with parenthesis
-      link_count <- gsub("\\s*\\([^\\)]+\\)", "",
-                         Hmisc::capitalize(object$family$family))
-    } else{
-      link_count <- ""
-    }
 
     if (!(inherits(object, "zeroinfl"))){
+      if (inherits(object, "glm")){
+        # Sometimes, link is given with parenthesis
+        link_count <- gsub("\\s*\\([^\\)]+\\)", "",
+                           Hmisc::capitalize(object$family$family))
+      } else{
+        link_count <- ""
+      }
       link_selection <- ""
+
     } else{
-      link_selection <- ""
+      link_count <- Hmisc::capitalize(object$dist)
+      link_selection <- Hmisc::capitalize(object$link)
+      if (object$dist == "negbin") link_count <- "Negative Binomial"
     }
 
     link_labels <- c(
@@ -167,7 +170,7 @@ liststats.default <- function(object, ...){
   if ('add_alpha' %in% names(args)){
     df <- rbind(data.frame(stat = "$\\alpha$ (dispersion)",
                            order = 0,
-                           val = extract_alpha(object), df)
+                           val = extract_alpha(object)), df
     )
   }
 
@@ -176,7 +179,7 @@ liststats.default <- function(object, ...){
 
 
 #' @export
-nobs.zeroinfl <- function(object, ...) return(zeroinfl$n)
+nobs.zeroinfl <- function(object, ...) return(object$n)
 
 
 
