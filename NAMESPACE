@@ -3,6 +3,7 @@
 S3method(extract_alpha,default)
 S3method(extract_alpha,glm)
 S3method(extract_alpha,zeroinfl)
+S3method(listcoeff,default)
 S3method(listcoeff,light.glm)
 S3method(listcoeff,light.zeroinfl)
 S3method(liststats,default)
