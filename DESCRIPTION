@@ -21,4 +21,5 @@ RoxygenNote: 6.1.0
 Imports: 
     Hmisc,
     stats,
-    qdap
+    qdap,
+    reshape2
