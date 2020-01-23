@@ -20,4 +20,5 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.0
 Imports: 
     Hmisc,
-    stats
+    stats,
+    qdap
