@@ -118,6 +118,7 @@ liststats.default <- function(object, ...){
 
 
     if (!(inherits(object, "zeroinfl"))){
+
       if (inherits(object, "glm")){
         # Sometimes, link is given with parenthesis
         link_count <- gsub("\\s*\\([^\\)]+\\)", "",
@@ -140,6 +141,7 @@ liststats.default <- function(object, ...){
 
 
   }
+
 
   stat_labels <- c(
     "Observations",
@@ -176,6 +178,15 @@ liststats.default <- function(object, ...){
                            val = extract_alpha(object)), df
     )
   }
+
+  if ('add_sigma' %in% names(args)){
+    est_sigma <- mean(sigma(object))
+    df <- rbind(data.frame(stat = "$\\widehat{\\sigma}$",
+                           order = -1,
+                           val = est_sigma), df
+    )
+  }
+
 
   return(df)
 }

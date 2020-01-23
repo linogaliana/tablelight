@@ -32,7 +32,6 @@ extract_alpha.zeroinfl <- function(object, ...){
   )
 }
 
-
 #' @rdname extract_alpha
 #' @export
 extract_alpha.glm <- function(object, ...){
