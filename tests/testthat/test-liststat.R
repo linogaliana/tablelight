@@ -243,3 +243,24 @@ testthat::test_that(
     )
   }
 )
+
+
+# oglmx OBJECTS -------------------
+
+
+oglm <- oglmx::oglmx(
+  I(round(y)) ~ Sepal.Length + factor(Species) ,
+  data = iris
+)
+
+
+stats_oglm <- texlight::liststats(oglm)
+
+
+testthat::test_that(
+  "Default method gives information for OLS",
+  testthat::expect_equal(
+    nrow(na.omit(stats_oglm)),
+    nrow(stats_oglm)
+  )
+)
