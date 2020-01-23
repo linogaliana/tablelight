@@ -1,3 +1,15 @@
+
+#' Extract summary table for coefficients
+#'  estimates
+#'
+#' @param object A regression object
+#' @param ... Additional parameters
+#'
+#' @return Returns coefficient values,
+#'  standard errors, t-stat (or z-stat)
+#'  and pvalues
+
+
 #' @export
 secoeff <- function(object, ...){
   UseMethod("secoeff")
@@ -5,19 +17,18 @@ secoeff <- function(object, ...){
 
 #' @rdname secoeff
 #' @export
-secoeff.default  <- function(object, tol = 1e-20, ...){
+secoeff.default  <- function(object, ...){
 
   return(
-    summary(object)$coefficients
+    summary(object, ...)$coefficients
   )
 
 }
 
 #' @rdname secoeff
 #' @export
-secoeff.oglmx <- function(object, tol = 1e-20, ...){
+secoeff.oglmx <- function(object, ...){
 
-  return(summary(object)$estimate)
-  summary(oglm)$estimate
+  return(summary(object, ...)$estimate)
 
 }
