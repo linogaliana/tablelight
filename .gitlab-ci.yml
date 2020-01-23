@@ -12,6 +12,7 @@ before_script:
    - HTTPS_PROXY=http://proxy-rie.http.insee.fr:8080/ git submodule sync --recursive
    - HTTPS_PROXY=http://proxy-rie.http.insee.fr:8080/ git submodule update --init --recursive
    - Rscript -e "devtools::install_deps(upgrade = 'always')"
+   - Rscript -e "devtools::install_deps(upgrade = 'always', type = 'Suggests')"
 
 
 variables:
