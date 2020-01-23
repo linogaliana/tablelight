@@ -1,4 +1,4 @@
-testthat::context("listcoeff return the coefficients")
+testthat::context("liststat return the expected list of summary statistics")
 
 
 # OLS ------------------------
@@ -247,9 +247,10 @@ testthat::test_that(
 
 # oglmx OBJECTS -------------------
 
+iris$y_r <- as.numeric(iris$Species)
 
 oglm <- oglmx::oglmx(
-  I(round(y)) ~ Sepal.Length + factor(Species) ,
+  y_r ~ Sepal.Length ,
   data = iris
 )
 
@@ -264,3 +265,4 @@ testthat::test_that(
     nrow(stats_oglm)
   )
 )
+
