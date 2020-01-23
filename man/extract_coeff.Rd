@@ -14,6 +14,11 @@ extract_coeff(object, ...)
 
 \method{extract_coeff}{oglmx}(object, ...)
 }
+\arguments{
+\item{object}{Regression objects}
+
+\item{...}{Additional parameters}
+}
 \value{
 Coefficients ready to be merged
 to produce a latex table

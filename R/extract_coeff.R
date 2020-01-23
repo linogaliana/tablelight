@@ -2,6 +2,9 @@
 #'  related information from statistical
 #'  models
 #'
+#' @param object Regression objects
+#' @param ... Additional parameters
+#'
 #' @return Coefficients ready to be merged
 #'  to produce a latex table
 

@@ -4,14 +4,20 @@
 \alias{light_table}
 \title{Produce latex tables from stripped objects to reduce memory needs}
 \usage{
-light_table(object, ...)
+light_table(object, modeltype = "outcome", title = "Title",
+  label = "label", dep.var.labels = "Label dep.var.labels",
+  dep.var.separate = NULL, column.labels = "blab",
+  column.separate = NULL, covariate.labels = NULL,
+  order_variable = NULL, stats.var.separate = NULL,
+  notes = "notes to add", add.lines = "",
+  rules_between_covariates = NULL, omit = "", landscape = FALSE, ...)
 }
 \arguments{
-\item{model_list}{List of models}
+\item{object}{List of object}
 
 \item{modeltype}{Character vectors indicating whether
-we should use selection or outcome model. Ignored if
-model is not zeroinfl}
+we should use selection or outcome object. Ignored if
+object is not zeroinfl}
 
 \item{title}{Table caption}
 
@@ -19,13 +25,15 @@ model is not zeroinfl}
 
 \item{dep.var.labels}{Label for dependent variables}
 
-\item{column.labels}{Label for columns}
+\item{dep.var.separate}{Numeric vector that specifies how
+\code{dep.var.labels} should be laid out across regression
+table columns. A value of c(2, 1, 3), for instance, will
+apply the first label to the two first columns, the second
+label to the third column, and the third label will apply
+to the following three columns (i.e., columns
+number four, five and six).}
 
-\item{covariate.labels}{A character vector of labels for
-columns in regression tables.
-Their layout, in terms of the number of columns
-associated with each label, is given by the
-argument \code{column.separate}.}
+\item{column.labels}{Label for columns}
 
 \item{column.separate}{A numeric vector that specifies how
 column.labels should be laid out across regression table
@@ -38,17 +46,44 @@ or the regression table contains more columns than are
 referred to in \code{column.separate}, a value of \code{1}
 is assumed for each \emph{excess} column label.}
 
-\item{add.lines}{Rows to add in model statistics part}
+\item{covariate.labels}{A character vector of labels for
+columns in regression tables.
+Their layout, in terms of the number of columns
+associated with each label, is given by the
+argument \code{column.separate}.}
+
+\item{order_variable}{A vector that indicates the order
+in which variables will appear in the output.}
 
 \item{notes}{Notes that should be added at the end}
 
+\item{add.lines}{Rows to add in object statistics part}
+
+\item{rules_between_covariates}{A numeric vector that specifies how
+rules should be laid out across rows of the regression table}
+
 \item{omit}{List of variables that should be removed from
-the table
+the table}
+
+\item{landscape}{Logical value indicating whether we want to
+use a landscape table. Default to \code{FALSE}}
+
+\item{...}{Additional arguments that should be passed. See, for instance,
+\link{liststats}
 
 This function is designed to produce \code{latex} tables with
 stripped objects (see \link{strip}). It follows
 \link[stargazer]{stargazer} standards but proposes a
 simplified framework. Customization is limiteds}
+
+\item{stat.var.separate}{Numeric vector that specifies how
+statistics should be laid out across regression
+table columns. A value of c(2, 1, 3), for instance, will
+apply the first statistics to the two first columns, the second
+statistics to the third column, and the statistics
+will apply
+to the following three columns (i.e., columns
+number four, five and six).}
 }
 \value{
 A character vector.
@@ -68,10 +103,10 @@ fm_zip5   <- MASS::glm.nb(art ~ 1, data = bioChemists)
 
 model_list <- lapply(list(fm_zip, fm_zip2,
                           glm_model, fm_zip3,
-                          fm_zip5), gravity::strip)
+                          fm_zip5), texlight::strip)
 
 cat(
-  gravity:::light_table(model_list = model_list,
+  texlight::light_table(object = model_list,
                         covariate.labels = c("x1","x2")),
   sep = "\\n"
 )

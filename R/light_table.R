@@ -1,18 +1,35 @@
 #' Produce latex tables from stripped objects to reduce memory needs
 #'
-#' @param model_list List of models
+#' @param object List of object
 #' @param modeltype Character vectors indicating whether
-#'  we should use selection or outcome model. Ignored if
-#'  model is not zeroinfl
+#'  we should use selection or outcome object. Ignored if
+#'  object is not zeroinfl
 #' @param title Table caption
 #' @param label Table label
 #' @param dep.var.labels Label for dependent variables
+#' @param dep.var.separate Numeric vector that specifies how
+#'  `dep.var.labels` should be laid out across regression
+#'  table columns. A value of c(2, 1, 3), for instance, will
+#'  apply the first label to the two first columns, the second
+#'  label to the third column, and the third label will apply
+#'  to the following three columns (i.e., columns
+#'  number four, five and six).
+#' @param stat.var.separate Numeric vector that specifies how
+#'  statistics should be laid out across regression
+#'  table columns. A value of c(2, 1, 3), for instance, will
+#'  apply the first statistics to the two first columns, the second
+#'  statistics to the third column, and the statistics
+#'  will apply
+#'  to the following three columns (i.e., columns
+#'  number four, five and six).
 #' @param column.labels Label for columns
 #' @param covariate.labels A character vector of labels for
 #'  columns in regression tables.
 #'  Their layout, in terms of the number of columns
 #'  associated with each label, is given by the
 #'  argument `column.separate`.
+#' @param order_variable A vector that indicates the order
+#'  in which variables will appear in the output.
 #' @param column.separate A numeric vector that specifies how
 #'  column.labels should be laid out across regression table
 #'  columns. A value of `c(2, 1, 3)`, for instance, will apply
@@ -23,10 +40,16 @@
 #'  or the regression table contains more columns than are
 #'  referred to in `column.separate`, a value of `1`
 #'  is assumed for each *excess* column label.
-#' @param add.lines Rows to add in model statistics part
+#' @param add.lines Rows to add in object statistics part
 #' @param notes Notes that should be added at the end
 #' @param omit List of variables that should be removed from
 #'  the table
+#' @param rules_between_covariates A numeric vector that specifies how
+#'  rules should be laid out across rows of the regression table
+#' @param landscape Logical value indicating whether we want to
+#'  use a landscape table. Default to `FALSE`
+#' @param ... Additional arguments that should be passed. See, for instance,
+#'   \link{liststats}
 #'
 #' This function is designed to produce `latex` tables with
 #'  stripped objects (see \link{strip}). It follows
@@ -49,7 +72,7 @@
 #'                           fm_zip5), texlight::strip)
 #'
 #' cat(
-#'   texlight::light_table(models = model_list,
+#'   texlight::light_table(object = model_list,
 #'                         covariate.labels = c("x1","x2")),
 #'   sep = "\n"
 #' )
@@ -59,13 +82,29 @@
 #' @importFrom stats na.omit
 #' @export
 
-light_table <- function(object, ...){
+light_table <- function(object,
+                        modeltype = "outcome",
+                        title = "Title",
+                        label = "label",
+                        dep.var.labels = "Label dep.var.labels",
+                        dep.var.separate = NULL,
+                        column.labels = "blab",
+                        column.separate = NULL,
+                        covariate.labels = NULL,
+                        order_variable = NULL,
+                        stats.var.separate = NULL,
+                        notes = "notes to add",
+                        add.lines = "",
+                        rules_between_covariates = NULL,
+                        omit = "",
+                        landscape = FALSE,
+                        ...){
   UseMethod("light_table")
 }
 
 #' @export
 light_table.default <- function(
-  model,
+  object,
   modeltype = "outcome",
   title = "Title",
   label = "label",
@@ -83,9 +122,11 @@ light_table.default <- function(
   landscape = FALSE,
   ...){
 
+
+
   ncols_models <- 1L
 
-  coeff_data <- extract_coeff(model)
+  coeff_data <- extract_coeff(object)
 
 
   # PART I : HEAD -------
@@ -230,7 +271,7 @@ light_table.default <- function(
     if (ncols_models>1){
       order_variable <- unique(do.call(c, lapply(model_list, listcoeff)))
     } else{
-      order_variable <- unique(listcoeff(model))
+      order_variable <- unique(listcoeff(object))
     }
   }
 
@@ -346,11 +387,11 @@ light_table.default <- function(
   # })
 
   if (ncols_models>1){
-    statsdf <- lapply(model, liststats, ...)
+    statsdf <- lapply(object, liststats, ...)
     statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
                       statsdf)
   } else{
-    statsdf <- liststats(model, ...)
+    statsdf <- liststats(object, ...)
   }
 
   statsdf <- statsdf[order(statsdf$order),]
@@ -418,8 +459,8 @@ light_table.default <- function(
 
 #' @export
 light_table.list <- function(
-  models,
-  modeltype = list("outcome", length(models)),
+  object,
+  modeltype = list("outcome", length(object)),
   title = "Title",
   label = "label",
   dep.var.labels = "Label dep.var.labels",
@@ -436,9 +477,9 @@ light_table.list <- function(
   landscape = FALSE,
   ...){
 
-  ncols_models <- length(models)
+  ncols_models <- length(object)
 
-  coeff_data <- lapply(models, extract_coeff)
+  coeff_data <- lapply(object, extract_coeff)
 
 
   # PART I : HEAD -------
@@ -575,7 +616,7 @@ light_table.list <- function(
   coeff_body <- coeff_body[!(coeff_body[,'variable'] == "Log(theta)"),]
 
 
-  order_variable <- unique(do.call(c, lapply(models, listcoeff)))
+  order_variable <- unique(do.call(c, lapply(object, listcoeff)))
 
 
   order_data <- data.frame(
@@ -684,9 +725,9 @@ light_table.list <- function(
   #   return(df)
   # })
 
-    statsdf <- lapply(models, liststats, ...)
-    statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
-                      statsdf)
+  statsdf <- lapply(object, liststats, ...)
+  statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
+                    statsdf)
 
   statsdf <- statsdf[order(statsdf$order),]
   statsdf <- statsdf[, names(statsdf) != "order"]

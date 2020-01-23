@@ -2,9 +2,22 @@
 #'  to econometric models
 #'
 #' @param object An object
-#' @param ... Additional arguments
+#' @param ... Additional arguments. See `details`
 #' @return A character vector with names
 #'  that can be passed to latex
+#'
+#' @details The following arguments add statistics
+#' \itemize{
+#'   \item `add_link = TRUE`: Add two rows informing
+#'     on the count and selection distributions
+#'     used in `object` (possibly empty)
+#'   \item `add_alpha = TRUE`: Add a row on the
+#'     dispersion parameter for negative binomial
+#'     models (possibly empty)
+#'   \item `add_sigma = TRUE`: Add a row on the
+#'     estimated standard deviation (see \link[stats]{sigma})
+#' }
+#'
 #' @importFrom stats logLik
 #' @importFrom stats BIC
 #' @export

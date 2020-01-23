@@ -19,7 +19,7 @@ liststats(object, ...)
 \arguments{
 \item{object}{An object}
 
-\item{...}{Additional arguments}
+\item{...}{Additional arguments. See \code{details}}
 }
 \value{
 A character vector with names
@@ -28,4 +28,17 @@ that can be passed to latex
 \description{
 A small method to extract statistics names relevent
 to econometric models
+}
+\details{
+The following arguments add statistics
+\itemize{
+\item \code{add_link = TRUE}: Add two rows informing
+on the count and selection distributions
+used in \code{object} (possibly empty)
+\item \code{add_alpha = TRUE}: Add a row on the
+dispersion parameter for negative binomial
+models (possibly empty)
+\item \code{add_sigma = TRUE}: Add a row on the
+estimated standard deviation (see \link[stats]{sigma})
+}
 }
