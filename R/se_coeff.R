@@ -32,3 +32,30 @@ secoeff.oglmx <- function(object, ...){
   return(summary(object, ...)$estimate)
 
 }
+
+
+#' @rdname secoeff
+#' @export
+secoeff.light.zeroinfl <- function(object, ...){
+
+  args <- list(...)
+
+  if ('modeltype' %in% names(args)){
+
+    if (args[['modeltype']] %in% c("count","outcome")){
+      return(
+        object$coefficients$count
+      )
+    } else{
+      return(
+        object$coefficients$zero
+      )
+    }
+
+  } else{
+    return(
+      object$coefficients
+    )
+  }
+
+}
