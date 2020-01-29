@@ -55,6 +55,15 @@ argument \code{column.separate}.}
 \item{order_variable}{A vector that indicates the order
 in which variables will appear in the output.}
 
+\item{stats.var.separate}{Numeric vector that specifies how
+statistics should be laid out across regression
+table columns. A value of c(2, 1, 3), for instance, will
+apply the first statistics to the two first columns, the second
+statistics to the third column, and the statistics
+will apply
+to the following three columns (i.e., columns
+number four, five and six).}
+
 \item{notes}{Notes that should be added at the end}
 
 \item{add.lines}{Rows to add in object statistics part}
@@ -75,15 +84,6 @@ This function is designed to produce \code{latex} tables with
 stripped objects (see \link{strip}). It follows
 \link[stargazer]{stargazer} standards but proposes a
 simplified framework. Customization is limiteds}
-
-\item{stat.var.separate}{Numeric vector that specifies how
-statistics should be laid out across regression
-table columns. A value of c(2, 1, 3), for instance, will
-apply the first statistics to the two first columns, the second
-statistics to the third column, and the statistics
-will apply
-to the following three columns (i.e., columns
-number four, five and six).}
 }
 \value{
 A character vector.
@@ -92,7 +92,7 @@ A character vector.
 Produce latex tables from stripped objects to reduce memory needs
 }
 \examples{
-data("bioChemists", package = "pscl")
+\dontrun{data("bioChemists", package = "pscl")
 
 fm_zip    <- pscl::zeroinfl(art ~ . | ., data = bioChemists)
 fm_zip2   <- pscl::zeroinfl(art ~ 1 | ., data = bioChemists)
@@ -110,5 +110,6 @@ cat(
                         covariate.labels = c("x1","x2")),
   sep = "\\n"
 )
+}
 
 }

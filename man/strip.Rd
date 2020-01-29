@@ -14,21 +14,21 @@
 \usage{
 strip(object, ...)
 
-\method{strip}{glm}(object)
+\method{strip}{glm}(object, ...)
 
-\method{strip}{lm}(object)
+\method{strip}{lm}(object, ...)
 
-\method{strip}{zeroinfl}(object)
+\method{strip}{zeroinfl}(object, ...)
 
-\method{strip}{summary.glm}(object)
+\method{strip}{summary.glm}(object, ...)
 
-\method{strip}{selection}(object)
+\method{strip}{selection}(object, ...)
 
-\method{strip}{summary.lm}(object)
+\method{strip}{summary.lm}(object, ...)
 
-\method{strip}{summary.selection}(object)
+\method{strip}{summary.selection}(object, ...)
 
-\method{strip}{summary.zeroinfl}(object)
+\method{strip}{summary.zeroinfl}(object, ...)
 }
 \arguments{
 \item{object}{A regression object or summary.

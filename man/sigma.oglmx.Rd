@@ -4,7 +4,7 @@
 \alias{sigma.oglmx}
 \title{Recover residual standard deviation from ordered discrete model}
 \usage{
-\method{sigma}{oglmx}(object, newdata = NULL)
+\method{sigma}{oglmx}(object, newdata = NULL, ...)
 }
 \arguments{
 \item{object}{A \code{oglmx} model}

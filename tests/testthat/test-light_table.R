@@ -16,7 +16,7 @@ oglm <- oglmx::oglmx(
 )
 
 testthat::expect_warning(
-  x <- texlight::light_table(model = oglm,
+  x <- texlight::light_table(oglm,
                              modeltype = "outcome"),
   "attributes are not identical across measure variables"
 )
@@ -28,7 +28,7 @@ testthat::expect_equal(
 )
 
 testthat::expect_warning(
-  x2 <- texlight::light_table(model = list(oglm, oglm),
+  x2 <- texlight::light_table(list(oglm, oglm),
                         modeltype = c("outcome","outcome")),
   "attributes are not identical across measure variables"
 )
