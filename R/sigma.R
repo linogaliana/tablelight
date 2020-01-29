@@ -10,8 +10,10 @@
 #' @param newdata Dataframe that must be used
 #' @return Residual estimated standard deviation in vector form. With an
 #'  homoskedastic model, all values are equal
+#' @importFrom stats sigma
 #' @export
-sigma.oglmx <- function(object, newdata = NULL){
+
+sigma.oglmx <- function(object, newdata = NULL, ...){
 
   if (!inherits(object, "oglmx")) stop("'object' is not a 'oglmx' object")
 
@@ -48,6 +50,16 @@ sigma.oglmx <- function(object, newdata = NULL){
 }
 
 
+#' Construct the dataframe used for
+#'  variance estimation
+#'
+#' @param object A \link[oglmx]{oglmx} object
+#' @param newdata Dataframe that must be used. An
+#'   error will be thrown away if the model matrix
+#'   for variance cannot be constructed
+#' @param ... Additional arguments
+#' @importFrom stats model.matrix
+
 variance_model <- function(object, newdata = NULL,
                            ...){
 
@@ -67,7 +79,7 @@ variance_model <- function(object, newdata = NULL,
     } else{
       Z <- newdata
     }
-    Z <- model.matrix(object$formula$sdeq, data.frame(Z))
+    Z <- stats::model.matrix(object$formula$sdeq, data.frame(Z))
   }
   else {
     Z <- matrix(rep(1, nrow(newdata)), ncol = 1)
