@@ -14,7 +14,7 @@
 #'  label to the third column, and the third label will apply
 #'  to the following three columns (i.e., columns
 #'  number four, five and six).
-#' @param stat.var.separate Numeric vector that specifies how
+#' @param stats.var.separate Numeric vector that specifies how
 #'  statistics should be laid out across regression
 #'  table columns. A value of c(2, 1, 3), for instance, will
 #'  apply the first statistics to the two first columns, the second
@@ -58,7 +58,7 @@
 #'
 #' @return A character vector.
 #'
-#' @examples data("bioChemists", package = "pscl")
+#' @examples \dontrun{data("bioChemists", package = "pscl")
 #'
 #' fm_zip    <- pscl::zeroinfl(art ~ . | ., data = bioChemists)
 #' fm_zip2   <- pscl::zeroinfl(art ~ 1 | ., data = bioChemists)
@@ -76,6 +76,7 @@
 #'                         covariate.labels = c("x1","x2")),
 #'   sep = "\n"
 #' )
+#' }
 #'
 #' @importFrom qdap mgsub
 #' @importFrom reshape2 melt
@@ -211,9 +212,14 @@ light_table.default <- function(
     }
 
     text_coeff <- cbind(text_coeff, "text_zempty" = "")
+    text_coeff <- data.frame(text_coeff)
+
+    if (!('variable' %in% colnames(text_coeff))){
+      text_coeff$variable <- rownames(text_coeff)
+    }
 
     body_table <- reshape2::melt(
-      data.frame(text_coeff), id.vars = "variable",
+      text_coeff, id.vars = "variable",
       variable.name = "obj",
       factorsAsStrings=FALSE
     )
@@ -269,7 +275,7 @@ light_table.default <- function(
 
   if (is.null(order_variable)){
     if (ncols_models>1){
-      order_variable <- unique(do.call(c, lapply(model_list, listcoeff)))
+      order_variable <- unique(do.call(c, lapply(object, listcoeff)))
     } else{
       order_variable <- unique(listcoeff(object))
     }
@@ -479,7 +485,15 @@ light_table.list <- function(
 
   ncols_models <- length(object)
 
-  coeff_data <- lapply(object, extract_coeff)
+  coeff_data <- lapply(1:length(object),
+                       function(k){
+                         return(
+                           extract_coeff(
+                             object = object[[k]],
+                             modeltype = modeltype[k]
+                           )
+                         )
+                       })
 
 
   # PART I : HEAD -------
@@ -559,14 +573,26 @@ light_table.list <- function(
 
   arrange_coeff <- function(text_coeff, order_variable = NULL){
 
+    namescol <- colnames(text_coeff)
+    text_coeff <- data.frame(text_coeff)
+    colnames(text_coeff) <- namescol
+
+
     if (is.null(nrow(text_coeff))){
       text_coeff <- rbind(text_coeff, "")
     }
 
+
     text_coeff <- cbind(text_coeff, "text_zempty" = "")
 
+
+    if (!('variable' %in% colnames(text_coeff))){
+      text_coeff$variable <- rownames(text_coeff)
+    }
+
+
     body_table <- reshape2::melt(
-      data.frame(text_coeff), id.vars = "variable",
+      text_coeff, id.vars = "variable",
       variable.name = "obj",
       factorsAsStrings=FALSE
     )
@@ -616,7 +642,13 @@ light_table.list <- function(
   coeff_body <- coeff_body[!(coeff_body[,'variable'] == "Log(theta)"),]
 
 
-  order_variable <- unique(do.call(c, lapply(object, listcoeff)))
+  if (is.null(order_variable)){
+    if (ncols_models>1){
+      order_variable <- unique(do.call(c, lapply(object, listcoeff)))
+    } else{
+      order_variable <- unique(listcoeff(object))
+    }
+  }
 
 
   order_data <- data.frame(
