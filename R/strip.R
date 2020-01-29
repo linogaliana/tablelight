@@ -25,7 +25,7 @@ strip <- function(object, ...){
 
 #' @rdname strip
 #' @export
-strip.glm <- function(object) {
+strip.glm <- function(object, ...) {
 
   if (!inherits(object, "glm")) stop("object' should be a glm object")
 
@@ -60,7 +60,7 @@ strip.glm <- function(object) {
 
 #' @rdname strip
 #' @export
-strip.lm <- function(object) {
+strip.lm <- function(object, ...) {
 
   if (!inherits(object, "lm")) stop("object' should be a lm object")
 
@@ -96,7 +96,7 @@ strip.lm <- function(object) {
 
 #' @rdname strip
 #' @export
-strip.zeroinfl <- function(object) {
+strip.zeroinfl <- function(object, ...) {
 
   if (!inherits(object, "zeroinfl")) stop("object' should be a zeroinfl object")
 
@@ -134,7 +134,7 @@ strip.zeroinfl <- function(object) {
 
 #' @rdname strip
 #' @export
-strip.summary.glm <- function(object){
+strip.summary.glm <- function(object, ...){
 
   if (!inherits(object, "summary.glm")) stop("object' should be the summary of a glm object")
 
@@ -147,7 +147,7 @@ strip.summary.glm <- function(object){
 
 #' @rdname strip
 #' @export
-strip.selection <- function(object) {
+strip.selection <- function(object, ...) {
 
   if (!inherits(object, "selection")) stop("object' should be a selection object")
 
@@ -183,7 +183,7 @@ strip.selection <- function(object) {
 
 #' @rdname strip
 #' @export
-strip.summary.lm <- function(object){
+strip.summary.lm <- function(object, ...){
 
   if (!inherits(object, "summary.lm")) stop("object' should be the summary of a lm object")
 
@@ -196,7 +196,7 @@ strip.summary.lm <- function(object){
 
 #' @rdname strip
 #' @export
-strip.summary.selection <- function(object){
+strip.summary.selection <- function(object, ...){
 
   if (!inherits(object, "summary.selection")) stop("object' should be the summary of a selection object")
 
@@ -211,7 +211,7 @@ strip.summary.selection <- function(object){
 
 #' @rdname strip
 #' @export
-strip.summary.zeroinfl <- function(object){
+strip.summary.zeroinfl <- function(object, ...){
 
   if (!inherits(object, "summary.zeroinfl")) stop("object' should be the summary of a zeroinfl object")
 
