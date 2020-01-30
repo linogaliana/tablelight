@@ -4,6 +4,7 @@
 \alias{extract_coeff}
 \alias{extract_coeff.default}
 \alias{extract_coeff.oglmx}
+\alias{extract_coeff.light.zeroinfl}
 \title{Methods to extract coefficients and
 related information from statistical
 models}
@@ -13,6 +14,8 @@ extract_coeff(object, ...)
 \method{extract_coeff}{default}(object, ...)
 
 \method{extract_coeff}{oglmx}(object, ...)
+
+\method{extract_coeff}{light.zeroinfl}(object, ...)
 }
 \arguments{
 \item{object}{Regression objects}

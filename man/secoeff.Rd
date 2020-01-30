@@ -4,6 +4,7 @@
 \alias{secoeff}
 \alias{secoeff.default}
 \alias{secoeff.oglmx}
+\alias{secoeff.light.zeroinfl}
 \title{Extract summary table for coefficients
 estimates}
 \usage{
@@ -12,6 +13,8 @@ secoeff(object, ...)
 \method{secoeff}{default}(object, ...)
 
 \method{secoeff}{oglmx}(object, ...)
+
+\method{secoeff}{light.zeroinfl}(object, ...)
 }
 \arguments{
 \item{object}{A regression object}
