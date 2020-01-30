@@ -28,11 +28,14 @@ strip <- function(object, ...){
 strip.glm <- function(object, ...) {
 
   if (!inherits(object, "glm")) stop("object' should be a glm object")
+  if (inherits(object, "negbin")) return(
+    strip.negbin(object, ...)
+  )
+
+  object$coefficients <- summary(object)$coefficients
 
   object$y = c()
   object$model = c()
-
-  object$coefficients <- summary(object)$coefficients
 
   object$residuals = c()
   object$fitted.values = c()
@@ -54,6 +57,39 @@ strip.glm <- function(object, ...) {
 
 
   class(object) <- c(class(object), "light.glm")
+
+  return(object)
+}
+
+
+#' @rdname strip
+#' @export
+strip.negbin <- function(object, ...) {
+
+  object$y = c()
+  object$model = c()
+
+  object$residuals = c()
+  object$fitted.values = c()
+  object$effects = c()
+  object$offset = c()
+  object$linear.predictors = c()
+  object$weights = c()
+  object$prior.weights = c()
+  object$data = c()
+  object$n = c()
+
+
+  object$family$variance = c()
+  #object$family$dev.resids = c()
+  #object$family$aic = c()
+  object$family$validmu = c()
+  object$family$simulate = c()
+  attr(object$terms,".Environment") = c()
+  attr(object$formula,".Environment") = c()
+
+
+  class(object) <- c(class(object), paste0("light.", class(object)))
 
   return(object)
 }
