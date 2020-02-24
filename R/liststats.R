@@ -67,7 +67,7 @@ liststats.light.zeroinfl <- function(object, ...){
 
   df <- rbind(data.frame(stat = "$\\alpha$ (dispersion)",
                          order = 0,
-                         val = alpha_value, df)
+                         val = alpha_value), df
   )
 
   return(df)
