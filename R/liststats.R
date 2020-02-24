@@ -60,11 +60,15 @@ liststats.light.zeroinfl <- function(object, ...){
     )
   )
 
+  alpha_value <- ""
+  if (object$dist == "negbin") alpha_value <- as.character(
+    format(1/object$theta, digits = 3L, nsmall = 3L))
+
+
   df <- rbind(data.frame(stat = "$\\alpha$ (dispersion)",
                          order = 0,
-                         val = as.character(
-                           format(1/object$theta, digits = 3L, nsmall = 3L))
-  ), df)
+                         val = alpha_value, df)
+  )
 
   return(df)
 }

@@ -3,6 +3,7 @@
 \name{strip}
 \alias{strip}
 \alias{strip.glm}
+\alias{strip.negbin}
 \alias{strip.lm}
 \alias{strip.zeroinfl}
 \alias{strip.summary.glm}
@@ -15,6 +16,8 @@
 strip(object, ...)
 
 \method{strip}{glm}(object, ...)
+
+\method{strip}{negbin}(object, ...)
 
 \method{strip}{lm}(object, ...)
 
