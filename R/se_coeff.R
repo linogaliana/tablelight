@@ -79,10 +79,10 @@ secoeff.negbin <- function(object, ...){
     )
   )
 
-  colnames(coeffs) <- c("Estimate",
-                        "Std. Error",
-                        "z value",
-                        "Pr(>|z|)")
+  colnames(coeffs) <- c("`Estimate`",
+                        "`Std. Error`",
+                        "`z value`",
+                        "`Pr(>|z|)`")
 
   return(coeffs)
 
