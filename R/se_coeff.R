@@ -19,6 +19,8 @@ secoeff <- function(object, ...){
 #' @export
 secoeff.default  <- function(object, ...){
 
+  if (inherits(object, "negbin")) return(secoeff.negbin(object))
+
   return(
     summary(object, ...)$coefficients
   )
@@ -79,10 +81,10 @@ secoeff.negbin <- function(object, ...){
     )
   )
 
-  colnames(coeffs) <- c("`Estimate`",
-                        "`Std. Error`",
-                        "`z value`",
-                        "`Pr(>|z|)`")
+  colnames(coeffs) <- c("Estimate",
+                        "Std. Error",
+                        "z value",
+                        "Pr(>|z|)")
 
   return(coeffs)
 
