@@ -59,3 +59,27 @@ secoeff.light.zeroinfl <- function(object, ...){
   }
 
 }
+
+
+#' @rdname secoeff
+#' @export
+secoeff.negbin <- function(object, ...){
+
+  args <- list(...)
+
+
+  coeffs <- data.frame(
+    "Estimate" = object$coefficients,
+    "Std. Error" = object$se,
+    "z value" =  object$coefficients/object$se,
+    "Pr(>|z|)" = pnorm(
+      - abs(
+        object$coefficients/object$se
+      )
+    )
+  )
+
+  return(coeffs)
+
+}
+

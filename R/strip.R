@@ -67,6 +67,9 @@ strip.glm <- function(object, ...) {
 #' @export
 strip.negbin <- function(object, ...) {
 
+  object$coefficients <- secoeff(object)
+
+
   object$y = c()
   object$model = c()
 
