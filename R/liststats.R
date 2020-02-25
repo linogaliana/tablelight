@@ -82,7 +82,17 @@ liststats.light.glm <- function(object, ...){
 
   llk <- as.numeric(logLik(object))
   bic <- BIC(object)
-  link_count <- if (object$call[1] == "glm.nb()") "Negative Binomial" else "Poisson"
+  if (as.character(object$call[1]) %in% c("glm.nb",
+                            "MASS::glm.nb",
+                            "MASS:::glm.nb",
+                            "fastglm.nb",
+                            "gravity::fastglm.nb",
+                            "gravity:::fastglm.nb")){
+    link_count <- "Negative Binomial"
+  } else{
+    link_count <- "Poisson"
+  }
+
   link_selection <- ""
 
   df <- data.frame(
@@ -212,6 +222,11 @@ liststats.default <- function(object, ...){
 #' @importFrom stats nobs
 #' @export
 nobs.zeroinfl <- function(object, ...) return(object$n)
+
+#' @rdname nobs
+#' @importFrom stats nobs
+#' @export
+nobs.negbin <- function(object, ...) return(object$n)
 
 
 

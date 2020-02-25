@@ -68,6 +68,7 @@ strip.glm <- function(object, ...) {
 strip.negbin <- function(object, ...) {
 
   object$coefficients <- secoeff(object)
+  object$n <- sum(object$n, na.rm = TRUE)
 
 
   object$y = c()
@@ -81,7 +82,6 @@ strip.negbin <- function(object, ...) {
   object$weights = c()
   object$prior.weights = c()
   object$data = c()
-  object$n = c()
 
 
   object$family$variance = c()
