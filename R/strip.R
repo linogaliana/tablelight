@@ -106,6 +106,7 @@ strip.lm <- function(object, ...) {
   if (!inherits(object, "lm")) stop("object' should be a lm object")
 
   object$coefficients <- secoeff(object)
+  object$n <- stats::nobs(object)
 
   object$y = c()
   object$model = c()
