@@ -99,7 +99,7 @@ light_table <- function(object,
                         rules_between_covariates = NULL,
                         omit = "",
                         landscape = FALSE,
-                        adjustbox_width = c(NULL, 1.1L),
+                        adjustbox_width = c(NULL, 1.1),
                         ...){
   UseMethod("light_table")
 }
@@ -122,7 +122,7 @@ light_table.default <- function(
   rules_between_covariates = NULL,
   omit = "",
   landscape = FALSE,
-  adjustbox_width = c(NULL, 1.1L),
+  adjustbox_width = c(NULL, 1.1),
   ...){
 
 
