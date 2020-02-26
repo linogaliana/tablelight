@@ -218,6 +218,94 @@ liststats.default <- function(object, ...){
   return(df)
 }
 
+
+#' @rdname liststats
+#' @export
+liststats.lm <- function(object, ...){
+
+  args <- list(...)
+
+
+  llk <- object$llk
+  bic <- object$bic
+
+  if ('add_link' %in% names(args)){
+
+
+    if (!(inherits(object, "zeroinfl"))){
+
+      if (inherits(object, "glm")){
+        # Sometimes, link is given with parenthesis
+        link_count <- gsub("\\s*\\([^\\)]+\\)", "",
+                           Hmisc::capitalize(object$family$family))
+      } else{
+        link_count <- ""
+      }
+      link_selection <- ""
+
+    } else{
+      link_count <- Hmisc::capitalize(object$dist)
+      link_selection <- Hmisc::capitalize(object$link)
+      if (object$dist == "negbin") link_count <- "Negative Binomial"
+    }
+
+    link_labels <- c(
+      "Count distribution",
+      "Selection distribution"
+    )
+
+
+  }
+
+
+  stat_labels <- c(
+    "Observations",
+    "Log likelihood",
+    "Log likelihood (by obs.)",
+    "Bayesian information criterion"
+  )
+
+  stat_val <- c(
+    format(nobs(object), digits = 0,  big.mark=",", scientific = FALSE),
+    format(llk, digits = 0, big.mark=",", scientific = FALSE),
+    format(llk/nobs(object), digits = 3L, nsmall = 3L, big.mark=",", scientific = FALSE),
+    format(bic, digits = 0L, big.mark=",", scientific = FALSE)
+  )
+
+
+  if ('add_link' %in% names(args)){
+    stat_labels <- c(link_labels,
+                     stat_labels)
+    stat_val <- c(link_count, link_selection, stat_val)
+  }
+
+
+  df <- data.frame(
+    stat = stat_labels,
+    order = seq_len(length(stat_labels)),
+    val = stat_val
+  )
+
+
+  if ('add_alpha' %in% names(args)){
+    df <- rbind(data.frame(stat = "$\\alpha$ (dispersion)",
+                           order = 0,
+                           val = extract_alpha(object)), df
+    )
+  }
+
+  if ('add_sigma' %in% names(args)){
+    est_sigma <- mean(sigma(object))
+    df <- rbind(data.frame(stat = "$\\widehat{\\sigma}$",
+                           order = -1,
+                           val = est_sigma), df
+    )
+  }
+
+
+  return(df)
+}
+
 #' @rdname nobs
 #' @importFrom stats nobs
 #' @export
