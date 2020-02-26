@@ -70,13 +70,13 @@ extract_coeff.default <- function(object, ...){
   tstat_var <- "Pr(>|t|)"
 
 
-  text_coeff <- paste0(format(coeff_list[,'Estimate'],digits = 3L,
+  text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3L), digits = 3L,
                               nsmall = 3L, big.mark=",", scientific = FALSE),
                        sapply(coeff_list[,tstat_var], signif_stars)
   )
   text_coeff <- gsub(x = text_coeff, pattern = " ", replacement = "")
 
-  text_sd <- paste0("(",format(coeff_list[,'Std. error'],
+  text_sd <- paste0("(",format(round(coeff_list[,'Std. error'], 3L),
                                digits = 3L,
                                nsmall = 3L, big.mark=",", scientific = FALSE),
                     ")")
@@ -95,19 +95,20 @@ extract_coeff.light.glm <- function(object, ...){
 
   args <- list(...)
 
+
   coeff_list <- object$coefficients
 
   tstat_var <- colnames(coeff_list)[4]
   se_var <- 'Std. Error'
 
 
-  text_coeff <- paste0(format(coeff_list[,'Estimate'],digits = 3L,
+  text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3L), digits = 3L,
                               nsmall = 3L, big.mark=",", scientific = FALSE),
                        sapply(coeff_list[,tstat_var], signif_stars)
   )
   text_coeff <- gsub(x = text_coeff, pattern = " ", replacement = "")
 
-  text_sd <- paste0("(",format(coeff_list[,se_var],
+  text_sd <- paste0("(",format(round(coeff_list[,se_var],3L),
                                digits = 3L,
                                nsmall = 3L, big.mark=",", scientific = FALSE),
                     ")")
@@ -129,13 +130,14 @@ extract_coeff.oglmx <- function(object, ...){
   tstat_var <- "Pr(>|t|)"
 
 
-  text_coeff <- paste0(format(coeff_list[,'Estimate'],digits = 3L,
+  text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3),
+                              digits = 3L,
                               nsmall = 3L, big.mark=",", scientific = FALSE),
                        sapply(coeff_list[,tstat_var], signif_stars)
                        )
   text_coeff <- gsub(x = text_coeff, pattern = " ", replacement = "")
 
-  text_sd <- paste0("(",format(coeff_list[,'Std. error'],
+  text_sd <- paste0("(",format(round(coeff_list[,'Std. error'], 3L),
                            digits = 3L,
                            nsmall = 3L, big.mark=",", scientific = FALSE),
                     ")")
@@ -163,13 +165,15 @@ extract_coeff.light.zeroinfl <- function(object, ...){
   tstat_var <- "Pr(>|z|)"
   sd_var <- "Std. Error"
 
-  text_coeff <- paste0(format(coeff_list[,'Estimate'],digits = 3L,
+  colnames(coeff_list) <- colnames(object$coefficients$count)
+
+  text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3L), digits = 3L,
                               nsmall = 3L, big.mark=",", scientific = FALSE),
                        sapply(coeff_list[,tstat_var], signif_stars)
   )
   text_coeff <- gsub(x = text_coeff, pattern = " ", replacement = "")
 
-  text_sd <- paste0("(",format(coeff_list[,sd_var],
+  text_sd <- paste0("(",format(round(coeff_list[,sd_var], 3L),
                                digits = 3L,
                                nsmall = 3L, big.mark=",", scientific = FALSE),
                     ")")
