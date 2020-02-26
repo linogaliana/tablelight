@@ -107,6 +107,8 @@ strip.lm <- function(object, ...) {
 
   object$coefficients <- secoeff(object)
   object$n <- stats::nobs(object)
+  object$llk <- as.numeric(logLik(object))
+  object$bic <- as.numeric(BIC(object))
 
   object$y = c()
   object$model = c()
