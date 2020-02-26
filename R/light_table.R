@@ -99,6 +99,7 @@ light_table <- function(object,
                         rules_between_covariates = NULL,
                         omit = "",
                         landscape = FALSE,
+                        adjustbox_width = c(NULL, 1.1L),
                         ...){
   UseMethod("light_table")
 }
@@ -121,8 +122,11 @@ light_table.default <- function(
   rules_between_covariates = NULL,
   omit = "",
   landscape = FALSE,
+  adjustbox_width = c(NULL, 1.1L),
   ...){
 
+
+  if (missing(adjustbox_width)) adjustbox_width <- NULL
 
 
   ncols_models <- 1L
@@ -145,8 +149,13 @@ light_table.default <- function(
   )
 
 
-  table_total <- c(header,tabular_header)
-
+  if (!is.null(adjustbox_width)){
+    table_total <- c(header,
+                     sprintf("\\begin{adjustbox}{width=%s\\linewidth}", adjustbox_width),
+                     tabular_header)
+  } else{
+    table_total <- c(header,tabular_header)
+  }
 
 
   if (is.null(dep.var.separate) | (length(dep.var.labels)==1)){
@@ -450,7 +459,14 @@ light_table.default <- function(
                     ))
   }
 
-  foot_table <- c(foot_table, "\\end{tabular} ", "\\end{table} ")
+  if (!is.null(adjustbox_width)){
+    foot_table <- c(foot_table, "\\end{tabular} ",
+                    "\\end{adjustbox} ",
+                    "\\end{table} ")
+  } else{
+    foot_table <- c(foot_table, "\\end{tabular} ", "\\end{table} ")
+  }
+
 
 
   table_total <- c(table_total, foot_table)
@@ -481,7 +497,10 @@ light_table.list <- function(
   rules_between_covariates = NULL,
   omit = "",
   landscape = FALSE,
+  adjustbox_width = c(NULL, 1.1),
   ...){
+
+  if (missing(adjustbox_width)) adjustbox_width <- NULL
 
   ncols_models <- length(object)
 
@@ -511,7 +530,13 @@ light_table.list <- function(
   )
 
 
-  table_total <- c(header,tabular_header)
+  if (!is.null(adjustbox_width)){
+    table_total <- c(header,
+                     sprintf("\\begin{adjustbox}{width=%s\\linewidth}", adjustbox_width),
+                     tabular_header)
+  } else{
+    table_total <- c(header,tabular_header)
+  }
 
 
 
@@ -811,7 +836,14 @@ light_table.list <- function(
                     ))
   }
 
-  foot_table <- c(foot_table, "\\end{tabular} ", "\\end{table} ")
+
+  if (!is.null(adjustbox_width)){
+    foot_table <- c(foot_table, "\\end{tabular} ",
+                    "\\end{adjustbox} ",
+                    "\\end{table} ")
+  } else{
+    foot_table <- c(foot_table, "\\end{tabular} ", "\\end{table} ")
+  }
 
 
   table_total <- c(table_total, foot_table)
