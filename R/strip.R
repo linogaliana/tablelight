@@ -107,8 +107,8 @@ strip.lm <- function(object, ...) {
 
   object$coefficients <- secoeff(object)
   object$n <- stats::nobs(object)
-  object$llk <- as.numeric(logLik(object))
-  object$bic <- as.numeric(BIC(object))
+  object$llk <- as.numeric(stats::logLik(object))
+  object$bic <- as.numeric(stats::BIC(object))
 
   object$y = c()
   object$model = c()
@@ -124,15 +124,15 @@ strip.lm <- function(object, ...) {
 
 
   object$family$variance = c()
-  #object$family$dev.resids = c()
-  #object$family$aic = c()
+  object$family$dev.resids = c()
+  object$family$aic = c()
   object$family$validmu = c()
   object$family$simulate = c()
   attr(object$terms,".Environment") = c()
   attr(object$formula,".Environment") = c()
 
 
-  class(object) <- c(class(object), "light.glm")
+  class(object) <- c(class(object), "light.lm")
 
   return(object)
 }
