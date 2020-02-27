@@ -221,9 +221,12 @@ liststats.default <- function(object, ...){
 
 #' @rdname liststats
 #' @export
-liststats.lm <- function(object, ...){
+liststats.light.lm <- function(object, ...){
 
   args <- list(...)
+
+  # IF glm OBJECT USE DIFFERENT FUNCTION
+  if (inherits(object, "light.glm")) return(liststats.light.glm(object, ...))
 
 
   llk <- object$llk
