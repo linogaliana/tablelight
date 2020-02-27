@@ -273,9 +273,9 @@ liststats.light.lm <- function(object, ...){
   )
 
   stat_val <- c(
-    format(nobs(object), digits = 0,  big.mark=",", scientific = FALSE),
+    format(object$n, digits = 0,  big.mark=",", scientific = FALSE),
     format(llk, digits = 0, big.mark=",", scientific = FALSE),
-    format(llk/nobs(object), digits = 3L, nsmall = 3L, big.mark=",", scientific = FALSE),
+    format(llk/object$n, digits = 3L, nsmall = 3L, big.mark=",", scientific = FALSE),
     format(bic, digits = 0L, big.mark=",", scientific = FALSE)
   )
 
