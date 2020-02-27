@@ -19,7 +19,13 @@ secoeff <- function(object, ...){
 #' @export
 secoeff.default  <- function(object, ...){
 
+  # ENSURE NEGBIN IS WELL HANDLED
   if (inherits(object, "negbin")) return(secoeff.negbin(object))
+
+  # ENSURE lm IS WELL HANDED
+  if (inherits(object, "light.lm") &&
+      (as.character(object$call[1]) == "lm")) return(object$coefficients)
+
 
   return(
     summary(object, ...)$coefficients

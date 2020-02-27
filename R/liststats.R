@@ -150,7 +150,9 @@ liststats.default <- function(object, ...){
         # Sometimes, link is given with parenthesis
         link_count <- gsub("\\s*\\([^\\)]+\\)", "",
                            Hmisc::capitalize(object$family$family))
-      } else{
+      } else if (as.character(object$call[1]) == "lm"){
+        link_count <- "Gaussian"
+      } else {
         link_count <- ""
       }
       link_selection <- ""
@@ -158,7 +160,11 @@ liststats.default <- function(object, ...){
     } else{
       link_count <- Hmisc::capitalize(object$dist)
       link_selection <- Hmisc::capitalize(object$link)
-      if (object$dist == "negbin") link_count <- "Negative Binomial"
+      if (inherits(object, "glm")){
+        if (object$dist == "negbin") link_count <- "Negative Binomial"
+      } else{
+        link_count <- "Gaussian"
+      }
     }
 
     link_labels <- c(
@@ -241,7 +247,9 @@ liststats.light.lm <- function(object, ...){
         # Sometimes, link is given with parenthesis
         link_count <- gsub("\\s*\\([^\\)]+\\)", "",
                            Hmisc::capitalize(object$family$family))
-      } else{
+      } else if (as.character(object$call[1]) == "lm"){
+        link_count <- "Gaussian"
+      } else {
         link_count <- ""
       }
       link_selection <- ""

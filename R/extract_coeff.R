@@ -68,6 +68,11 @@ extract_coeff.default <- function(object, ...){
   coeff_list <- secoeff(object)
 
   tstat_var <- "Pr(>|t|)"
+  if (as.character(object$call[1]) == "lm"){
+    se_var <- 'Std. Error'
+  } else{
+    se_var <- 'Std. error'
+  }
 
 
   text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3L), digits = 3L,
@@ -76,7 +81,7 @@ extract_coeff.default <- function(object, ...){
   )
   text_coeff <- gsub(x = text_coeff, pattern = " ", replacement = "")
 
-  text_sd <- paste0("(",format(round(coeff_list[,'Std. error'], 3L),
+  text_sd <- paste0("(",format(round(coeff_list[,se_var], 3L),
                                digits = 3L,
                                nsmall = 3L, big.mark=",", scientific = FALSE),
                     ")")

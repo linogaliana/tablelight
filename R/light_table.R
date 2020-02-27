@@ -734,54 +734,6 @@ light_table.list <- function(
 
   # PART III: STATISTICS -----
 
-  # statsdf <- lapply(model_list, function(mod){
-  #
-  #   if (inherits(mod,"zeroinfl")){
-  #     llk <- mod$loglik
-  #     bic <- BIC(mod)
-  #     link_count <- if (mod$dist == "negbin") "Negative Binomial" else "Poisson"
-  #     link_selection <- Hmisc::capitalize(mod$link)
-  #   } else{
-  #     llk <- logLik(mod)
-  #     k <- attributes(llk)$df
-  #     bic <- -2*as.numeric(llk) + k*log(mod$n)
-  #     llk <- as.numeric(llk)
-  #     link_count <- ""
-  #     link_selection <- ""
-  #   }
-  #
-  #   df <- data.frame(
-  #     stat = c(
-  #       "Count distribution",
-  #       "Selection distribution",
-  #       "Observations",
-  #       "Log likelihood",
-  #       "Log likelihood (by obs.)",
-  #       "Bayesian information criterion"),
-  #     order = seq_len(6L),
-  #     val = as.character(
-  #       c(link_count,
-  #         link_selection,
-  #         format(mod$n, digits = 0,  big.mark=",", scientific = FALSE),
-  #         format(llk, digits = 0, big.mark=",", scientific = FALSE),
-  #         format(llk/mod$n, digits = 3L, nsmall = 3L, big.mark=",", scientific = FALSE),
-  #         format(bic, digits = 0L, big.mark=",", scientific = FALSE)
-  #       )
-  #     )
-  #   )
-  #
-  #   if ((inherits(mod,"zeroinfl") && mod$dist == "negbin") || (inherits(mod,"negbin"))){
-  #
-  #     df <- rbind(data.frame(stat = "$\\alpha$ (dispersion)",
-  #                            order = 0,
-  #                            val = as.character(
-  #                              format(1/mod$theta, digits = 3L, nsmall = 3L))
-  #     ), df)
-  #   }
-  #
-  #   return(df)
-  # })
-
   statsdf <- lapply(object, liststats, ...)
   statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
                     statsdf)
