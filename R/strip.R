@@ -109,6 +109,7 @@ strip.lm <- function(object, ...) {
   object$n <- stats::nobs(object)
   object$llk <- as.numeric(stats::logLik(object))
   object$bic <- as.numeric(stats::BIC(object))
+  object$r.squared  <- summary(object)$r.squared
 
   object$y = c()
   object$model = c()
