@@ -4,13 +4,26 @@
 \alias{light_table}
 \title{Produce latex tables from stripped objects to reduce memory needs}
 \usage{
-light_table(object, modeltype = "outcome", title = "Title",
-  label = "label", dep.var.labels = "Label dep.var.labels",
-  dep.var.separate = NULL, column.labels = "blab",
-  column.separate = NULL, covariate.labels = NULL,
-  order_variable = NULL, stats.var.separate = NULL,
-  notes = "notes to add", add.lines = "",
-  rules_between_covariates = NULL, omit = "", landscape = FALSE, ...)
+light_table(
+  object,
+  modeltype = "outcome",
+  title = "Title",
+  label = "label",
+  dep.var.labels = "Label dep.var.labels",
+  dep.var.separate = NULL,
+  column.labels = "blab",
+  column.separate = NULL,
+  covariate.labels = NULL,
+  order_variable = NULL,
+  stats.var.separate = NULL,
+  notes = "notes to add",
+  add.lines = "",
+  rules_between_covariates = NULL,
+  omit = "",
+  landscape = FALSE,
+  adjustbox_width = c(NULL, 1.1),
+  ...
+)
 }
 \arguments{
 \item{object}{List of object}
@@ -108,7 +121,7 @@ model_list <- lapply(list(fm_zip, fm_zip2,
 cat(
   texlight::light_table(object = model_list,
                         covariate.labels = c("x1","x2")),
-  sep = "\\n"
+  sep = "\n"
 )
 }
 

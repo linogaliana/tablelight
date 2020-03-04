@@ -3,6 +3,7 @@
 \name{extract_coeff}
 \alias{extract_coeff}
 \alias{extract_coeff.default}
+\alias{extract_coeff.light.glm}
 \alias{extract_coeff.oglmx}
 \alias{extract_coeff.light.zeroinfl}
 \title{Methods to extract coefficients and
@@ -12,6 +13,8 @@ models}
 extract_coeff(object, ...)
 
 \method{extract_coeff}{default}(object, ...)
+
+\method{extract_coeff}{light.glm}(object, ...)
 
 \method{extract_coeff}{oglmx}(object, ...)
 

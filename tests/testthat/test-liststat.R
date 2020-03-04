@@ -74,12 +74,12 @@ testthat::test_that(
 
     testthat::expect_equal(
       as.character(stats_ols_bis[stats_ols_bis$stat == "Log likelihood","val"]),
-      format(as.numeric(stats::logLik(ols)), digits = 0L)
+      format(as.numeric(stats::logLik(ols)), digits = 0L, big.mark = ",")
     )
 
     testthat::expect_equal(
       as.character(stats_ols[stats_ols$stat == "Log likelihood","val"]),
-      format(as.numeric(stats::logLik(ols)), digits = 0L)
+      format(as.numeric(stats::logLik(ols)), digits = 0L, big.mark = ",")
     )
 
   }
@@ -92,12 +92,14 @@ testthat::test_that(
 
     testthat::expect_equal(
       as.character(stats_ols_bis[stats_ols_bis$stat == "Log likelihood (by obs.)","val"]),
-      format(as.numeric(stats::logLik(ols)/stats::nobs(ols)), digits = 3L, nsmall = 3L)
+      format(as.numeric(stats::logLik(ols)/stats::nobs(ols)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
     )
 
     testthat::expect_equal(
       as.character(stats_ols[stats_ols$stat == "Log likelihood (by obs.)","val"]),
-      format(as.numeric(stats::logLik(ols)/stats::nobs(ols)), digits = 3L, nsmall = 3L)
+      format(as.numeric(stats::logLik(ols)/stats::nobs(ols)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
     )
 
   }
@@ -110,12 +112,12 @@ testthat::test_that(
 
     testthat::expect_equal(
       as.character(stats_ols_bis[stats_ols_bis$stat == "Bayesian information criterion","val"]),
-      format(stats::BIC(ols), digits = 0L)
+      format(stats::BIC(ols), digits = 0L, big.mark = ",")
     )
 
     testthat::expect_equal(
       as.character(stats_ols[stats_ols$stat == "Bayesian information criterion","val"]),
-      format(stats::BIC(ols), digits = 0L)
+      format(stats::BIC(ols), digits = 0L, big.mark = ",")
     )
 
   }
@@ -183,12 +185,12 @@ testthat::test_that(
 
     testthat::expect_equal(
       as.character(stats_glm_bis[stats_glm_bis$stat == "Log likelihood","val"]),
-      format(as.numeric(stats::logLik(glm)), digits = 0L)
+      format(as.numeric(stats::logLik(glm)), digits = 0L, big.mark = ",")
     )
 
     testthat::expect_equal(
       as.character(stats_glm[stats_glm$stat == "Log likelihood","val"]),
-      format(as.numeric(stats::logLik(glm)), digits = 0L)
+      format(as.numeric(stats::logLik(glm)), digits = 0L, big.mark = ",")
     )
 
   }
@@ -201,12 +203,14 @@ testthat::test_that(
 
     testthat::expect_equal(
       as.character(stats_glm_bis[stats_glm_bis$stat == "Log likelihood (by obs.)","val"]),
-      format(as.numeric(stats::logLik(glm)/stats::nobs(glm)), digits = 3L, nsmall = 3L)
+      format(as.numeric(stats::logLik(glm)/stats::nobs(glm)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
     )
 
     testthat::expect_equal(
       as.character(stats_glm[stats_glm$stat == "Log likelihood (by obs.)","val"]),
-      format(as.numeric(stats::logLik(glm)/stats::nobs(glm)), digits = 3L, nsmall = 3L)
+      format(as.numeric(stats::logLik(glm)/stats::nobs(glm)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
     )
 
   }
@@ -219,12 +223,12 @@ testthat::test_that(
 
     testthat::expect_equal(
       as.character(stats_glm_bis[stats_glm_bis$stat == "Bayesian information criterion","val"]),
-      format(stats::BIC(glm), digits = 0L)
+      format(stats::BIC(glm), digits = 0L, big.mark = ",")
     )
 
     testthat::expect_equal(
       as.character(stats_glm[stats_glm$stat == "Bayesian information criterion","val"]),
-      format(stats::BIC(glm), digits = 0L)
+      format(stats::BIC(glm), digits = 0L, big.mark = ",")
     )
 
   }
@@ -241,6 +245,7 @@ quine <- MASS::quine
 glmnb <- MASS::glm.nb(Days ~ Sex/(Age + Eth*Lrn), data = quine)
 
 
+# A/ CHECK STATISTICS RETURNED ======
 
 stats_glmnb <- texlight::liststats(glmnb)
 stats_glmnb_bis <- texlight::liststats(glmnb, add_link = TRUE,
@@ -280,32 +285,103 @@ testthat::test_that(
                               pattern = "alpha"),'val']
       ),
       as.character(
-        format(1/glmnb$theta, digits = 3L, nsmall = 3L)
+        format(1/glmnb$theta, digits = 3L, nsmall = 3L, big.mark = ",")
       )
     )
   }
 )
+
+## PART B/ CHECK STATISTICS VALUES ======
+
+testthat::test_that(
+  "'Observations' field is OK",{
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_glmnb_bis[stats_glmnb_bis$stat == "Observations","val"])),
+      stats::nobs(glmnb)
+    )
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_glmnb[stats_glmnb$stat == "Observations","val"])),
+      stats::nobs(glmnb)
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_glmnb_bis[stats_glmnb_bis$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(glmnb)), digits = 0L, big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_glmnb[stats_glmnb$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(glmnb)), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood (by obs.)' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_glmnb_bis[stats_glmnb_bis$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(glmnb)/stats::nobs(glmnb)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_glmnb[stats_glmnb$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(glmnb)/stats::nobs(glmnb)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'BIC' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_glmnb_bis[stats_glmnb_bis$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(glmnb), digits = 0L, big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_glmnb[stats_glmnb$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(glmnb), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+
+
 
 
 # ZEROINFL OBJECT ---------------------
 
 ## NEGBIN COUNT DISTRIBUTION ============
 
-quine$y <- quine$Days
+data("bioChemists", package = "pscl")
 
-quine$y[sample(seq_len(nrow(quine)),
-               .4*nrow(quine),
-               replace = FALSE)] <- 0
-
-zeroinfl_negbin <- pscl::zeroinfl(
-  y ~ Sex/(Age + Eth*Lrn),
-  data = quine,
-  dist = "negbin"
-)
+zeroinfl_negbin <- pscl::zeroinfl(art ~ . | ., data = bioChemists, dist = "negbin")
 
 
 
-stats_zeroinfl_negbin <- texlight::liststats(zeroinfl_negbin)
+stats_bis_zeroinfl_negbin <- texlight::liststats(zeroinfl_negbin)
 stats_bis_zeroinfl_negbin <- texlight::liststats(zeroinfl_negbin, add_link = TRUE,
                                                  add_alpha = TRUE)
 
@@ -343,25 +419,97 @@ testthat::test_that(
                               pattern = "alpha"),'val']
       ),
       as.character(
-        format(1/glmnb$theta, digits = 3L, nsmall = 3L)
+        format(1/glmnb$theta, digits = 3L, nsmall = 3L, big.mark = ",")
       )
     )
   }
 )
 
 
-## POISSON COUNT DISTRIBUTION ============
+# B/ CHECK STATISTICS VALUES ++++++
 
-zeroinfl_negbin <- pscl::zeroinfl(
-  y ~ Sex/(Age + Eth*Lrn),
-  data = quine,
-  dist = "poisson"
+
+testthat::test_that(
+  "'Observations' field is OK",{
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_bis_zeroinfl_negbin[stats_bis_zeroinfl_negbin$stat == "Observations","val"])),
+      stats::nobs(zeroinfl_negbin)
+    )
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_bis_zeroinfl_negbin[stats_bis_zeroinfl_negbin$stat == "Observations","val"])),
+      stats::nobs(zeroinfl_negbin)
+    )
+
+  }
+
 )
 
 
+testthat::test_that(
+  "'Log likelihood' field is OK",{
 
-stats_zeroinfl_negbin <- texlight::liststats(zeroinfl_negbin)
-stats_bis_zeroinfl_negbin <- texlight::liststats(zeroinfl_negbin, add_link = TRUE,
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_negbin[stats_bis_zeroinfl_negbin$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(zeroinfl_negbin)), digits = 0L, big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_negbin[stats_bis_zeroinfl_negbin$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(zeroinfl_negbin)), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood (by obs.)' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_negbin[stats_bis_zeroinfl_negbin$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(zeroinfl_negbin)/stats::nobs(zeroinfl_negbin)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_negbin[stats_bis_zeroinfl_negbin$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(zeroinfl_negbin)/stats::nobs(zeroinfl_negbin)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'BIC' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_negbin[stats_bis_zeroinfl_negbin$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(zeroinfl_negbin), digits = 0L, big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_negbin[stats_bis_zeroinfl_negbin$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(zeroinfl_negbin), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+## POISSON COUNT DISTRIBUTION ============
+
+zeroinfl_poisson <- pscl::zeroinfl(art ~ . | ., data = bioChemists)
+
+
+stats_zeroinfl_poisson <- texlight::liststats(zeroinfl_poisson)
+stats_bis_zeroinfl_poisson <- texlight::liststats(zeroinfl_poisson, add_link = TRUE,
                                                  add_alpha = TRUE)
 
 
@@ -369,40 +517,100 @@ stats_bis_zeroinfl_negbin <- texlight::liststats(zeroinfl_negbin, add_link = TRU
 testthat::test_that(
   "Default method gives information for glm.nb objects",
   testthat::expect_equal(
-    nrow(na.omit(zeroinfl_negbin)),
-    nrow(zeroinfl_negbin)
+    nrow(na.omit(zeroinfl_poisson)),
+    nrow(zeroinfl_poisson)
   )
 )
 
 testthat::test_that(
   "If you add argument add_link = TRUE, count distribution added but no selection distribution",
   testthat::expect_equal(
-    as.character(stats_bis_zeroinfl_negbin[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
+    as.character(stats_bis_zeroinfl_poisson[grepl(x = as.character(stats_bis_zeroinfl_poisson$stat),
                                                  pattern = "(Count|Selection)"),'val']),
     c("Poisson", 'Logit')
   )
 )
 
 
+
+# B/ CHECK STATISTICS VALUES ++++++
+
+
 testthat::test_that(
-  "If you add argument add_alpha = TRUE, dispersion parameter is returned",{
+  "'Observations' field is OK",{
+
     testthat::expect_equal(
-      length(as.character(stats_glmnb_bis[grepl(x = as.character(stats_glmnb_bis$stat),
-                                                pattern = "alpha"),'stat'])
-      ),
-      1L
+      as.numeric(as.character(stats_bis_zeroinfl_poisson[stats_bis_zeroinfl_poisson$stat == "Observations","val"])),
+      stats::nobs(zeroinfl_poisson)
     )
+
     testthat::expect_equal(
-      as.character(
-        stats_glmnb_bis[grepl(x = as.character(stats_glmnb_bis$stat),
-                              pattern = "alpha"),'val']
-      ),
-      as.character(
-        format(1/glmnb$theta, digits = 3L, nsmall = 3L)
-      )
+      as.numeric(as.character(stats_bis_zeroinfl_poisson[stats_bis_zeroinfl_poisson$stat == "Observations","val"])),
+      stats::nobs(zeroinfl_poisson)
     )
+
   }
+
 )
+
+
+testthat::test_that(
+  "'Log likelihood' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_poisson[stats_bis_zeroinfl_poisson$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(zeroinfl_poisson)), digits = 0L, big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_poisson[stats_bis_zeroinfl_poisson$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(zeroinfl_poisson)), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood (by obs.)' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_poisson[stats_bis_zeroinfl_poisson$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(zeroinfl_poisson)/stats::nobs(zeroinfl_poisson)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_poisson[stats_bis_zeroinfl_poisson$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(zeroinfl_poisson)/stats::nobs(zeroinfl_poisson)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'BIC' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_poisson[stats_bis_zeroinfl_poisson$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(zeroinfl_poisson), digits = 0L, big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_poisson[stats_bis_zeroinfl_poisson$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(zeroinfl_poisson), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+
 
 
 # oglmx OBJECTS -------------------

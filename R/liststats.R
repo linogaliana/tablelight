@@ -163,10 +163,14 @@ liststats.default <- function(object, ...){
     } else{
       link_count <- Hmisc::capitalize(object$dist)
       link_selection <- Hmisc::capitalize(object$link)
-      if (inherits(object, "glm")){
-        if (object$dist == "negbin") link_count <- "Negative Binomial"
+      if (!inherits(object, "glm")){
+        if (inherits(object, "zeroinfl")){
+          if (object$dist == "negbin") link_count <- "Negative Binomial"
+        } else{
+          link_count <- "Gaussian"
+        }
       } else{
-        link_count <- "Gaussian"
+        if (object$dist == "negbin") link_count <- "Negative Binomial"
       }
     }
 
@@ -332,7 +336,7 @@ nobs.zeroinfl <- function(object, ...) return(object$n)
 #' @rdname nobs
 #' @importFrom stats nobs
 #' @export
-nobs.negbin <- function(object, ...) return(object$n)
+nobs.negbin <- function(object, ...) return(length(object$residuals))
 
 
 
