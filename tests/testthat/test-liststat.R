@@ -136,6 +136,7 @@ stats_glm <- texlight::liststats(glm)
 stats_glm_bis <- texlight::liststats(glm, add_link = TRUE)
 
 
+# A/ CHECK STATISTICS RETURNED ======
 
 testthat::test_that(
   "Default method gives information for glm",
@@ -154,6 +155,80 @@ testthat::test_that(
     ),
     c(glm$family$family, '')
   )
+)
+
+
+## PART B/ CHECK STATISTICS VALUES ======
+
+testthat::test_that(
+  "'Observations' field is OK",{
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_glm_bis[stats_glm_bis$stat == "Observations","val"])),
+      stats::nobs(glm)
+    )
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_glm[stats_glm$stat == "Observations","val"])),
+      stats::nobs(glm)
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_glm_bis[stats_glm_bis$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(glm)), digits = 0L)
+    )
+
+    testthat::expect_equal(
+      as.character(stats_glm[stats_glm$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(glm)), digits = 0L)
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood (by obs.)' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_glm_bis[stats_glm_bis$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(glm)/stats::nobs(glm)), digits = 3L, nsmall = 3L)
+    )
+
+    testthat::expect_equal(
+      as.character(stats_glm[stats_glm$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(glm)/stats::nobs(glm)), digits = 3L, nsmall = 3L)
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'BIC' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_glm_bis[stats_glm_bis$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(glm), digits = 0L)
+    )
+
+    testthat::expect_equal(
+      as.character(stats_glm[stats_glm$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(glm), digits = 0L)
+    )
+
+  }
+
 )
 
 
