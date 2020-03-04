@@ -8,9 +8,10 @@ ols <- lm(
   data = iris
 )
 
-stats_ols <- texlight::liststats(ols)
+stats_ols <- texlight:::liststats(ols)
 stats_ols_bis <- texlight::liststats(ols, add_link = TRUE)
 
+## PART A/ CHECK STATISTICS RETURNED ======
 
 testthat::test_that(
   "Default method gives information for OLS",
@@ -21,20 +22,104 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "If you add argument add_link = TRUE, you have new lines not filled with in OLS",
+  "Count distribution is 'Gaussian' for OLS",
+  testthat::expect_equal(
+    as.character(stats_ols_bis[stats_ols_bis$stat == "Count distribution",'val']),
+    'Gaussian'
+  )
+)
+
+
+testthat::test_that(
+  "If you add argument add_link = TRUE, you have new lines not filled in OLS case",
   testthat::expect_equal(
     as.character(stats_ols_bis[stats_ols_bis$val == "",'stat']),
-    c('Count distribution', 'Selection distribution')
+    'Selection distribution'
   )
 )
 
 testthat::test_that(
   "add_link = TRUE does not modify other rows",
   testthat::expect_equal(
-    stats_ols_bis[stats_ols_bis$val != "", c('stat','val')],
+    stats_ols_bis[!(stats_ols_bis$stat %in% c("Count distribution","Selection distribution")),
+                  c('stat','val')],
     stats_ols[, c('stat','val')],
     check.attributes = FALSE
   )
+)
+
+
+## PART B/ CHECK STATISTICS VALUES ======
+
+testthat::test_that(
+  "'Observations' field is OK",{
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_ols_bis[stats_ols_bis$stat == "Observations","val"])),
+      stats::nobs(ols)
+    )
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_ols[stats_ols$stat == "Observations","val"])),
+      stats::nobs(ols)
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_ols_bis[stats_ols_bis$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(ols)), digits = 0L)
+    )
+
+    testthat::expect_equal(
+      as.character(stats_ols[stats_ols$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(ols)), digits = 0L)
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood (by obs.)' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_ols_bis[stats_ols_bis$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(ols)/stats::nobs(ols)), digits = 3L, nsmall = 3L)
+    )
+
+    testthat::expect_equal(
+      as.character(stats_ols[stats_ols$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(ols)/stats::nobs(ols)), digits = 3L, nsmall = 3L)
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'BIC' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_ols_bis[stats_ols_bis$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(ols), digits = 0L)
+    )
+
+    testthat::expect_equal(
+      as.character(stats_ols[stats_ols$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(ols), digits = 0L)
+    )
+
+  }
+
 )
 
 
@@ -117,11 +202,11 @@ testthat::test_that(
     testthat::expect_equal(
       as.character(
         stats_glmnb_bis[grepl(x = as.character(stats_glmnb_bis$stat),
-                                                pattern = "alpha"),'val']
-        ),
+                              pattern = "alpha"),'val']
+      ),
       as.character(
         format(1/glmnb$theta, digits = 3L, nsmall = 3L)
-        )
+      )
     )
   }
 )
@@ -147,7 +232,7 @@ zeroinfl_negbin <- pscl::zeroinfl(
 
 stats_zeroinfl_negbin <- texlight::liststats(zeroinfl_negbin)
 stats_bis_zeroinfl_negbin <- texlight::liststats(zeroinfl_negbin, add_link = TRUE,
-                                       add_alpha = TRUE)
+                                                 add_alpha = TRUE)
 
 
 
@@ -163,7 +248,7 @@ testthat::test_that(
   "If you add argument add_link = TRUE, count distribution added but no selection distribution",
   testthat::expect_equal(
     as.character(stats_bis_zeroinfl_negbin[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
-                                       pattern = "(Count|Selection)"),'val']),
+                                                 pattern = "(Count|Selection)"),'val']),
     c("Negative Binomial", 'Logit')
   )
 )

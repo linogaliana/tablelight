@@ -137,7 +137,8 @@ liststats.default <- function(object, ...){
 
   args <- list(...)
 
-  if (as.character(object$call[1]) == "lm") return(liststats.light.lm(object, ...))
+  if (as.character(object$call[1]) == "lm" && inherits(object, "light.lm"))
+    return(liststats.light.lm(object, ...))
 
 
   llk <- as.numeric(logLik(object))

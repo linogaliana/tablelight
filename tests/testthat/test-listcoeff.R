@@ -1,4 +1,4 @@
-testthat::context("liststat return the expected list of summary statistics")
+testthat::context("listcoeff return the expected list of coefficients statistics")
 
 # OLS ------------------------
 
