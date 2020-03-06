@@ -724,6 +724,109 @@ testthat::test_that(
 
 
 
+
+
+# 6. LIGHT.GLM ------------------------
+
+glm <- glm(
+  I(round(Sepal.Length)) ~ Sepal.Width,
+  data = iris,
+  family = poisson()
+)
+
+light_glm <- texlight::strip(glm)
+
+stats_glm <- texlight::liststats(glm, add_link = TRUE, add_alpha = TRUE)
+stats_glm_strip <- texlight::liststats(light_glm, add_link = TRUE)
+
+
+## 6.A. CHECK STATISTICS RETURNED ======
+
+testthat::test_that(
+  "light.glm method gives same information than glm method when add_alpha=TRUE",
+  testthat::expect_equal(
+    nrow(stats_glm),
+    nrow(stats_glm_strip)
+  )
+)
+
+testthat::test_that(
+  "If you add argument add_link = TRUE, count distribution added but no selection distribution",
+  testthat::expect_equal(
+    tolower(
+      as.character(stats_glm_strip[grepl(x = as.character(stats_glm_strip$stat),
+                                       pattern = "(Count|Selection)"),'val'])
+    ),
+    c(glm$family$family, '')
+  )
+)
+
+
+## 6.B. CHECK STATISTICS VALUES ======
+
+testthat::test_that(
+  "'Observations' field is OK",{
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_glm_strip[stats_glm_strip$stat == "Observations","val"])),
+      stats::nobs(glm)
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_glm_strip[stats_glm_strip$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(glm)), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood (by obs.)' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_glm_strip[stats_glm_strip$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(glm)/stats::nobs(glm)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'BIC' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_glm_strip[stats_glm_strip$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(glm), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+
+
+
+
+
+
+
+
+
 # oglmx OBJECTS -------------------
 
 iris$y_r <- as.numeric(iris$Species)
