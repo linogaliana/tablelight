@@ -1,7 +1,7 @@
 testthat::context("liststat return the expected list of summary statistics")
 
 
-# OLS ------------------------
+# 1. OLS ------------------------
 
 ols <- lm(
   Sepal.Length ~ Sepal.Width,
@@ -11,7 +11,7 @@ ols <- lm(
 stats_ols <- texlight:::liststats(ols)
 stats_ols_bis <- texlight::liststats(ols, add_link = TRUE)
 
-## PART A/ CHECK STATISTICS RETURNED ======
+## 1.A. CHECK STATISTICS RETURNED ======
 
 testthat::test_that(
   "Default method gives information for OLS",
@@ -49,7 +49,7 @@ testthat::test_that(
 )
 
 
-## PART B/ CHECK STATISTICS VALUES ======
+## 1.B. CHECK STATISTICS VALUES ======
 
 testthat::test_that(
   "'Observations' field is OK",{
@@ -126,7 +126,7 @@ testthat::test_that(
 
 
 
-# GLM ---------------------------
+# 2. GLM ---------------------------
 
 glm <- glm(
   I(round(Sepal.Length)) ~ Sepal.Width,
@@ -138,7 +138,7 @@ stats_glm <- texlight::liststats(glm)
 stats_glm_bis <- texlight::liststats(glm, add_link = TRUE)
 
 
-# A/ CHECK STATISTICS RETURNED ======
+# 2.A. CHECK STATISTICS RETURNED ======
 
 testthat::test_that(
   "Default method gives information for glm",
@@ -160,7 +160,7 @@ testthat::test_that(
 )
 
 
-## PART B/ CHECK STATISTICS VALUES ======
+## 2.B. CHECK STATISTICS VALUES ======
 
 testthat::test_that(
   "'Observations' field is OK",{
@@ -237,7 +237,7 @@ testthat::test_that(
 
 
 
-# GLM.NB OBJECT ---------------------
+# 3. GLM.NB OBJECT ---------------------
 
 
 quine <- MASS::quine
@@ -245,7 +245,7 @@ quine <- MASS::quine
 glmnb <- MASS::glm.nb(Days ~ Sex/(Age + Eth*Lrn), data = quine)
 
 
-# A/ CHECK STATISTICS RETURNED ======
+# 3.A. CHECK STATISTICS RETURNED ======
 
 stats_glmnb <- texlight::liststats(glmnb)
 stats_glmnb_bis <- texlight::liststats(glmnb, add_link = TRUE,
@@ -291,7 +291,7 @@ testthat::test_that(
   }
 )
 
-## PART B/ CHECK STATISTICS VALUES ======
+## 3.B. CHECK STATISTICS VALUES ======
 
 testthat::test_that(
   "'Observations' field is OK",{
@@ -371,9 +371,9 @@ testthat::test_that(
 
 
 
-# ZEROINFL OBJECT ---------------------
+# 4. ZEROINFL OBJECT ---------------------
 
-## NEGBIN COUNT DISTRIBUTION ============
+## 4.A. NEGBIN COUNT DISTRIBUTION ============
 
 data("bioChemists", package = "pscl")
 
@@ -503,7 +503,7 @@ testthat::test_that(
 )
 
 
-## POISSON COUNT DISTRIBUTION ============
+## 4.B. POISSON COUNT DISTRIBUTION ============
 
 zeroinfl_poisson <- pscl::zeroinfl(art ~ . | ., data = bioChemists)
 
@@ -610,7 +610,7 @@ testthat::test_that(
 )
 
 
-# LIGHT.OLS ------------------------
+# 5. LIGHT.OLS ------------------------
 
 ols <- lm(
   Sepal.Length ~ Sepal.Width,
@@ -623,7 +623,7 @@ stats_ols <- texlight:::liststats(ols, add_link = TRUE)
 stats_ols_strip <- texlight:::liststats(light_ols, add_link = TRUE)
 
 
-## PART A/ CHECK STATISTICS RETURNED ======
+## 5.A. CHECK STATISTICS RETURNED ======
 
 testthat::test_that(
   "light.ols method gives same information than ols method",
@@ -662,7 +662,7 @@ testthat::test_that(
 )
 
 
-## PART B/ CHECK STATISTICS VALUES ======
+## 5.B. CHECK STATISTICS VALUES ======
 
 testthat::test_that(
   "'Observations' field is OK",{
