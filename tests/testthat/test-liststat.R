@@ -610,6 +610,117 @@ testthat::test_that(
 )
 
 
+# LIGHT.OLS ------------------------
+
+ols <- lm(
+  Sepal.Length ~ Sepal.Width,
+  data = iris
+)
+
+light_ols <- texlight::strip(ols)
+
+stats_ols <- texlight:::liststats(ols, add_link = TRUE)
+stats_ols_strip <- texlight:::liststats(light_ols, add_link = TRUE)
+
+
+## PART A/ CHECK STATISTICS RETURNED ======
+
+testthat::test_that(
+  "light.ols method gives same information than ols method",
+  testthat::expect_equal(
+    nrow(stats_ols_strip),
+    nrow(stats_ols)
+  )
+)
+
+testthat::test_that(
+  "Count distribution is 'Gaussian' for OLS",
+  testthat::expect_equal(
+    as.character(stats_ols_strip[stats_ols_strip$stat == "Count distribution",'val']),
+    'Gaussian'
+  )
+)
+
+
+testthat::test_that(
+  "If you add argument add_link = TRUE, you have new lines not filled in OLS case",
+  testthat::expect_equal(
+    as.character(stats_ols_strip[stats_ols_strip$val == "",'stat']),
+    'Selection distribution'
+  )
+)
+
+testthat::test_that(
+  "add_link = TRUE does not modify other rows",
+  testthat::expect_equal(
+    stats_ols_strip[!(stats_ols_strip$stat %in% c("Count distribution","Selection distribution")),
+                  c('stat','val')],
+    stats_ols[!(stats_ols$stat %in% c("Count distribution","Selection distribution")),
+                    c('stat','val')],
+    check.attributes = FALSE
+  )
+)
+
+
+## PART B/ CHECK STATISTICS VALUES ======
+
+testthat::test_that(
+  "'Observations' field is OK",{
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_ols_strip[stats_ols_strip$stat == "Observations","val"])),
+      stats::nobs(ols)
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_ols_strip[stats_ols_strip$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(ols)), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood (by obs.)' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_ols_strip[stats_ols_strip$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(ols)/stats::nobs(ols)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'BIC' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_ols_strip[stats_ols_strip$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(ols), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+
+
+
+
 
 
 
