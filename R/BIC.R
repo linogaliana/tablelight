@@ -31,7 +31,7 @@ BIC.light.glm <- function(object, ...){
   if (!is.null(object$theta)) k <- k + 1
 
   return(
-    -llk + k*log(object$n)
+    -2*llk + k*log(object$n)
   )
 
 }

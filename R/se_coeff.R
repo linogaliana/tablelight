@@ -75,14 +75,22 @@ secoeff.negbin <- function(object, ...){
 
   args <- list(...)
 
+  if ('se' %in% names(object)){
+    object2 <- object
+    se <- object$se
+  } else{
+    object2 <- summary(object)
+    se <- object2$coefficients[,"Std. Error"]
+  }
+
 
   coeffs <- data.frame(
-    "Estimate" = object$coefficients,
-    "Std. Error" = object$se,
-    "z value" =  abs(object$coefficients/object$se),
+    "Estimate" = object2$coefficients,
+    "Std. Error" = se,
+    "z value" =  abs(object2$coefficients/se),
     "Pr(>|z|)" = pnorm(
       - abs(
-        object$coefficients/object$se
+        object2$coefficients/se
       )
     )
   )
