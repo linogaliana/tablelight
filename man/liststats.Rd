@@ -3,6 +3,7 @@
 \name{liststats}
 \alias{liststats}
 \alias{liststats.light.zeroinfl}
+\alias{liststats.zeroinfl}
 \alias{liststats.light.glm}
 \alias{liststats.default}
 \alias{liststats.light.lm}
@@ -12,6 +13,8 @@ to econometric models}
 liststats(object, ...)
 
 \method{liststats}{light.zeroinfl}(object, ...)
+
+\method{liststats}{zeroinfl}(object, ...)
 
 \method{liststats}{light.glm}(object, ...)
 

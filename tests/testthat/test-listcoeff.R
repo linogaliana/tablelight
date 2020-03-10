@@ -99,26 +99,86 @@ testthat::test_that(
 
 
 
+# 4. ZEROINFL OBJECT ---------------------
 
-# OGLMX -----------------------------
+data("bioChemists", package = "pscl")
 
-data(iris)
-iris$y <- as.numeric(iris$Species)
+ZINB <- pscl::zeroinfl(art ~ kid5 + phd | kid5 + phd,
+                       data = bioChemists, dist = "negbin")
 
-oglm <- oglmx::oglmx(
-  y ~ Sepal.Width,
-  data = iris
-)
-
-
-
-
-
+# Same variables in outcome and selection
 testthat::test_that(
-  "Coefficient names returned consistent with formula",
+  "[zinb] Coefficient names returned consistent with formula",
   testthat::expect_equal(
-    texlight::listcoeff(oglm),
-    c("(Intercept)", "Sepal.Width", "Threshold (1->2)", "Threshold (2->3)", NA)
+    texlight::listcoeff(ZINB),
+    c("(Intercept)", "kid5", "phd")
   )
 )
 
+# Not same variables in outcome and selection
+testthat::test_that(
+  "[zinb] Coefficient names returned consistent with formula",{
+
+    testthat::expect_equal(
+      texlight::listcoeff(
+        pscl::zeroinfl(art ~ kid5 | phd,
+                       data = bioChemists, dist = "negbin")
+      ),
+      c("(Intercept)", "kid5", "phd")
+    )
+
+    testthat::expect_equal(
+      texlight::listcoeff(
+        pscl::zeroinfl(art ~ kid5 + phd | phd,
+                       data = bioChemists, dist = "negbin")
+      ),
+      c("(Intercept)", "kid5", "phd")
+    )
+
+    testthat::expect_equal(
+      texlight::listcoeff(
+        pscl::zeroinfl(art ~ kid5 + phd | 1,
+                       data = bioChemists, dist = "negbin")
+      ),
+      c("(Intercept)", "kid5", "phd")
+    )
+
+    testthat::expect_equal(
+      texlight::listcoeff(
+        pscl::zeroinfl(art ~ 1 | phd,
+                       data = bioChemists, dist = "negbin")
+      ),
+      c("(Intercept)", "phd")
+    )
+
+
+  }
+
+)
+
+
+
+
+
+# OGLMX -----------------------------
+
+# data(iris)
+# iris$y <- as.numeric(iris$Species)
+#
+# oglm <- oglmx::oglmx(
+#   y ~ Sepal.Width,
+#   data = iris
+# )
+#
+#
+#
+#
+#
+# testthat::test_that(
+#   "Coefficient names returned consistent with formula",
+#   testthat::expect_equal(
+#     texlight::listcoeff(oglm),
+#     c("(Intercept)", "Sepal.Width", "Threshold (1->2)", "Threshold (2->3)", NA)
+#   )
+# )
+#

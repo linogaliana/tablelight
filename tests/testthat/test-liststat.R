@@ -1538,22 +1538,22 @@ testthat::test_that(
 
 # oglmx OBJECTS -------------------
 
-iris$y_r <- as.numeric(iris$Species)
-
-oglm <- oglmx::oglmx(
-  y_r ~ Sepal.Length ,
-  data = iris
-)
-
-
-stats_oglm <- texlight::liststats(oglm)
-
-
-testthat::test_that(
-  "Default method gives information for OLS",
-  testthat::expect_equal(
-    nrow(na.omit(stats_oglm)),
-    nrow(stats_oglm)
-  )
-)
+# iris$y_r <- as.numeric(iris$Species)
+#
+# oglm <- oglmx::oglmx(
+#   y_r ~ Sepal.Length ,
+#   data = iris
+# )
+#
+#
+# stats_oglm <- texlight::liststats(oglm)
+#
+#
+# testthat::test_that(
+#   "Default method gives information for OLS",
+#   testthat::expect_equal(
+#     nrow(na.omit(stats_oglm)),
+#     nrow(stats_oglm)
+#   )
+# )
 
