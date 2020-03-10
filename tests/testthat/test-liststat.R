@@ -1521,6 +1521,7 @@ testthat::test_that(
 
 
 testthat::test_that(
+
   "'BIC' field is OK",{
 
     testthat::expect_equal(
