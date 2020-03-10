@@ -1092,12 +1092,226 @@ stats_glmnb_bis <- texlight::liststats(glmnb_light, add_link = TRUE,
 
 
 
-
-
-
 # 9. FASTZEROINFL OBJECT ---------------------
 
 ## 9.A. NEGBIN COUNT DISTRIBUTION ============
+
+data("bioChemists", package = "pscl")
+
+zeroinfl_negbin <- gravity::fastzeroinfl(art ~ . | ., data = bioChemists, dist = "negbin")
+stats_bis_zeroinfl_negbin <- texlight::liststats(zeroinfl_negbin,
+                                                 add_link =TRUE, add_alpha = TRUE)
+
+
+
+testthat::test_that(
+  "Default method gives information for fast.zeroinfl objects",
+  testthat::expect_equal(
+    nrow(na.omit(stats_bis_zeroinfl_negbin)),
+    nrow(stats_bis_zeroinfl_negbin)
+  )
+)
+
+testthat::test_that(
+  "If you add argument add_link = TRUE, count distribution added but no selection distribution",
+  testthat::expect_equal(
+    as.character(stats_bis_zeroinfl_negbin[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
+                                                 pattern = "(Count|Selection)"),'val']),
+    c("Negative Binomial", 'Logit')
+  )
+)
+
+
+testthat::test_that(
+  "If you add argument add_alpha = TRUE, dispersion parameter is returned",{
+    testthat::expect_equal(
+      length(as.character(stats_bis_zeroinfl_negbin[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
+                                                pattern = "alpha"),'stat'])
+      ),
+      1L
+    )
+    testthat::expect_equal(
+      as.character(
+        stats_bis_zeroinfl_negbin[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
+                              pattern = "alpha"),'val']
+      ),
+      as.character(
+        format(1/zeroinfl_negbin$theta, digits = 3L, nsmall = 3L, big.mark = ",")
+      )
+    )
+  }
+)
+
+
+# B/ CHECK STATISTICS VALUES ++++++
+
+
+testthat::test_that(
+  "'Observations' field is OK",{
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_bis_zeroinfl_negbin[stats_bis_zeroinfl_negbin$stat == "Observations","val"])),
+      stats::nobs(zeroinfl_negbin)
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_negbin[stats_bis_zeroinfl_negbin$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(zeroinfl_negbin)), digits = 0L, big.mark = ",")
+    )
+
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood (by obs.)' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_negbin[stats_bis_zeroinfl_negbin$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(zeroinfl_negbin)/stats::nobs(zeroinfl_negbin)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'BIC' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_negbin[stats_bis_zeroinfl_negbin$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(zeroinfl_negbin), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+## 4.B. POISSON COUNT DISTRIBUTION ============
+
+zeroinfl_poisson <- pscl::zeroinfl(art ~ . | ., data = bioChemists)
+
+
+stats_zeroinfl_poisson <- texlight::liststats(zeroinfl_poisson)
+stats_bis_zeroinfl_poisson <- texlight::liststats(zeroinfl_poisson, add_link = TRUE,
+                                                  add_alpha = TRUE)
+
+
+
+testthat::test_that(
+  "Default method gives information for glm.nb objects",
+  testthat::expect_equal(
+    nrow(na.omit(zeroinfl_poisson)),
+    nrow(zeroinfl_poisson)
+  )
+)
+
+testthat::test_that(
+  "If you add argument add_link = TRUE, count distribution added but no selection distribution",
+  testthat::expect_equal(
+    as.character(stats_bis_zeroinfl_poisson[grepl(x = as.character(stats_bis_zeroinfl_poisson$stat),
+                                                  pattern = "(Count|Selection)"),'val']),
+    c("Poisson", 'Logit')
+  )
+)
+
+
+
+# B/ CHECK STATISTICS VALUES ++++++
+
+
+testthat::test_that(
+  "'Observations' field is OK",{
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_bis_zeroinfl_poisson[stats_bis_zeroinfl_poisson$stat == "Observations","val"])),
+      stats::nobs(zeroinfl_poisson)
+    )
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_bis_zeroinfl_poisson[stats_bis_zeroinfl_poisson$stat == "Observations","val"])),
+      stats::nobs(zeroinfl_poisson)
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_poisson[stats_bis_zeroinfl_poisson$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(zeroinfl_poisson)), digits = 0L, big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_poisson[stats_bis_zeroinfl_poisson$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(zeroinfl_poisson)), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood (by obs.)' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_poisson[stats_bis_zeroinfl_poisson$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(zeroinfl_poisson)/stats::nobs(zeroinfl_poisson)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_poisson[stats_bis_zeroinfl_poisson$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(zeroinfl_poisson)/stats::nobs(zeroinfl_poisson)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'BIC' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_poisson[stats_bis_zeroinfl_poisson$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(zeroinfl_poisson), digits = 0L, big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_poisson[stats_bis_zeroinfl_poisson$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(zeroinfl_poisson), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+
+
+# 10. LIGHT.FASTZEROINFL OBJECT ---------------------
+
+## 10.A. NEGBIN COUNT DISTRIBUTION ============
 
 data("bioChemists", package = "pscl")
 
@@ -1207,7 +1421,7 @@ testthat::test_that(
 )
 
 
-## 9.B. POISSON COUNT DISTRIBUTION ============
+## 10.B. POISSON COUNT DISTRIBUTION ============
 
 data("bioChemists", package = "pscl")
 
@@ -1306,14 +1520,12 @@ testthat::test_that(
 testthat::test_that(
   "'BIC' field is OK",{
 
-    testthat::expect_equal(
-      as.character(stats_bis_zeroinfl_negbin_strip[stats_bis_zeroinfl_negbin_strip$stat == "Bayesian information criterion","val"]),
-      format(stats::BIC(zeroinfl_negbin), digits = 0L, big.mark = ",")
-    )
-
+  # tO DO
   }
 
 )
+
+
 
 
 

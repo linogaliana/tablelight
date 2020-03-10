@@ -73,6 +73,54 @@ liststats.light.zeroinfl <- function(object, ...){
   return(df)
 }
 
+#' @rdname liststats
+#' @importFrom Hmisc capitalize
+#' @export
+liststats.zeroinfl <- function(object, ...){
+
+  if (!inherits(object, "zeroinfl")) stop("Object is not a zeroinfl object")
+
+  if (inherits(object, "light.zeroinfl")) return(liststats.light.zeroinfl(object, ...))
+
+  llk <- object$loglik
+  bic <- BIC(object)
+  link_count <- if (object$dist == "negbin") "Negative Binomial" else "Poisson"
+  link_selection <- Hmisc::capitalize(object$link)
+
+
+  df <- data.frame(
+    stat = c(
+      "Count distribution",
+      "Selection distribution",
+      "Observations",
+      "Log likelihood",
+      "Log likelihood (by obs.)",
+      "Bayesian information criterion"),
+    order = seq_len(6L),
+    val = as.character(
+      c(link_count,
+        link_selection,
+        format(object$n, digits = 0,  big.mark=",", scientific = FALSE),
+        format(llk, digits = 0, big.mark=",", scientific = FALSE),
+        format(llk/object$n, digits = 3L, nsmall = 3L, big.mark=",", scientific = FALSE),
+        format(bic, digits = 0L, big.mark=",", scientific = FALSE)
+      )
+    )
+  )
+
+  alpha_value <- ""
+  if (object$dist == "negbin") alpha_value <- as.character(
+    format(1/object$theta, digits = 3L, nsmall = 3L))
+
+
+  df <- rbind(data.frame(stat = "$\\alpha$ (dispersion)",
+                         order = 0,
+                         val = alpha_value), df
+  )
+
+  return(df)
+}
+
 
 #' @rdname liststats
 #' @export
