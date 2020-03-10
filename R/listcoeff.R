@@ -80,3 +80,19 @@ listcoeff.default <- function(object, ...){
 
   return(allcoeffs)
 }
+
+
+#' @rdname listcoeff
+#' @export
+listcoeff.light.lm <- function(object, ...){
+
+  allcoeffs <- object$coefficients
+
+  allcoeffs <- rownames(allcoeffs)
+
+  allcoeffs <- unique(allcoeffs)
+
+  allcoeffs <- gsub(pattern = "\\_", replacement = "\\\\_", allcoeffs)
+
+  return(allcoeffs)
+}

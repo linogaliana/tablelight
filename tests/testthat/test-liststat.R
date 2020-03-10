@@ -962,7 +962,7 @@ testthat::test_that(
 
 
 
-# 8. FAST GLM.NB
+# 8. FAST GLM.NB --------------------
 
 requireNamespace("gravity", quietly = TRUE)
 

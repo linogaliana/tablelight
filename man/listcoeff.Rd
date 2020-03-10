@@ -6,6 +6,7 @@
 \alias{listcoeff.zeroinfl}
 \alias{listcoeff.light.glm}
 \alias{listcoeff.default}
+\alias{listcoeff.light.lm}
 \title{A small method to extract coefficient names from
 econometric models}
 \usage{
@@ -18,6 +19,8 @@ listcoeff(object, ...)
 \method{listcoeff}{light.glm}(object, ...)
 
 \method{listcoeff}{default}(object, ...)
+
+\method{listcoeff}{light.lm}(object, ...)
 }
 \arguments{
 \item{object}{An object}
