@@ -1202,7 +1202,7 @@ testthat::test_that(
 )
 
 
-## 4.B. POISSON COUNT DISTRIBUTION ============
+## 9.B. POISSON COUNT DISTRIBUTION ============
 
 zeroinfl_poisson <- pscl::zeroinfl(art ~ . | ., data = bioChemists)
 
