@@ -1,14 +1,12 @@
 testthat::context("listcoeff return the expected list of coefficients statistics")
 
-# OLS ------------------------
+# 1. OLS ------------------------
 
 ols <- lm(
   Sepal.Length ~ Sepal.Width,
   data = iris
 )
 
-
-texlight::listcoeff(ols)
 
 
 testthat::test_that(
@@ -36,6 +34,70 @@ testthat::test_that(
     "Sepal.Width"
   )
 )
+
+
+# 2. GLM ---------------------------
+
+glm <- glm(
+  I(round(Sepal.Length)) ~ Sepal.Width,
+  data = iris,
+  family = poisson()
+)
+
+
+testthat::test_that(
+  "[glm] Coefficient names returned consistent with formula",
+  testthat::expect_equal(
+    texlight::listcoeff(glm),
+    c("(Intercept)", "Sepal.Width")
+  )
+)
+
+testthat::test_that(
+  "[glm] Coefficient names returned consistent with formula",
+  testthat::expect_equal(
+    texlight::listcoeff(
+      glm(
+        Sepal.Length ~ 0 + Sepal.Width,
+        data = iris
+      )
+    ),
+    "Sepal.Width"
+  )
+)
+
+
+
+# 3. GLM.NB OBJECT ---------------------
+
+
+quine <- MASS::quine
+
+glmnb <- MASS::glm.nb(Days ~ Sex + Age, data = quine)
+
+
+testthat::test_that(
+  "[glm] Coefficient names returned consistent with formula",
+  testthat::expect_equal(
+    texlight::listcoeff(glmnb),
+    c("(Intercept)", paste0("Sex", levels(quine$Sex)[2]),
+      paste0("Age", levels(quine$Age)[2:length(levels(quine$Age))]))
+  )
+)
+
+# Quand il n'y a pas d'intercept, on a tous les niveaux d'un facteur
+testthat::test_that(
+  "[glmnb] Coefficient names returned consistent with formula",
+  testthat::expect_equal(
+    texlight::listcoeff(
+      MASS::glm.nb(Days ~ 0 + Sex + Age, data = quine)
+    ),
+    c(paste0("Sex", levels(quine$Sex)),
+      paste0("Age", levels(quine$Age)[2:length(levels(quine$Age))]))
+  )
+)
+
+
 
 
 # OGLMX -----------------------------
