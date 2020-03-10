@@ -14,6 +14,7 @@ before_script:
    - Rscript -e "devtools::install_deps(upgrade = 'always')"
    - Rscript -e "devtools::install_deps(upgrade = 'always', type = 'Suggests')"
    - Rscript -e "install.packages('oglmx')"
+   - Rscript -e "install.packages('pscl')"
 
 
 variables:
@@ -38,7 +39,6 @@ building:
   stage: build
   script:
     - R -e "remotes::install_deps(dependencies = TRUE)"
-    - R -e "install.packages('oglmx')"
     - R -e 'devtools::build()'
 
 # To have the coverage percentage appear as a gitlab badge follow these
