@@ -48,17 +48,9 @@ testthat::test_that(
 
 # IV - PSCL NEGBIN: COEF ---------------
 
-quine$y <- quine$Days
+data("bioChemists", package = "pscl")
 
-quine$y[sample(seq_len(nrow(quine)),
-              .1*nrow(quine),
-              replace = FALSE)] <- 0
-
-zeroinfl_negbin <- pscl::zeroinfl(
-  y ~ Sex/(Age + Eth*Lrn),
-  data = quine,
-  dist = "negbin"
-)
+zeroinfl_negbin <- pscl::zeroinfl(art ~ . | ., data = bioChemists, dist = "negbin")
 
 
 testthat::test_that(
@@ -73,10 +65,7 @@ testthat::test_that(
 # V - PSCL POISSON: NO COEF ---------------
 
 
-zeroinfl <- pscl::zeroinfl(
-  y ~ Sex/(Age + Eth*Lrn),
-  data = quine
-)
+zeroinfl <- pscl::zeroinfl(art ~ . | ., data = bioChemists)
 
 
 testthat::test_that(
