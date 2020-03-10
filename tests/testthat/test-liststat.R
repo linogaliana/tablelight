@@ -1523,8 +1523,13 @@ testthat::test_that(
 testthat::test_that(
   "'BIC' field is OK",{
 
-  # tO DO
-  }
+    testthat::expect_equal(
+      as.character(stats_bis_zeroinfl_poisson_strip[stats_bis_zeroinfl_poisson_strip$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(zeroinfl_poisson), digits = 0L, big.mark = ",")
+    )
+
+
+      }
 
 )
 

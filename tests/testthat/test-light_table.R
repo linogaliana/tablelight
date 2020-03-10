@@ -7,6 +7,7 @@ testthat::context("latex table")
 
 # OGLMX ---------
 
+requireNamespace("oglmx", quietly = TRUE)
 
 iris$y_r <- as.numeric(iris$Species)
 
