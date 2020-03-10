@@ -50,7 +50,7 @@ testthat::test_that("Body (coefficients) correct",{
     )+1
     ]
 
-  # Coefficient names are ok
+  # Coefficient names are ok [intercept]
   testthat::expect_equal(
     trimws(
       as.character(
@@ -60,6 +60,7 @@ testthat::test_that("Body (coefficients) correct",{
     "(Intercept)"
   )
 
+  # Coefficient names are ok [x covariate]
   testthat::expect_equal(
     trimws(
       as.character(
@@ -71,6 +72,7 @@ testthat::test_that("Body (coefficients) correct",{
 
   sd <- summary(ols)$coefficients[,"Pr(>|t|)"]
 
+  # Coefficient s.e. are ok [intercept]
   testthat::expect_equal(
     trimws(
       as.character(
@@ -81,6 +83,8 @@ testthat::test_that("Body (coefficients) correct",{
       texlight:::signif_stars(sd['(Intercept)']),
       "\\\\")
   )
+
+  # Coefficient names are ok [x covariates]
   testthat::expect_equal(
     trimws(
       as.character(
