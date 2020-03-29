@@ -4,6 +4,7 @@ stages:
   - build
   - test
   - deploy
+  - check
 
 
 
@@ -69,3 +70,10 @@ pages:
         expire_in: 30 days
     only:
         - master
+
+
+checking:
+    stage: check
+    allow_failure: true
+    script:
+        - Rscript -e 'devtools::check(".")'
