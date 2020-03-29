@@ -1,4 +1,4 @@
-image: git-registry.stable.innovation.insee.eu/innovation/rstudio
+image: rocker/geospatial
 
 stages:
   - build
@@ -8,9 +8,6 @@ stages:
 
 
 before_script:
-   - echo " => mise a jour des modules"
-   - HTTPS_PROXY=http://proxy-rie.http.insee.fr:8080/ git submodule sync --recursive
-   - HTTPS_PROXY=http://proxy-rie.http.insee.fr:8080/ git submodule update --init --recursive
    - Rscript -e "devtools::install_deps(upgrade = 'always')"
    - Rscript -e "devtools::install_deps(upgrade = 'always', type = 'Suggests')"
    - Rscript -e "install.packages('oglmx')"
@@ -18,14 +15,10 @@ before_script:
 
 
 variables:
-  GIT_SSL_NO_VERIFY: "1"
   _R_CHECK_CRAN_INCOMING_: "FALSE"
   _R_CHECK_CRAN_INCOMING_: "FALSE"
   _R_CHECK_FORCE_SUGGESTS_: "FALSE"
   _R_CHECK_CRAN_INCOMING_USE_ASPELL_: "TRUE"
-  R_LIBS_USER: "$CI_PROJECT_DIR/ci/lib"
-  CHECK_DIR: "$CI_PROJECT_DIR/ci/logs"
-  BUILD_LOGS_DIR: "$CI_PROJECT_DIR/ci/logs/$CI_PROJECT_NAME.Rcheck"
   CXX1X: "g++"
   CXX1XSTD: "-std=c++0x"
   CFLAGS: "-Wall -pedantic -fdiagnostics-color=always"
