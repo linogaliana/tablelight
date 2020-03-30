@@ -72,5 +72,4 @@ checking:
     stage: check
     allow_failure: true
     script:
-        - rm "public/*"
         - Rscript -e 'devtools::check(".")'
