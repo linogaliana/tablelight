@@ -1,4 +1,4 @@
-image: rocker/geospatial
+image: registry.gitlab.com/linogaliana/texlightci
 
 stages:
   - build
