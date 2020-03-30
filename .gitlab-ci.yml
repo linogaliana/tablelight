@@ -2,9 +2,9 @@ image: linogaliana/texlightci
 
 stages:
   - build
+  - check
   - test
   - deploy
-  - check
 
 
 before_script:
@@ -30,6 +30,13 @@ building:
   script:
     - R -e "remotes::install_deps(dependencies = TRUE)"
     - R -e 'devtools::build()'
+
+checking:
+    stage: check
+    allow_failure: true
+    script:
+        - Rscript -e 'devtools::check(".")'
+
 
 # To have the coverage percentage appear as a gitlab badge follow these
 # instructions:
@@ -68,8 +75,3 @@ pages:
         - master
 
 
-checking:
-    stage: check
-    allow_failure: true
-    script:
-        - Rscript -e 'devtools::check(".")'
