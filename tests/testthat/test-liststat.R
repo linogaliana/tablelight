@@ -510,7 +510,7 @@ zeroinfl_poisson <- pscl::zeroinfl(art ~ . | ., data = bioChemists)
 
 stats_zeroinfl_poisson <- texlight::liststats(zeroinfl_poisson)
 stats_bis_zeroinfl_poisson <- texlight::liststats(zeroinfl_poisson, add_link = TRUE,
-                                                 add_alpha = TRUE)
+                                                  add_alpha = TRUE)
 
 
 
@@ -526,7 +526,7 @@ testthat::test_that(
   "If you add argument add_link = TRUE, count distribution added but no selection distribution",
   testthat::expect_equal(
     as.character(stats_bis_zeroinfl_poisson[grepl(x = as.character(stats_bis_zeroinfl_poisson$stat),
-                                                 pattern = "(Count|Selection)"),'val']),
+                                                  pattern = "(Count|Selection)"),'val']),
     c("Poisson", 'Logit')
   )
 )
@@ -654,9 +654,9 @@ testthat::test_that(
   "add_link = TRUE does not modify other rows",
   testthat::expect_equal(
     stats_ols_strip[!(stats_ols_strip$stat %in% c("Count distribution","Selection distribution")),
-                  c('stat','val')],
-    stats_ols[!(stats_ols$stat %in% c("Count distribution","Selection distribution")),
                     c('stat','val')],
+    stats_ols[!(stats_ols$stat %in% c("Count distribution","Selection distribution")),
+              c('stat','val')],
     check.attributes = FALSE
   )
 )
@@ -755,7 +755,7 @@ testthat::test_that(
   testthat::expect_equal(
     tolower(
       as.character(stats_glm_strip[grepl(x = as.character(stats_glm_strip$stat),
-                                       pattern = "(Count|Selection)"),'val'])
+                                         pattern = "(Count|Selection)"),'val'])
     ),
     c(glm$family$family, '')
   )
@@ -1128,14 +1128,14 @@ testthat::test_that(
   "If you add argument add_alpha = TRUE, dispersion parameter is returned",{
     testthat::expect_equal(
       length(as.character(stats_bis_zeroinfl_negbin[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
-                                                pattern = "alpha"),'stat'])
+                                                          pattern = "alpha"),'stat'])
       ),
       1L
     )
     testthat::expect_equal(
       as.character(
         stats_bis_zeroinfl_negbin[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
-                              pattern = "alpha"),'val']
+                                        pattern = "alpha"),'val']
       ),
       as.character(
         format(1/zeroinfl_negbin$theta, digits = 3L, nsmall = 3L, big.mark = ",")
@@ -1324,7 +1324,7 @@ zeroinfl_negbin_strip <- texlight::strip(zeroinfl_negbin)
 stats_bis_zeroinfl_negbin <- texlight::liststats(zeroinfl_negbin, add_link = TRUE,
                                                  add_alpha = TRUE)
 stats_bis_zeroinfl_negbin_strip <- texlight::liststats(zeroinfl_negbin_strip, add_link = TRUE,
-                                                 add_alpha = TRUE)
+                                                       add_alpha = TRUE)
 
 
 
@@ -1340,7 +1340,7 @@ testthat::test_that(
   "If you add argument add_link = TRUE, count distribution added but no selection distribution",
   testthat::expect_equal(
     as.character(stats_bis_zeroinfl_negbin_strip[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
-                                                 pattern = "(Count|Selection)"),'val']),
+                                                       pattern = "(Count|Selection)"),'val']),
     c("Negative Binomial", 'Logit')
   )
 )
@@ -1350,7 +1350,7 @@ testthat::test_that(
   "If you add argument add_alpha = TRUE, dispersion parameter is returned",{
     testthat::expect_equal(
       length(as.character(stats_bis_zeroinfl_negbin_strip[grepl(x = as.character(stats_bis_zeroinfl_negbin_strip$stat),
-                                                pattern = "alpha"),'stat'])
+                                                                pattern = "alpha"),'stat'])
       ),
       1L
     )
@@ -1435,7 +1435,7 @@ zeroinfl_poisson_strip <- texlight::strip(zeroinfl_poisson)
 stats_bis_zeroinfl_poisson <- texlight::liststats(zeroinfl_poisson, add_link = TRUE,
                                                   add_alpha = TRUE)
 stats_bis_zeroinfl_poisson_strip <- texlight::liststats(zeroinfl_poisson_strip, add_link = TRUE,
-                                                       add_alpha = TRUE)
+                                                        add_alpha = TRUE)
 
 
 
@@ -1451,7 +1451,7 @@ testthat::test_that(
   "If you add argument add_link = TRUE, count distribution added but no selection distribution",
   testthat::expect_equal(
     as.character(stats_bis_zeroinfl_poisson_strip[grepl(x = as.character(stats_bis_zeroinfl_poisson_strip$stat),
-                                                       pattern = "(Count|Selection)"),'val']),
+                                                        pattern = "(Count|Selection)"),'val']),
     c("Poisson", 'Logit')
   )
 )
@@ -1461,14 +1461,14 @@ testthat::test_that(
   "If you add argument add_alpha = TRUE, dispersion parameter is returned",{
     testthat::expect_equal(
       length(as.character(stats_bis_zeroinfl_poisson_strip[grepl(x = as.character(stats_bis_zeroinfl_poisson_strip$stat),
-                                                                pattern = "alpha"),'stat'])
+                                                                 pattern = "alpha"),'stat'])
       ),
       1L
     )
     testthat::expect_equal(
       as.character(
         stats_bis_zeroinfl_poisson_strip[grepl(x = as.character(stats_bis_zeroinfl_poisson_strip$stat),
-                              pattern = "alpha"),'val']
+                                               pattern = "alpha"),'val']
       ),
       ""
     )
@@ -1530,7 +1530,7 @@ testthat::test_that(
     )
 
 
-      }
+  }
 
 )
 
@@ -1539,27 +1539,131 @@ testthat::test_that(
 
 
 
+# 11. OGLMX OBJECTS -------------------
 
 
+# CREATE OGLMX OBJECT (FROM THE DOC)
 
-# oglmx OBJECTS -------------------
+n<-250
+x1<-sample(c(0,1),n,replace=TRUE,prob=c(0.75,0.25))
+x2<-vector("numeric",n)
+x2[x1==0]<-sample(c(0,1),n-sum(x1==1),replace=TRUE,prob=c(2/3,1/3))
+z<-rnorm(n,0.5)
+# create latent outcome variable
+latenty<-0.5+1.5*x1-0.5*x2+0.5*z+rnorm(n,sd=exp(0.5*x1-0.5*x2))
+# observed y has four possible values: -1,0,1,2
+# threshold values are: -0.5, 0.5, 1.5.
+y<-vector("numeric",n)
+y[latenty< -0.5]<--1
+y[latenty>= -0.5 & latenty<0.5]<- 0
+y[latenty>= 0.5 & latenty<1.5]<- 1
+y[latenty>= 1.5]<- 2
+dataset<-data.frame(y,x1,x2)
 
-# iris$y_r <- as.numeric(iris$Species)
-#
-# oglm <- oglmx::oglmx(
-#   y_r ~ Sepal.Length ,
-#   data = iris
-# )
-#
-#
-# stats_oglm <- texlight::liststats(oglm)
-#
-#
-# testthat::test_that(
-#   "Default method gives information for OLS",
-#   testthat::expect_equal(
-#     nrow(na.omit(stats_oglm)),
-#     nrow(stats_oglm)
-#   )
-# )
+
+oglm <- oglmx::oglmx(y ~ x1 + x2 + z, data=dataset,link="probit",constantMEAN=FALSE,
+                              constantSD=FALSE,delta=0,threshparam=NULL)
+
+stats_oglm <- texlight::liststats(oglm)
+stats_oglm_bis <- texlight::liststats(oglm, add_link = TRUE)
+
+
+# 2.A. CHECK STATISTICS RETURNED ======
+
+testthat::test_that(
+  "Default method gives information for oglm",
+  testthat::expect_equal(
+    nrow(na.omit(stats_oglm)),
+    nrow(stats_oglm)
+  )
+)
+
+testthat::test_that(
+  "If you add argument add_link = TRUE, empty fields for count and selection distribution",
+  testthat::expect_equal(
+    tolower(
+      as.character(stats_oglm_bis[grepl(x = as.character(stats_oglm_bis$stat),
+                                       pattern = "(Count|Selection)"),'val'])
+    ),
+    c('', '')
+  )
+)
+
+
+## 2.B. CHECK STATISTICS VALUES ======
+
+testthat::test_that(
+  "'Observations' field is OK",{
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_oglm_bis[stats_oglm_bis$stat == "Observations","val"])),
+      stats::nobs(oglm)
+    )
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_oglm[stats_oglm$stat == "Observations","val"])),
+      stats::nobs(oglm)
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_oglm_bis[stats_oglm_bis$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(oglm)), digits = 0L, big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_oglm[stats_oglm$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(oglm)), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood (by obs.)' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_oglm_bis[stats_oglm_bis$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(oglm)/stats::nobs(oglm)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_oglm[stats_oglm$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(oglm)/stats::nobs(oglm)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'BIC' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_oglm_bis[stats_oglm_bis$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(oglm), digits = 0L, big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_oglm[stats_oglm$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(oglm), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
 
