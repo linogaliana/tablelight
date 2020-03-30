@@ -55,7 +55,7 @@
 #'
 #' This function is designed to produce `latex` tables with
 #'  stripped objects (see \link{strip}). It follows
-#'  \link[stargazer]{stargazer} standards but proposes a
+#'  `stargazer` standards but proposes a
 #'  simplified framework. Customization is limiteds
 #'
 #' @return A character vector.
