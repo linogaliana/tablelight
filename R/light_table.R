@@ -50,6 +50,8 @@
 #'  use a landscape table. Default to `FALSE`
 #' @param ... Additional arguments that should be passed. See, for instance,
 #'   \link{liststats}
+#' @param adjustbox_width If the table needs to be adjusted to page width,
+#'  what should be the parameter ?
 #'
 #' This function is designed to produce `latex` tables with
 #'  stripped objects (see \link{strip}). It follows
