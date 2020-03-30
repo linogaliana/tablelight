@@ -8,7 +8,6 @@ stages:
 
 
 before_script:
-   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
    - Rscript -e "devtools::install_deps(dependencies = TRUE, upgrade = 'never')"
 
 
