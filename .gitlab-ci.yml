@@ -46,6 +46,7 @@ testing:
     script:
         - Rscript -e 'install.packages("DT")'
         - Rscript -e 'covr::gitlab(quiet = FALSE)'
+        - mv coverage.html index.html
     artifacts:
         paths:
             - public
