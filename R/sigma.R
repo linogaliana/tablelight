@@ -8,7 +8,7 @@
 #'
 #' @param object A \code{oglmx} model
 #' @param newdata Dataframe that must be used
-#' @param ... Additional arguments that should be passed. Currently unused
+#' @param ... Additional arguments that should be passed. Currently not used
 #' @return Residual estimated standard deviation in vector form. With an
 #'  homoskedastic model, all values are equal
 #' @importFrom stats sigma
@@ -71,7 +71,7 @@ variance_model <- function(object, newdata = NULL,
 
 
   if (!is.null(object$formula$sdeq)) {
-    if (object$constantSD) {
+    if (!(is.null(object$constantSD)) && isTRUE(object$constantSD)) {
       Z <- newdata
       Zint <- match("(Intercept)", colnames(Z), nomatch = 0L)
       if (Zint > 0L) {

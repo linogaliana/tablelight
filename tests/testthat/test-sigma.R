@@ -72,5 +72,26 @@ testthat::test_that("With homoscedasticity, we have a variance = exp(constant_sd
 
 # estimate ordered probit with heteroskedasticity
 
-results.oprobhet <- oglmx::oglmx(y ~ x1 + x2 + z, ~ x1 + x2, data=dataset, link="probit",
+oglmx3 <- oglmx::oglmx(y ~ x1 + x2 + z, ~ x1 + x2, data=dataset, link="probit",
                         constantMEAN=FALSE, constantSD=FALSE,threshparam=NULL)
+
+testthat::test_that("With heteroskedasticity, sigma vector is correct",{
+  testthat::expect_equal(exp(oglmx3$modelframes$Z %*% oglmx3$allparams$delta),
+                         sigma(oglmx3))
+})
+
+
+newdata2 <- dataset
+newdata2$x1 <- newdata2$x1 + 1
+
+Z <- stats::model.matrix(oglmx3$formula$sdeq, newdata2)
+Zint <- match("(Intercept)", colnames(Z), nomatch = 0L)
+Z <- Z[, -Zint, drop = FALSE]
+
+
+# testthat::test_that("With heteroskedasticity, sigma vector is correct for newdata",{
+#   testthat::expect_equal(exp(Z %*% oglmx3$allparams$delta)[1:10],
+#                          sigma(oglmx3, newdata = newdata2)[1:10])
+# })
+
+
