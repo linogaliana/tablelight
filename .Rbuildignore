@@ -5,3 +5,4 @@
 ^cran-comments\.md$
 ^\.github$
 ^\.gitlab-ci\.yml$
+^\.gitlab-ci-innov\.yml$
