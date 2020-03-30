@@ -21,6 +21,12 @@ y[latenty>= 1.5]<- 2
 dataset<-data.frame(y,x1,x2)
 
 
+# ERROR ------------------
+
+testthat::expect_error(sigma.oglmx(lm(y ~  x1, data = dataset)),
+                       "not a 'oglmx' object")
+
+
 # WITHOUT THRESHOLDS ----------------------
 
 # delta = 0 : variance is one in any case
