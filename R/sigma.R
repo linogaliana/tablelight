@@ -8,6 +8,7 @@
 #'
 #' @param object A \code{oglmx} model
 #' @param newdata Dataframe that must be used
+#' @param ... Additional arguments that should be passed. Currently unused
 #' @return Residual estimated standard deviation in vector form. With an
 #'  homoskedastic model, all values are equal
 #' @importFrom stats sigma
