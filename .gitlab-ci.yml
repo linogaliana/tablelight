@@ -9,10 +9,7 @@ stages:
 
 
 before_script:
-   - Rscript -e "devtools::install_deps(upgrade = 'always')"
-   - Rscript -e "devtools::install_deps(upgrade = 'always', type = 'Suggests')"
-   - Rscript -e "install.packages('oglmx')"
-   - Rscript -e "install.packages('pscl')"
+   - Rscript -e "devtools::install_deps(dependencies = TRUE, upgrade = 'never')"
 
 
 variables:
@@ -48,7 +45,6 @@ testing:
     only:
         - master
     script:
-        - Rscript -e 'devtools::install_gitlab("linogaliana/gravity")'
         - Rscript -e 'install.packages("DT")'
         - Rscript -e 'covr::gitlab(quiet = FALSE)'
     artifacts:
