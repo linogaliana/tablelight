@@ -110,7 +110,7 @@ latex_table2 <- texlight::light_table(ols,
                                      adjustbox_width = 1.1)
 
 
-testthat::test_that("Table header is correct",{
+testthat::test_that("Table header and foot are correct",{
 
   testthat::expect_true(startsWith(prefix = "\\begin{table}[!htbp]", latex_table[1])
   )
@@ -129,6 +129,10 @@ testthat::test_that("Table header is correct",{
 
   testthat::expect_true(sum(grepl("& My label column", perl = TRUE,
                                   x = latex_table))>0)
+
+  testthat::expect_true(sum(grepl("\\\\end{adjustbox} ", perl = TRUE,
+                                  x = latex_table))>0)
+
 
 }
 )
