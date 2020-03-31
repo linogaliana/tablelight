@@ -34,6 +34,7 @@ strip.glm <- function(object, ...) {
 
   object$coefficients <- summary(object)$coefficients
   object$n = length(object$y)
+  object$loglik = as.numeric(logLik(object))
 
   object$y = c()
   object$model = c()
