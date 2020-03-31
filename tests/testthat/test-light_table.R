@@ -102,7 +102,7 @@ testthat::test_that("Body (coefficients) correct",{
 
 
 
-latex_table2 <- texlight::light_table(ols,
+latex_table <- texlight::light_table(ols,
                                      title = "My table title",
                                      label = "My table label",
                                      dep.var.labels = "My depvar",
