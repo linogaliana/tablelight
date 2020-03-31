@@ -8,9 +8,7 @@
 \alias{strip.lm}
 \alias{strip.zeroinfl}
 \alias{strip.summary.glm}
-\alias{strip.selection}
 \alias{strip.summary.lm}
-\alias{strip.summary.selection}
 \alias{strip.summary.zeroinfl}
 \title{strip: strip regressions}
 \usage{
@@ -28,11 +26,7 @@ strip(object, ...)
 
 \method{strip}{summary.glm}(object, ...)
 
-\method{strip}{selection}(object, ...)
-
 \method{strip}{summary.lm}(object, ...)
-
-\method{strip}{summary.selection}(object, ...)
 
 \method{strip}{summary.zeroinfl}(object, ...)
 }

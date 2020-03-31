@@ -272,60 +272,12 @@ strip.summary.glm <- function(object, ...){
   return(object)
 }
 
-#' @rdname strip
-#' @export
-strip.selection <- function(object, ...) {
-
-  if (!inherits(object, "selection")) stop("object' should be a selection object")
-
-  object$coefficients <- secoeff(object)
-
-  object$y = c()
-  object$model = c()
-
-  object$residuals = c()
-  object$fitted.values = c()
-  object$effects = c()
-  # object$qr$qr = c()
-  # object$linear.predictors = c()
-  object$weights = c()
-  object$prior.weights = c()
-  object$data = c()
-
-
-  object$family$variance = c()
-  #object$family$dev.resids = c()
-  #object$family$aic = c()
-  object$family$validmu = c()
-  object$family$simulate = c()
-  attr(object$terms,".Environment") = c()
-  attr(object$formula,".Environment") = c()
-
-
-  class(object) <- c(class(object), "light.glm")
-
-  return(object)
-}
-
 
 #' @rdname strip
 #' @export
 strip.summary.lm <- function(object, ...){
 
   if (!inherits(object, "summary.lm")) stop("object' should be the summary of a lm object")
-
-  object$deviance.resid <- NULL
-
-  class(object) <- c(class(object), "light.summary.lm")
-
-  return(object)
-}
-
-#' @rdname strip
-#' @export
-strip.summary.selection <- function(object, ...){
-
-  if (!inherits(object, "summary.selection")) stop("object' should be the summary of a selection object")
 
   object$deviance.resid <- NULL
 

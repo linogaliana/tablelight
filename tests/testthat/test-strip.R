@@ -8,11 +8,18 @@ df = data.frame(y = rnorm(100L),
 
 object <- lm(y ~  x, df)
 object_light <- strip(object)
-
+summary_light <- summary(object)
 
 testthat::test_that("New class light.", {
   testthat::expect_equal(class(object_light),
                          c(class(object), paste0("light.", class(object)))
+  )
+})
+
+testthat::test_that('stripped summary is just summary without dev.res', {
+  testthat::expect_equal(
+    names(summary(object))[(names(summary(object)) != "deviance.resid")],
+    names(summary_light)
   )
 })
 
@@ -69,10 +76,18 @@ print(d.AD <- data.frame(treatment, outcome, counts))
 object <- glm(counts ~ outcome + treatment, family = poisson())
 
 object_light <- strip(object)
+summary_light <- strip(summary(object))
 
 testthat::test_that("New class light.", {
   testthat::expect_equal(class(object_light),
                          c(class(object), "light.glm"))
+})
+
+testthat::test_that('stripped summary is just summary without dev.res', {
+  testthat::expect_equal(
+    names(summary(object))[(names(summary(object)) != "deviance.resid")],
+    names(summary_light)
+  )
 })
 
 
@@ -196,6 +211,7 @@ dataset<-data.frame(y,x1,x2)
 object <- oglmx::oglmx(y ~ x1 + x2 + z, data=dataset,link="probit",constantMEAN=FALSE,
              constantSD=FALSE,delta=0,threshparam=NULL)
 object_light <- strip(object)
+summary_light <- summary(object)
 
 testthat::test_that("New class light.", {
   testthat::expect_equal(class(object_light),
@@ -254,13 +270,22 @@ data("bioChemists", package = "pscl")
 
 object <- pscl::zeroinfl(art ~ . | 1, data = bioChemists)
 object_light <- strip(object)
-
+summary_light <- strip(summary(object))
 
 
 testthat::test_that("New class light.", {
   testthat::expect_equal(class(object_light),
                          c(class(object), paste0("light.", class(object))))
 })
+
+
+testthat::test_that('stripped summary is just summary without dev.res', {
+  testthat::expect_equal(
+    names(summary(object))[!(names(summary(object)) %in% c("weights","residuals", "fitted.values"))],
+    names(summary_light)
+  )
+})
+
 
 
 testthat::test_that("Coefficients field is same than summary(object)$coefficients", {
@@ -304,3 +329,7 @@ testthat::test_that("link_selection is empty", {
     Hmisc::capitalize(object$link)
   )
 })
+
+
+
+
