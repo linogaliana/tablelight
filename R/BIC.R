@@ -22,7 +22,6 @@ BIC.light.zeroinfl <- function(object, ...){
 
 
 #' @export
-#'
 BIC.light.glm <- function(object, ...){
 
   llk <- as.numeric(logLik(object))
@@ -35,3 +34,15 @@ BIC.light.glm <- function(object, ...){
   )
 
 }
+
+
+#' @export
+BIC.logLik.oglmx <- function(object, ...){
+
+  return(
+    -2 * as.numeric(object) + attr(object, "df") * log(attr(object, "nobs"))
+  )
+
+}
+
+

@@ -75,6 +75,52 @@ strip.glm <- function(object, ...) {
 
 #' @rdname strip
 #' @export
+strip.oglmx <- function(object, ...) {
+
+  if (!inherits(object, "oglmx")) stop("object' should be a glm object")
+
+  summary_object <- summary(object)
+
+  object$coefficients <- secoeff(summary_object)
+  object$n <- stats::nobs(object)
+  llk <- stats::logLik(object)
+  attr(llk, "nobs") <- object$n
+  object$loglikelihood <- as.numeric(llk)
+  object$bic <- as.numeric(BIC.logLik.oglmx(llk))
+  object$link_count <- ""
+  object$link_selection <- ""
+
+  object$y = c()
+  object$model = c()
+
+  object$residuals = c()
+  object$fitted.values = c()
+  object$effects = c()
+  object$offset = c()
+  object$qr$qr = c()
+  object$linear.predictors = c()
+  object$weights = c()
+  object$prior.weights = c()
+  object$data = c()
+
+
+  object$family$variance = c()
+  #object$family$dev.resids = c()
+  #object$family$aic = c()
+  object$family$validmu = c()
+  object$family$simulate = c()
+  attr(object$terms,".Environment") = c()
+  attr(object$formula,".Environment") = c()
+
+
+  class(object) <- c(class(object), "light.oglmx")
+
+  return(object)
+}
+
+
+#' @rdname strip
+#' @export
 strip.negbin <- function(object, ...) {
 
   summary_object <- summary(object)
@@ -115,6 +161,8 @@ strip.negbin <- function(object, ...) {
 
   return(object)
 }
+
+
 
 #' @rdname strip
 #' @export

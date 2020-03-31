@@ -30,3 +30,4 @@ logLik.light.glm <- function(object, ...){
     object$loglik
   )
 }
+

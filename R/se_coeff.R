@@ -119,3 +119,10 @@ secoeff.summary.lm  <- function(object, ...){
 secoeff.summary.glm  <- function(object, ...){
   return(object$coefficients)
 }
+
+
+#' @rdname secoeff
+#' @export
+secoeff.summary.oglmx  <- function(object, ...){
+  return(object$coefficients)
+}
