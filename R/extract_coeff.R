@@ -67,13 +67,21 @@ extract_coeff.default <- function(object, ...){
 
   coeff_list <- secoeff(object)
 
-  tstat_var <- "Pr(>|t|)"
   if (as.character(object$call[1]) == "lm"){
     se_var <- 'Std. Error'
   } else{
-    se_var <- 'Std. error'
+    if (as.character(object$call[1]) == "glm"){
+      se_var <- 'Std. Error'
+    } else{
+      se_var <- 'Std. error'
+    }
   }
 
+  if (inherits(object, "glm")){
+    tstat_var <- "Pr(>|z|)"
+  }  else{
+    tstat_var <- "Pr(>|t|)"
+  }
 
   text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3L), digits = 3L,
                               nsmall = 3L, big.mark=",", scientific = FALSE),
