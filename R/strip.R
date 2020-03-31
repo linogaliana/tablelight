@@ -32,9 +32,17 @@ strip.glm <- function(object, ...) {
     strip.negbin(object, ...)
   )
 
-  object$coefficients <- summary(object)$coefficients
-  object$n = length(object$y)
-  object$loglik = as.numeric(logLik(object))
+
+  summary_object <- summary(object)
+
+  object$coefficients <- secoeff(summary_object)
+  object$n <- stats::nobs(object)
+  llk <- stats::logLik(object)
+  object$loglikelihood <- as.numeric(llk)
+  object$bic <- as.numeric(BIC(llk))
+  object$r.squared  <- summary_object$r.squared
+  object$link_count <- Hmisc::capitalize(as.character(summary_object$family$family))
+  object$link_selection <- ""
 
   object$y = c()
   object$model = c()
@@ -69,8 +77,16 @@ strip.glm <- function(object, ...) {
 #' @export
 strip.negbin <- function(object, ...) {
 
-  object$coefficients <- secoeff(object)
-  object$n <- sum(object$n, na.rm = TRUE)
+  summary_object <- summary(object)
+
+  object$coefficients <- secoeff(summary_object)
+  object$n <- stats::nobs(object)
+  llk <- stats::logLik(object)
+  object$loglikelihood <- as.numeric(llk)
+  object$bic <- as.numeric(BIC(llk))
+  object$link_count <- gsub("\\s*\\([^\\)]+\\)","",
+                            as.character(summary_object$family$family))
+  object$link_selection <-  ""
 
 
   object$y = c()

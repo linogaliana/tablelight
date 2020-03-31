@@ -113,3 +113,9 @@ secoeff.negbin <- function(object, ...){
 secoeff.summary.lm  <- function(object, ...){
   return(object$coefficients)
 }
+
+#' @rdname secoeff
+#' @export
+secoeff.summary.glm  <- function(object, ...){
+  return(object$coefficients)
+}
