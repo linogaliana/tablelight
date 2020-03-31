@@ -969,7 +969,7 @@ requireNamespace("gravity", quietly = TRUE)
 quine <- MASS::quine
 
 glmnb <- gravity::fastglm.nb(Days ~ Sex/(Age + Eth*Lrn), data = quine)
-glmnb_light <- texlight::strip(glmnb)
+# glmnb_light <- texlight::strip(glmnb)
 
 
 # 8.A. CHECK STATISTICS RETURNED ======
