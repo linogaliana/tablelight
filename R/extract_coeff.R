@@ -169,7 +169,12 @@ extract_coeff.light.zeroinfl <- function(object, ...){
 
   args <- list(...)
 
-  coeff_list <- secoeff.light.zeroinfl(object, ...)
+  if (!("modeltype" %in% names(args))){
+    message("'modeltype' argument missing, assuming 'outcome'")
+    args[['modeltype']] <- 'outcome'
+  }
+
+  coeff_list <- secoeff.light.zeroinfl(object, modeltype = args[['modeltype']],...)
 
   namescol <- colnames(coeff_list)
   coeff_list <- data.frame(coeff_list)
