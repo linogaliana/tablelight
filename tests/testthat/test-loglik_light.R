@@ -16,6 +16,10 @@ testthat::expect_equal(
   as.numeric(logLik(glm_light))
 )
 
+testthat::expect_equal(
+  as.numeric(logLik(glm)),
+  as.numeric(logLik.light.glm(glm_light))
+)
 
 # ZEROINFL OBJECTS ----------
 
@@ -28,4 +32,9 @@ zeroinfl_negbin_strip <- texlight::strip(zeroinfl_negbin)
 testthat::expect_equal(
   as.numeric(logLik(zeroinfl_negbin)),
   as.numeric(logLik(zeroinfl_negbin_strip))
+)
+
+testthat::expect_equal(
+  as.numeric(logLik(zeroinfl_negbin)),
+  as.numeric(logLik.light.zeroinfl(zeroinfl_negbin_strip))
 )

@@ -178,6 +178,7 @@ testthat::test_that("Coefficient values are consistent", {
   )
 })
 
+
 testthat::test_that("Coefficient s.e. are consistent", {
   testthat::expect_equal(
     ZINB_outcome[,'text_sd'],
