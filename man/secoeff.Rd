@@ -9,6 +9,7 @@
 \alias{secoeff.summary.lm}
 \alias{secoeff.summary.glm}
 \alias{secoeff.summary.oglmx}
+\alias{secoeff.summary.zeroinfl}
 \title{Extract summary table for coefficients
 estimates}
 \usage{
@@ -27,6 +28,8 @@ secoeff(object, ...)
 \method{secoeff}{summary.glm}(object, ...)
 
 \method{secoeff}{summary.oglmx}(object, ...)
+
+\method{secoeff}{summary.zeroinfl}(object, ...)
 }
 \arguments{
 \item{object}{A regression object}

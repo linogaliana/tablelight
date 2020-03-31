@@ -40,7 +40,6 @@ strip.glm <- function(object, ...) {
   llk <- stats::logLik(object)
   object$loglikelihood <- as.numeric(llk)
   object$bic <- as.numeric(BIC(llk))
-  object$r.squared  <- summary_object$r.squared
   object$link_count <- Hmisc::capitalize(as.character(summary_object$family$family))
   object$link_selection <- ""
 
@@ -215,7 +214,20 @@ strip.zeroinfl <- function(object, ...) {
 
   if (!inherits(object, "zeroinfl")) stop("object' should be a zeroinfl object")
 
-  object$coefficients <- secoeff(object)
+
+  summary_object <- summary(object)
+
+  object$coefficients <- secoeff(summary_object)
+
+  object$n <- stats::nobs(object)
+  llk <- stats::logLik(object)
+  object$loglikelihood <- as.numeric(llk)
+  object$bic <- as.numeric(BIC(llk))
+  object$r.squared  <- summary_object$r.squared
+  object$link_count <- Hmisc::capitalize(object$dist)
+  object$link_selection <- Hmisc::capitalize(object$link)
+
+
 
   object$y = c()
   object$model = c()

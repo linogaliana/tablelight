@@ -245,3 +245,62 @@ testthat::test_that("link_selection is empty", {
   )
 })
 
+
+
+
+# 5. ZEROINFL -------------------
+
+data("bioChemists", package = "pscl")
+
+object <- pscl::zeroinfl(art ~ . | 1, data = bioChemists)
+object_light <- strip(object)
+
+
+
+testthat::test_that("New class light.", {
+  testthat::expect_equal(class(object_light),
+                         c(class(object), paste0("light.", class(object))))
+})
+
+
+testthat::test_that("Coefficients field is same than summary(object)$coefficients", {
+  testthat::expect_equal(
+    object_light$coefficients,
+    summary(object)$coefficients
+  )
+})
+
+testthat::test_that("Observations field is same than nobs(.)", {
+  testthat::expect_equal(
+    object_light$n,
+    nobs(object)
+  )
+})
+
+testthat::test_that("loglikelihood field is same than Loglik(.)", {
+  testthat::expect_equal(
+    object_light$loglikelihood,
+    as.numeric(logLik(object))
+  )
+})
+
+testthat::test_that("bic field is same than BIC(.)", {
+  testthat::expect_equal(
+    object_light$bic,
+    BIC(object)
+  )
+})
+
+testthat::test_that("link_count is 'Gaussian'", {
+  testthat::expect_equal(
+    object_light$link_count,
+    Hmisc::capitalize(object$dist)
+  )
+})
+
+testthat::test_that("link_selection is empty", {
+  testthat::expect_equal(
+    object_light$link_selection,
+    Hmisc::capitalize(object$link)
+  )
+})
