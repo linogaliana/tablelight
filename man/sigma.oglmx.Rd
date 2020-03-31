@@ -10,6 +10,8 @@
 \item{object}{A \code{oglmx} model}
 
 \item{newdata}{Dataframe that must be used}
+
+\item{...}{Additional arguments that should be passed. Currently not used}
 }
 \value{
 Residual estimated standard deviation in vector form. With an

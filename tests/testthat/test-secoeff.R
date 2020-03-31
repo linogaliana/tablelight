@@ -63,3 +63,21 @@ testthat::expect_equal(
   secoeff(zeroinfl_negbin)$zero
 )
 
+
+
+# 5. SUMMARY.LM ---------
+
+df = data.frame(y = rnorm(100L),
+                x = rnorm(100L))
+
+object <- lm(y ~  x, df)
+
+testthat::expect_equal(
+  summary(object)$coefficients,
+  secoeff(summary(object))
+)
+
+testthat::expect_equal(
+  secoeff.summary.lm(summary(object)),
+  secoeff(summary(object))
+)

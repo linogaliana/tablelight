@@ -290,7 +290,7 @@ liststats.light.lm <- function(object, ...){
   if (inherits(object, "light.glm")) return(liststats.light.glm(object, ...))
 
 
-  llk <- object$llk
+  llk <- object$loglikelihood
   bic <- object$bic
 
   if ('add_link' %in% names(args)){

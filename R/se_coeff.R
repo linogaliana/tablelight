@@ -19,6 +19,9 @@ secoeff <- function(object, ...){
 #' @export
 secoeff.default  <- function(object, ...){
 
+  # FOR SUMMARY.LM OBJECTS
+  if (inherits(object, "summary.lm")) return(secoeff.summary.lm(object))
+
   # ENSURE NEGBIN IS WELL HANDLED
   if (inherits(object, "negbin")) return(secoeff.negbin(object))
 
@@ -104,3 +107,9 @@ secoeff.negbin <- function(object, ...){
 
 }
 
+
+#' @rdname secoeff
+#' @export
+secoeff.summary.lm  <- function(object, ...){
+  return(object$coefficients)
+}

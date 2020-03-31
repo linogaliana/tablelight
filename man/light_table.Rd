@@ -90,13 +90,16 @@ the table}
 \item{landscape}{Logical value indicating whether we want to
 use a landscape table. Default to \code{FALSE}}
 
-\item{...}{Additional arguments that should be passed. See, for instance,
-\link{liststats}
+\item{adjustbox_width}{If the table needs to be adjusted to page width,
+what should be the parameter ?
 
 This function is designed to produce \code{latex} tables with
 stripped objects (see \link{strip}). It follows
-\link[stargazer]{stargazer} standards but proposes a
+\code{stargazer} standards but proposes a
 simplified framework. Customization is limiteds}
+
+\item{...}{Additional arguments that should be passed. See, for instance,
+\link{liststats}}
 }
 \value{
 A character vector.

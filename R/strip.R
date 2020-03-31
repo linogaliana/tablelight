@@ -106,11 +106,16 @@ strip.lm <- function(object, ...) {
 
   if (!inherits(object, "lm")) stop("object' should be a lm object")
 
-  object$coefficients <- secoeff(object)
+  summary_object <- summary(object)
+
+  object$coefficients <- secoeff(summary_object)
   object$n <- stats::nobs(object)
-  object$llk <- as.numeric(stats::logLik(object))
-  object$bic <- as.numeric(stats::BIC(object))
-  object$r.squared  <- summary(object)$r.squared
+  llk <- stats::logLik(object)
+  object$loglikelihood <- as.numeric(llk)
+  object$bic <- as.numeric(BIC(llk))
+  object$r.squared  <- summary_object$r.squared
+  object$link_count <- "Gaussian"
+  object$link_selection <- ""
 
   object$y = c()
   object$model = c()
