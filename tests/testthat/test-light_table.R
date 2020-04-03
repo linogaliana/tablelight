@@ -172,3 +172,33 @@ testthat::expect_equal(
   class(x2),
   "character"
 )
+
+
+
+
+# PART 2: TEST OPTIONS -------------------
+
+
+ols <- lm(
+  Sepal.Length ~ Sepal.Width,
+  data = iris
+)
+
+latex_table <- texlight::light_table(ols,
+                                     title = "My table title",
+                                     label = "My table label",
+                                     dep.var.labels = "My depvar",
+                                     column.labels = "My label column")
+
+latex_table2 <- texlight::light_table(ols,
+                                     title = "My table title",
+                                     label = "My table label",
+                                     dep.var.labels = rep("My depvar",10L),
+                                     column.labels = "My label column")
+
+testthat::test_that("Too many dep.var.labels do not change the output", {
+  testthat::expect_equal(
+    latex_table2, latex_table
+  )
+})
+
