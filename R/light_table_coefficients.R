@@ -1,6 +1,8 @@
 #' Prepare coefficients part of the latex table
 #'
 #' @inheritParams light_table
+#' @param ncols_models Number of columns
+#' @param coeff_data Output from \link{secoeff}
 light_table_coefficients <- function(object,
                                      ncols_models, coeff_data, order_variable,
                                      omit, covariate.labels, rules_between_covariates

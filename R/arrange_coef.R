@@ -4,6 +4,7 @@
 #'  a three rows object that can be used
 #'  after some transformation in a table
 #' @inheritParams light_table
+#' @param text_coeff Output from \link{secoeff}
 #'
 arrange_coeff <- function(text_coeff, order_variable = NULL){
 

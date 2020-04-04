@@ -37,11 +37,11 @@ testthat::expect_equal(
 
 # 3. NEGBIN ----------
 
-# quine.nb1 <- MASS::glm.nb(Days ~ Sex/(Age + Eth*Lrn), data = MASS::quine)
+quine.nb1 <- MASS::glm.nb(Days ~ Sex/(Age + Eth*Lrn), data = MASS::quine)
 
 
 # testthat::expect_equal(
-#   texlight::secoeff(quine.nb1),
+#   texlight:::secoeff(quine.nb1),
 #   summary(quine.nb1)$estimate
 # )
 

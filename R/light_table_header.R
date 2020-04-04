@@ -1,5 +1,6 @@
 #' Header for the regression table
 #' @inheritParams light_table
+#' @param ncols_models Number of columns
 
 light_table_header <- function(ncols_models,
                                title = "Title",

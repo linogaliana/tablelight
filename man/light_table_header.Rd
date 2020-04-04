@@ -15,6 +15,8 @@ light_table_header(
 )
 }
 \arguments{
+\item{ncols_models}{Number of columns}
+
 \item{title}{Table caption}
 
 \item{label}{Table label}

@@ -17,6 +17,10 @@ light_table_coefficients(
 \arguments{
 \item{object}{List of object}
 
+\item{ncols_models}{Number of columns}
+
+\item{coeff_data}{Output from \link{secoeff}}
+
 \item{order_variable}{A vector that indicates the order
 in which variables will appear in the output.}
 
