@@ -1,4 +1,4 @@
-light_table_stats <- function(object, ncols_models, stats.var.separate){
+light_table_stats <- function(object, ncols_models, stats.var.separate, ...){
 
   # COMPUTE STATISTICS -------------------
 

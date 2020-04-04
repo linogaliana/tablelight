@@ -130,7 +130,11 @@ light_table.default <- function(
 
   if (missing(adjustbox_width)) adjustbox_width <- NULL
 
-  ncols_models <- length(object)
+  if (isFALSE(inherits(object, "list"))){
+    ncols_models <- 1L
+  } else{
+    ncols_models <- length(object)
+  }
 
   if (identical(ncols_models, 1L)){
     coeff_data <- extract_coeff(object)
@@ -183,7 +187,8 @@ light_table.default <- function(
 
   stats_table <- light_table_stats(object = object,
                                    ncols_models = ncols_models,
-                                   stats.var.separate = stats.var.separate)
+                                   stats.var.separate = stats.var.separate,
+                                   ...)
 
   table_total <- c(table_total, stats_table,
                    "\\hline ",
