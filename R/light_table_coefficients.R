@@ -1,7 +1,8 @@
 #' Prepare coefficients part of the latex table
 #'
 #' @inheritParams light_table
-light_table_coefficients <- function(ncols_models, coeff_data, order_variable,
+light_table_coefficients <- function(object,
+                                     ncols_models, coeff_data, order_variable,
                                      omit, covariate.labels, rules_between_covariates
                                      ){
 

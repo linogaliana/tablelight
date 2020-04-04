@@ -5,6 +5,7 @@
 \title{Prepare coefficients part of the latex table}
 \usage{
 light_table_coefficients(
+  object,
   ncols_models,
   coeff_data,
   order_variable,
@@ -14,6 +15,8 @@ light_table_coefficients(
 )
 }
 \arguments{
+\item{object}{List of object}
+
 \item{order_variable}{A vector that indicates the order
 in which variables will appear in the output.}
 

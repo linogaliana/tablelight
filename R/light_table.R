@@ -151,8 +151,14 @@ light_table.default <- function(
 
   # PART II : BODY -------
 
-  body_table <- light_table_coefficients(ncols_models, coeff_data, order_variable,
-                                         omit, covariate.labels, rules_between_covariates
+  body_table <- light_table_coefficients(
+    object = object,
+    ncols_models = ncols_models,
+    coeff_data = coeff_data,
+    order_variable = order_variable,
+    omit = omit,
+    covariate.labels = covariate.labels,
+    rules_between_covariates = rules_between_covariates
   )
 
   table_total <- c(table_total, body_table, "\\hline \\hline \\\\[-1.8ex] ")
@@ -161,90 +167,9 @@ light_table.default <- function(
 
   # PART III: STATISTICS -----
 
-  # statsdf <- lapply(model_list, function(mod){
-  #
-  #   if (inherits(mod,"zeroinfl")){
-  #     llk <- mod$loglik
-  #     bic <- BIC(mod)
-  #     link_count <- if (mod$dist == "negbin") "Negative Binomial" else "Poisson"
-  #     link_selection <- Hmisc::capitalize(mod$link)
-  #   } else{
-  #     llk <- logLik(mod)
-  #     k <- attributes(llk)$df
-  #     bic <- -2*as.numeric(llk) + k*log(mod$n)
-  #     llk <- as.numeric(llk)
-  #     link_count <- ""
-  #     link_selection <- ""
-  #   }
-  #
-  #   df <- data.frame(
-  #     stat = c(
-  #       "Count distribution",
-  #       "Selection distribution",
-  #       "Observations",
-  #       "Log likelihood",
-  #       "Log likelihood (by obs.)",
-  #       "Bayesian information criterion"),
-  #     order = seq_len(6L),
-  #     val = as.character(
-  #       c(link_count,
-  #         link_selection,
-  #         format(mod$n, digits = 0,  big.mark=",", scientific = FALSE),
-  #         format(llk, digits = 0, big.mark=",", scientific = FALSE),
-  #         format(llk/mod$n, digits = 3L, nsmall = 3L, big.mark=",", scientific = FALSE),
-  #         format(bic, digits = 0L, big.mark=",", scientific = FALSE)
-  #       )
-  #     )
-  #   )
-  #
-  #   if ((inherits(mod,"zeroinfl") && mod$dist == "negbin") || (inherits(mod,"negbin"))){
-  #
-  #     df <- rbind(data.frame(stat = "$\\alpha$ (dispersion)",
-  #                            order = 0,
-  #                            val = as.character(
-  #                              format(1/mod$theta, digits = 3L, nsmall = 3L))
-  #     ), df)
-  #   }
-  #
-  #   return(df)
-  # })
-
-  if (ncols_models>1){
-    statsdf <- lapply(object, liststats, ...)
-    statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
-                      statsdf)
-  } else{
-    statsdf <- liststats(object, ...)
-  }
-
-  statsdf <- statsdf[order(statsdf$order),]
-  statsdf <- statsdf[, names(statsdf) != "order"]
-  statsdf[, ] <- lapply(statsdf[, ], as.character)
-  statsdf[is.na(statsdf)] <- ""
-
-
-  if (!is.null(stats.var.separate)){
-
-    labels_stats <- rep("\\multicolumn{%s}{c}{%s}", length(stats.var.separate) + 1)
-    length_labels <- c(cumsum(stats.var.separate), ncols_models - sum(stats.var.separate))
-    # length_labels <- length_labels[length_labels>0]
-    statsdf2 <- lapply(1:length(length_labels), function(i){
-      sprintf(
-        labels_stats[i],
-        length_labels[i],
-        statsdf[,1 + 2*i])
-    }
-    )
-    statsdf <- cbind(statsdf[,1], do.call(cbind, statsdf2))
-
-  }
-
-  statsdf <- apply(statsdf, 1, paste, collapse = " & ")
-  stats_table <- paste0(statsdf, " \\\\")
-
-  stats_table <- gsub(pattern = "-", replacement = "$-$",
-                      stats_table)
-
+  stats_table <- light_table_stats(object = object,
+                                   ncols_models = ncols_models,
+                                   stats.var.separate = stats.var.separate)
 
   table_total <- c(table_total, stats_table,
                    "\\hline ",
@@ -336,8 +261,14 @@ light_table.list <- function(
 
   # PART II : BODY -------
 
-  body_table <- light_table_coefficients(ncols_models, coeff_data, order_variable,
-                 omit, covariate.labels, rules_between_covariates
+  body_table <- light_table_coefficients(
+    object = object,
+    ncols_models = ncols_models,
+    coeff_data = coeff_data,
+    order_variable = order_variable,
+    omit = omit,
+    covariate.labels = covariate.labels,
+    rules_between_covariates = rules_between_covariates
   )
 
   table_total <- c(table_total, body_table, "\\hline \\hline \\\\[-1.8ex] ")
@@ -346,38 +277,9 @@ light_table.list <- function(
 
   # PART III: STATISTICS -----
 
-  statsdf <- lapply(object, liststats, ...)
-  statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
-                    statsdf)
-
-  statsdf <- statsdf[order(statsdf$order),]
-  statsdf <- statsdf[, names(statsdf) != "order"]
-  statsdf[, ] <- lapply(statsdf[, ], as.character)
-  statsdf[is.na(statsdf)] <- ""
-
-
-  if (!is.null(stats.var.separate)){
-
-    labels_stats <- rep("\\multicolumn{%s}{c}{%s}", length(stats.var.separate) + 1)
-    length_labels <- c(cumsum(stats.var.separate), ncols_models - sum(stats.var.separate))
-    # length_labels <- length_labels[length_labels>0]
-    statsdf2 <- lapply(1:length(length_labels), function(i){
-      sprintf(
-        labels_stats[i],
-        length_labels[i],
-        statsdf[,1 + 2*i])
-    }
-    )
-    statsdf <- cbind(statsdf[,1], do.call(cbind, statsdf2))
-
-  }
-
-  statsdf <- apply(statsdf, 1, paste, collapse = " & ")
-  stats_table <- paste0(statsdf, " \\\\")
-
-  stats_table <- gsub(pattern = "-", replacement = "$-$",
-                      stats_table)
-
+  stats_table <- light_table_stats(object = object,
+                                   ncols_models = ncols_models,
+                                   stats.var.separate = stats.var.separate)
 
   table_total <- c(table_total, stats_table,
                    "\\hline ",
