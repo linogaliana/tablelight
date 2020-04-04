@@ -24,7 +24,7 @@ light_table_footer <- function(ncols_models, add.lines,
   }
 
 
-  return(table_total)
+  return(foot_table)
 }
 
 
