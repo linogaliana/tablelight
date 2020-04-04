@@ -130,106 +130,28 @@ light_table.default <- function(
 
   if (missing(adjustbox_width)) adjustbox_width <- NULL
 
-
-  ncols_models <- 1L
-
-  coeff_data <- extract_coeff(object)
-
-
-  # PART I : HEAD -------
-
-
-  table_total <- light_table_header(
-    ncols_models,
-    title = title,
-    label = label,
-    dep.var.labels = dep.var.labels,
-    dep.var.separate = dep.var.separate,
-    column.labels = column.labels,
-    adjustbox_width = adjustbox_width)
-
-
-  # PART II : BODY -------
-
-  body_table <- light_table_coefficients(
-    object = object,
-    ncols_models = ncols_models,
-    coeff_data = coeff_data,
-    order_variable = order_variable,
-    omit = omit,
-    covariate.labels = covariate.labels,
-    rules_between_covariates = rules_between_covariates
-  )
-
-  table_total <- c(table_total, body_table, "\\hline \\hline \\\\[-1.8ex] ")
-
-
-
-  # PART III: STATISTICS -----
-
-  stats_table <- light_table_stats(object = object,
-                                   ncols_models = ncols_models,
-                                   stats.var.separate = stats.var.separate)
-
-  table_total <- c(table_total, stats_table,
-                   "\\hline ",
-                   "\\hline \\\\[-1.8ex] ")
-
-
-  # PART IV: FOOTER -----
-
-  foot_table <- light_table_footer(
-    ncols_models = ncols_models,
-    add.lines = add.lines,
-    adjustbox_width = adjustbox_width)
-
-  table_total <- c(table_total, foot_table)
-
-  if (landscape) table_total <- c("\\begin{landscape}", table_total, "\\end{landscape}")
-
-  return(table_total)
-}
-
-
-
-
-#' @export
-light_table.list <- function(
-  object,
-  modeltype = list("outcome", length(object)),
-  title = "Title",
-  label = "label",
-  dep.var.labels = "Label dep.var.labels",
-  dep.var.separate = NULL,
-  column.labels = "blab",
-  column.separate = NULL,
-  covariate.labels = NULL,
-  order_variable = NULL,
-  stats.var.separate = NULL,
-  notes = "notes to add",
-  add.lines = "",
-  rules_between_covariates = NULL,
-  omit = "",
-  landscape = FALSE,
-  adjustbox_width = c(NULL, 1.1),
-  ...){
-
-  if (missing(adjustbox_width)) adjustbox_width <- NULL
-
   ncols_models <- length(object)
 
-  coeff_data <- lapply(1:length(object),
-                       function(k){
-                         return(
-                           extract_coeff(
-                             object = object[[k]],
-                             modeltype = modeltype[k]
+  if (identical(ncols_models, 1L)){
+    coeff_data <- extract_coeff(object)
+  } else{
+    coeff_data <- lapply(1:length(object),
+                         function(k){
+                           return(
+                             extract_coeff(
+                               object = object[[k]],
+                               modeltype = modeltype[k]
+                             )
                            )
-                         )
-                       })
+                         })
+  }
+
+
+
 
 
   # PART I : HEAD -------
+
 
   table_total <- light_table_header(
     ncols_models,
@@ -239,6 +161,7 @@ light_table.list <- function(
     dep.var.separate = dep.var.separate,
     column.labels = column.labels,
     adjustbox_width = adjustbox_width)
+
 
   # PART II : BODY -------
 
