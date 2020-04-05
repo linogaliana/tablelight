@@ -111,9 +111,9 @@ Only the elements needed to print a result table are kept. Since using
 :package: proposes a function (`tablelight::light_table`) to produce
 nice tables.
 
-### Some examples
+## Some examples
 
-## General case
+### General case
 
 Let’s say you want to produce a regression table from two objects. For
 the moment, the freedom in customizing the table is limited but future
@@ -135,7 +135,7 @@ regression2 <- lm(y ~ x, df2)
 get_required_RAM(profvis(
   capture.output(stargazer::stargazer(regression1, regression2)))
 )
-#> [1] 118.8367
+#> [1] 118.8375
 ```
 
 With `tablelight`, you will :
@@ -153,12 +153,12 @@ regression2 <- tablelight::strip(lm(y ~ x, df2))
 get_required_RAM(profvis(
   capture.output(light_table(list(regression1, regression2))))
   )
-#> [1] 0.6555939
+#> [1] 0.6620483
 ```
 
-This is, approximatively, 2344 times less memory needed.
+This is, approximatively,  times less memory needed.
 
-## Specificity with zero inflated models
+### Specificity with zero inflated models
 
 It is hard to put together selection and outcome equations in a
 zero-inflated model with `stargazer`. Normally, you need to chose

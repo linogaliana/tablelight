@@ -88,9 +88,9 @@ pryr::object_size(tablelight::strip(regression))
 
 Only the elements needed to print a result table are kept. Since using `stargazer` is no longer possible on a lightened model, `tablelight` :package: proposes a function (`tablelight::light_table`) to produce nice tables.
 
-### Some examples
+## Some examples
 
-## General case
+### General case
 
 Let's say you want to produce a regression table from two objects. For the moment, the freedom in customizing the table is limited but future enhancements will add more and more flexibility.
 
@@ -142,7 +142,7 @@ r2 <- get_required_RAM(profvis(
 This is, approximatively, `r round(r1/r2)` times less memory needed.
 
 
-## Specificity with zero inflated models
+### Specificity with zero inflated models
 
 It is hard to put together selection and outcome equations in a zero-inflated model with `stargazer`. Normally, you need to chose between reporting selection or outcome related terms. Sometimes you want to report both together. Unless using a hack with `stargazer` (see [here](https://stackoverflow.com/questions/40974843/how-to-report-both-selection-and-outcome-equation-of-selection-models-with-starg)), this is not possible with `stargazer`. 
 
