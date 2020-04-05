@@ -30,6 +30,14 @@ from regression objects. The list of regression objects accepted is, for
 the moment: `lm`, `glm`, `negbin`, `oglmx`, `zeroinfl`. Other types of
 regression objects will be added in the future.
 
+To install this package, you can do
+
+``` r
+devtools::install_github("linogaliana/tablelight")
+```
+
+If you want to use the :package:
+
 ``` r
 library(tablelight)
 ```
@@ -66,7 +74,7 @@ get_required_RAM <- function(profvis_object){
   )
 }
 get_required_RAM(profvis(summary(regression)))
-#> [1] 22.88872
+#> [1] 22.88857
 ```
 
 To produce a regression table, that’s a deadly combo: you need to store
@@ -76,10 +84,40 @@ your RAM hit the limit available. The idea behind `lighttable` is that
 you just need heavy elements once (to produce the standard error
 values). Once they have been used, heavy elements can be thrown away.
 
-## A possible workflow
+Most of the pieces to lighten regression objects are described
+[there](http://www.win-vector.com/blog/2014/05/trimming-the-fat-from-glm-models-in-r/).
+However, if you want to use `stargazer` later on, this will be
+impossible. You lose elements required to be able to run `summary` and
+hence produce the result table. A solution has been proposed by the
+`strip` package ([here](https://github.com/paulponcet/strip)): stripping
+the object selectively. Unfortunately, this method is only available for
+`lm` objects and the weight loss is around 30%
+
+``` r
+# install.packages('strip')
+pryr::object_size(strip::strip(regression, keep = "summary"))
+#> 104 MB
+```
+
+The `strip` method used in `tablelight` :package: is more drastic:
+
+``` r
+pryr::object_size(tablelight::strip(regression))
+#> 7.24 kB
+```
+
+Only the elements needed to print a result table are kept. Since using
+`stargazer` is no longer possible on a lightened model, `tablelight`
+:package: proposes a function (`tablelight::light_table`) to produce
+nice tables.
+
+### Some examples
+
+## General case
 
 Let’s say you want to produce a regression table from two objects. For
-the moment, the freedom in customizing the table is limited.
+the moment, the freedom in customizing the table is limited but future
+enhancements will add more and more flexibility.
 
 ``` r
 df <- data.frame(
@@ -97,14 +135,14 @@ regression2 <- lm(y ~ x, df2)
 get_required_RAM(profvis(
   capture.output(stargazer::stargazer(regression1, regression2)))
 )
-#> [1] 118.8371
+#> [1] 118.8369
 ```
 
 With `tablelight`, you will :
 
-1.  Strip the object from its fat with `strip` function ;
-2.  Use `light_table` to produce the output. You should give objects as
-    a list
+1.  Strip an object using `strip` function ;
+2.  Use `light_table` to produce the output. Models should be provided
+    as a list:
 
 <!-- end list -->
 
@@ -115,5 +153,36 @@ regression2 <- tablelight::strip(lm(y ~ x, df2))
 get_required_RAM(profvis(
   capture.output(light_table(list(regression1, regression2))))
   )
-#> [1] 0.6332245
+#> [1] 0.7170258
 ```
+
+This is, approximatively,  times less memory needed.
+
+## Specificity with zero inflated models
+
+It is hard to put together selection and outcome equations in a
+zero-inflated model with `stargazer`. Normally, you need to chose
+between reporting selection or outcome related terms. Sometimes you want
+to report both together. Unless using a hack with `stargazer` (see
+[here](https://stackoverflow.com/questions/40974843/how-to-report-both-selection-and-outcome-equation-of-selection-models-with-starg)),
+this is not possible with `stargazer`.
+
+This functionality has been integrated into `light_table` function. For
+instance, imagine you want to report both selection and outcome
+equations in a zero-inflated Poisson model:
+
+``` r
+data("bioChemists", package = "pscl")
+fm_zip <- strip(pscl::zeroinfl(art ~ . | ., data = bioChemists))
+```
+
+In that case, you will use
+
+``` r
+light_table(list(fm_zip, fm_zip), modeltype = c("selection","outcome"),
+            dep.var.labels = c("Selection","Outcome"),
+            stats.var.separate = 2L)
+```
+
+`stats.var.separate` is not compulsory but it’s nicer to get
+multicolumned performance statistics rather than two times the same.
