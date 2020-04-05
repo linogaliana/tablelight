@@ -1,13 +1,13 @@
 Package: tablelight
-Title: What the Package Does (One Line, Title Case)
+Title: R package to reduce memory needs when creating regression tables
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Lino",
+           family = "Galiana",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "lino.galiana@insee.fr")
+Description: This package has been designed to strip regression objects
+    to reduce memory needs and produce table from this lighter objects.
 License: GPL-3
 Suggests: 
     testthat (>= 2.1.0),
@@ -26,3 +26,5 @@ Imports:
     stats,
     qdap,
     reshape2
+Remotes:  
+    linogaliana/gravity
