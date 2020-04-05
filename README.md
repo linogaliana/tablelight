@@ -5,10 +5,12 @@
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.org/linogaliana/tablelight.svg?branch=master)](https://travis-ci.org/linogaliana/tablelight)
+[![Codecov test
+coverage](https://codecov.io/gh/linogaliana/tablelight/branch/master/graph/badge.svg)](https://codecov.io/gh/linogaliana/tablelight?branch=master)
 [![pipeline
 status](https://gitlab.com/linogaliana/texlight/badges/master/pipeline.svg)](https://gitlab.com/linogaliana/texlight/-/commits/master)
-[![coverage
-report](https://gitlab.com/linogaliana/texlight/badges/master/coverage.svg)](https://gitlab.com/linogaliana/texlight/-/commits/master)
 <!-- badges: end -->
 
 The goal of `tablelight` is to propose functions to generate regression
@@ -135,7 +137,7 @@ regression2 <- lm(y ~ x, df2)
 get_required_RAM(profvis(
   capture.output(stargazer::stargazer(regression1, regression2)))
 )
-#> [1] 118.8375
+#> [1] 118.8371
 ```
 
 With `tablelight`, you will :
@@ -153,7 +155,7 @@ regression2 <- tablelight::strip(lm(y ~ x, df2))
 get_required_RAM(profvis(
   capture.output(light_table(list(regression1, regression2))))
   )
-#> [1] 0.6620483
+#> [1] 0.6818161
 ```
 
 This is, approximatively,  times less memory needed.

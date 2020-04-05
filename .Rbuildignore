@@ -6,3 +6,5 @@
 ^\.github$
 ^\.gitlab-ci\.yml$
 ^\.gitlab-ci-innov\.yml$
+^\.travis\.yml$
+^codecov\.yml$

@@ -18,8 +18,9 @@ knitr::opts_chunk$set(
 # tablelight
 
 <!-- badges: start -->
+[![Travis build status](https://travis-ci.org/linogaliana/tablelight.svg?branch=master)](https://travis-ci.org/linogaliana/tablelight)
+[![Codecov test coverage](https://codecov.io/gh/linogaliana/tablelight/branch/master/graph/badge.svg)](https://codecov.io/gh/linogaliana/tablelight?branch=master)
 [![pipeline status](https://gitlab.com/linogaliana/texlight/badges/master/pipeline.svg)](https://gitlab.com/linogaliana/texlight/-/commits/master)
-[![coverage report](https://gitlab.com/linogaliana/texlight/badges/master/coverage.svg)](https://gitlab.com/linogaliana/texlight/-/commits/master)
 <!-- badges: end -->
 
 The goal of `tablelight` is to propose functions to generate regression tables using as little as possible computer resources, especially RAM. This package has been designed because `stargazer` requires a huge amount of RAM to produce tables with voluminous data.

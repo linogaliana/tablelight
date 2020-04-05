@@ -21,6 +21,7 @@ variables:
   CFLAGS: "-Wall -pedantic -fdiagnostics-color=always"
   CXXFLAGS: "-Wall -pedantic -fdiagnostics-color=always"
   CXX11FLAGS: "-Wall -pedantic -fdiagnostics-color=always"
+  CODECOV_TOKEN: "883afc2a-d265-49d5-b6cf-8b723c7317e3"
 
 
 
