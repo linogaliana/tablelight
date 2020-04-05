@@ -20,19 +20,29 @@ light_table_stats <- function(object, ncols_models, stats.var.separate, ...){
 
   if (!is.null(stats.var.separate)){
 
-    labels_stats <- rep("\\multicolumn{%s}{c}{%s}", length(stats.var.separate) + 1)
-    length_labels <- c(cumsum(stats.var.separate), ncols_models - sum(stats.var.separate))
-    # length_labels <- length_labels[length_labels>0]
-    statsdf2 <- lapply(1:length(length_labels), function(i){
-      sprintf(
-        labels_stats[i],
-        length_labels[i],
-        statsdf[,1 + 2*i])
-    }
-    )
-    statsdf <- cbind(statsdf[,1], do.call(cbind, statsdf2))
+    if (isTRUE(length(stats.var.separate)==1)){
 
+      statsdf2 <- sprintf(paste0(sprintf("\\multicolumn{%s}{c}", ncols_models),
+                          "{%s}"), statsdf[,2])
+      statsdf <- cbind(statsdf[,1], statsdf2)
+
+    } else{
+
+      labels_stats <- rep("\\multicolumn{%s}{c}{%s}", length(stats.var.separate) + 1)
+      length_labels <- c(cumsum(stats.var.separate), ncols_models - sum(stats.var.separate))
+      # length_labels <- length_labels[length_labels>0]
+      statsdf2 <- lapply(1:length(length_labels), function(i){
+        sprintf(
+          labels_stats[i],
+          length_labels[i],
+          statsdf[,1 + 2*i])
+      }
+      )
+      statsdf <- cbind(statsdf[,1], do.call(cbind, statsdf2))
+
+    }
   }
+
 
   statsdf <- apply(statsdf, 1, paste, collapse = " & ")
   stats_table <- paste0(statsdf, " \\\\")
