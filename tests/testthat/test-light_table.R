@@ -227,7 +227,7 @@ testthat::test_that("Table header and foot are correct",{
 )
 
 
-# stats.var.separate ==========
+# stats.var.separate (when length 1) ==========
 
 data("bioChemists", package = "pscl")
 fm_zip <- tablelight::strip(pscl::zeroinfl(art ~ . | ., data = bioChemists,
@@ -315,4 +315,116 @@ testthat::test_that("Summary statistics on two columns",{
 })
 
 
+# stats.var.separate (when length > 1) ==========
+
+data("bioChemists", package = "pscl")
+fm_zip <- tablelight::strip(pscl::zeroinfl(art ~ . | ., data = bioChemists,
+                                            dist = "poisson"))
+fm_zinb <- tablelight::strip(pscl::zeroinfl(art ~ . | ., data = bioChemists,
+                                           dist = "negbin"))
+
+latex_table <- tablelight::light_table(list(fm_zip, fm_zip,
+                                fm_zinb, fm_zinb),
+                           modeltype = c("selection","outcome","selection","outcome"),
+#                           dep.var.labels = c("ZIP","ZINB"),
+#                           dep.var.separate = 2L,
+                           stats.var.separate = c(2L, 2L)
+)
+
+
+testthat::test_that("Summary statistics on two columns",{
+
+  # ALPHA STATISTICS
+  alpha_row <- stringr::str_split(
+    latex_table[grepl("\\\\alpha", latex_table, perl = TRUE)],
+    "&",
+    simplify = TRUE)
+  testthat::expect_equal(ncol(alpha_row), 3L)
+  testthat::expect_equal(alpha_row[,2L], sprintf(" \\multicolumn{2}{c}{%s} ",
+                                                 ""))
+  testthat::expect_equal(alpha_row[,3L], sprintf(" \\multicolumn{2}{c}{%s} \\\\",
+                                                 format(1/exp(fm_zinb$coefficients$count['Log(theta)','Estimate']),
+                                                        digits = 3L, nsmall = 3L)))
+
+  # COUNT DISTRIBUTION
+  count_row <- stringr::str_split(
+    latex_table[grepl("Count distribution", latex_table, perl = TRUE)],
+    "&",
+    simplify = TRUE)
+  testthat::expect_equal(ncol(count_row), 3L)
+  testthat::expect_equal(count_row[,2L], sprintf(" \\multicolumn{2}{c}{Poisson} "))
+  testthat::expect_equal(count_row[,3L], sprintf(" \\multicolumn{2}{c}{Negative Binomial} \\\\"))
+
+  # LINK DISTRIBUTION
+  link_row <- stringr::str_split(
+    latex_table[grepl("Selection distribution", latex_table, perl = TRUE)],
+    "&",
+    simplify = TRUE)
+  testthat::expect_equal(ncol(link_row), 3L)
+  testthat::expect_equal(link_row[,2L], sprintf(" \\multicolumn{2}{c}{Logit} "))
+  testthat::expect_equal(link_row[,2L], sprintf(" \\multicolumn{2}{c}{Logit} \\\\"))
+
+  # OBSERVATIONS
+  link_obs <- stringr::str_split(
+    latex_table[grepl("Observations", latex_table, perl = TRUE)],
+    "&",
+    simplify = TRUE)
+  testthat::expect_equal(ncol(link_obs), 3L)
+  testthat::expect_equal(link_obs[,2L], sprintf(" \\multicolumn{2}{c}{%s} ",
+                                                format(fm_zip$n, big.mark = ",")))
+  testthat::expect_equal(link_obs[,3L], sprintf(" \\multicolumn{2}{c}{%s} \\\\",
+                                                format(fm_zinb$n, big.mark = ",")))
+
+
+  # LOGLIKELIHHOD
+  link_llk <- stringr::str_split(
+    latex_table[grepl("Log likelihood &", latex_table, perl = TRUE)],
+    "&",
+    simplify = TRUE)
+  testthat::expect_equal(ncol(link_llk), 3L)
+  testthat::expect_equal(link_llk[,3L], sprintf(" \\multicolumn{2}{c}{%s} ",
+                                                gsub("-","$-$",
+                                                     format(fm_zip$loglik, big.mark = ",", digits = 0L)))
+  )
+  testthat::expect_equal(link_llk[,3L], sprintf(" \\multicolumn{2}{c}{%s} \\\\",
+                                                gsub("-","$-$",
+                                                     format(fm_zinb$loglik, big.mark = ",", digits = 0L)))
+  )
+
+  # OBSERVATIONS (BY OBS)
+  link_llk2 <- stringr::str_split(
+    latex_table[grepl("Log likelihood \\(by obs.\\)", latex_table, perl = TRUE)],
+    "&",
+    simplify = TRUE)
+  testthat::expect_equal(ncol(link_llk2), 3L)
+  testthat::expect_equal(link_llk2[,2L], sprintf(" \\multicolumn{2}{c}{%s} ",
+                                                 gsub("-","$-$",
+                                                      format(fm_zip$loglik/fm_zip$n,
+                                                             big.mark = ",", digits = 3L,
+                                                             nsmall = 3)))
+  )
+  testthat::expect_equal(link_llk2[,3L], sprintf(" \\multicolumn{2}{c}{%s} \\\\",
+                                                 gsub("-","$-$",
+                                                      format(fm_zinb$loglik/fm_zinb$n,
+                                                             big.mark = ",", digits = 3L,
+                                                             nsmall = 3)))
+  )
+
+  # BIC
+  link_bic <- stringr::str_split(
+    latex_table[grepl("Bayesian information criterion", latex_table, perl = TRUE)],
+    "&",
+    simplify = TRUE)
+  testthat::expect_equal(ncol(link_bic), 3L)
+  testthat::expect_equal(link_bic[,2L], sprintf(" \\multicolumn{2}{c}{%s} ",
+                                                gsub("-","$-$",
+                                                     format(fm_zip$bic, big.mark = ",", digits = 0L)))
+  )
+  testthat::expect_equal(link_bic[,3L], sprintf(" \\multicolumn{2}{c}{%s} \\\\",
+                                                gsub("-","$-$",
+                                                     format(fm_zinb$bic, big.mark = ",", digits = 0L)))
+  )
+
+
+})
 

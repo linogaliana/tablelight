@@ -28,9 +28,9 @@ light_table_stats <- function(object, ncols_models, stats.var.separate, ...){
 
     } else{
 
-      labels_stats <- rep("\\multicolumn{%s}{c}{%s}", length(stats.var.separate) + 1)
-      length_labels <- c(cumsum(stats.var.separate), ncols_models - sum(stats.var.separate))
-      # length_labels <- length_labels[length_labels>0]
+      labels_stats <- rep("\\multicolumn{%s}{c}{%s}", length(stats.var.separate) + ncols_models - sum(stats.var.separate))
+      length_labels <- c(stats.var.separate, ncols_models - sum(stats.var.separate))
+      length_labels <- length_labels[length_labels>0]
       statsdf2 <- lapply(1:length(length_labels), function(i){
         sprintf(
           labels_stats[i],
