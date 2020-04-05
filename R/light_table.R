@@ -71,10 +71,10 @@
 #'
 #' model_list <- lapply(list(fm_zip, fm_zip2,
 #'                           glm_model, fm_zip3,
-#'                           fm_zip5), texlight::strip)
+#'                           fm_zip5), tablelight::strip)
 #'
 #' cat(
-#'   texlight::light_table(object = model_list,
+#'   tablelight::light_table(object = model_list,
 #'                         covariate.labels = c("x1","x2")),
 #'   sep = "\n"
 #' )

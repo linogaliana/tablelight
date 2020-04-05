@@ -1,7 +1,7 @@
 testthat::context("extract_coeff recovers the coefficients")
 
 
-library(texlight)
+library(tablelight)
 
 # GLM -------------------------
 
@@ -10,7 +10,7 @@ glm <- glm(
   data = iris,
   family = poisson()
 )
-stats_glm <- texlight::extract_coeff(glm)
+stats_glm <- tablelight::extract_coeff(glm)
 
 testthat::test_that("Coefficient names are consistent", {
   testthat::expect_equal(
@@ -56,9 +56,9 @@ glm <- glm(
   family = poisson()
 )
 
-light_glm <- texlight::strip(glm)
+light_glm <- tablelight::strip(glm)
 
-stats_glm <- texlight::extract_coeff(light_glm)
+stats_glm <- tablelight::extract_coeff(light_glm)
 
 testthat::test_that("Coefficient names are consistent", {
   testthat::expect_equal(
@@ -100,24 +100,24 @@ testthat::test_that("Coefficient s.e. are consistent", {
 data("bioChemists", package = "pscl")
 
 zeroinfl_negbin <- pscl::zeroinfl(art ~ . | ., data = bioChemists, dist = "negbin")
-zeroinfl_negbin_strip <- texlight::strip(zeroinfl_negbin)
+zeroinfl_negbin_strip <- tablelight::strip(zeroinfl_negbin)
 
 testthat::test_that("When modeltype = 'missing', outcome is used", {
 
   testthat::expect_message(
-    stats_glm <- texlight::extract_coeff(zeroinfl_negbin_strip),
+    stats_glm <- tablelight::extract_coeff(zeroinfl_negbin_strip),
     "'modeltype' argument missing, assuming 'outcome'"
   )
 
   testthat::expect_identical(
     stats_glm,
-    texlight::extract_coeff(zeroinfl_negbin_strip, modeltype = "outcome")
+    tablelight::extract_coeff(zeroinfl_negbin_strip, modeltype = "outcome")
   )
 }
 )
 
-ZINB_outcome <- texlight::extract_coeff(zeroinfl_negbin_strip, modeltype = "outcome")
-ZINB_zero <- texlight::extract_coeff(zeroinfl_negbin_strip, modeltype = "selection")
+ZINB_outcome <- tablelight::extract_coeff(zeroinfl_negbin_strip, modeltype = "outcome")
+ZINB_zero <- tablelight::extract_coeff(zeroinfl_negbin_strip, modeltype = "selection")
 
 output_glm <- summary(zeroinfl_negbin)$coefficients
 

@@ -11,7 +11,7 @@ ols <- lm(
 
 testthat::test_that(
   "[OLS] Empty string returned",
-  testthat::expect_equal(texlight::extract_alpha(ols),
+  testthat::expect_equal(tablelight::extract_alpha(ols),
                          "")
 )
 
@@ -24,7 +24,7 @@ glm <- glm(
 
 testthat::test_that(
   "[glm] Empty string returned",
-  testthat::expect_equal(texlight::extract_alpha(glm),
+  testthat::expect_equal(tablelight::extract_alpha(glm),
                          "")
 )
 
@@ -38,7 +38,7 @@ glmnb <- MASS::glm.nb(Days ~ Sex/(Age + Eth*Lrn), data = quine)
 
 testthat::test_that(
   "[glm.nb] alpha returned",
-  testthat::expect_equal(texlight::extract_alpha(glmnb),
+  testthat::expect_equal(tablelight::extract_alpha(glmnb),
                          as.character(
                            format(
                              1/glmnb$theta, digits = 3L, nsmall = 3L)
@@ -55,7 +55,7 @@ zeroinfl_negbin <- pscl::zeroinfl(art ~ . | ., data = bioChemists, dist = "negbi
 
 testthat::test_that(
   "[zeroinfl] Empty string returned",
-  testthat::expect_equal(texlight::extract_alpha(zeroinfl_negbin),
+  testthat::expect_equal(tablelight::extract_alpha(zeroinfl_negbin),
                          format(
                            1/zeroinfl_negbin$theta, digits = 3L, nsmall = 3L)
   )
@@ -70,6 +70,6 @@ zeroinfl <- pscl::zeroinfl(art ~ . | ., data = bioChemists)
 
 testthat::test_that(
   "[zeroinfl] Empty string returned",
-  testthat::expect_equal(texlight::extract_alpha(zeroinfl),"")
+  testthat::expect_equal(tablelight::extract_alpha(zeroinfl),"")
 )
 

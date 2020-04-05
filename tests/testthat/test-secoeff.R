@@ -30,7 +30,7 @@ oglm <- oglmx::oglmx(
 
 
 testthat::expect_equal(
-  texlight::secoeff(oglm),
+  tablelight::secoeff(oglm),
   summary(oglm)$estimate
 )
 
@@ -41,7 +41,7 @@ quine.nb1 <- MASS::glm.nb(Days ~ Sex/(Age + Eth*Lrn), data = MASS::quine)
 
 
 # testthat::expect_equal(
-#   texlight:::secoeff(quine.nb1),
+#   tablelight:::secoeff(quine.nb1),
 #   summary(quine.nb1)$estimate
 # )
 
@@ -51,7 +51,7 @@ quine.nb1 <- MASS::glm.nb(Days ~ Sex/(Age + Eth*Lrn), data = MASS::quine)
 data("bioChemists", package = "pscl")
 
 zeroinfl_negbin <- pscl::zeroinfl(art ~ . | ., data = bioChemists, dist = "negbin")
-zeroinfl_negbin_strip <- texlight::strip(zeroinfl_negbin)
+zeroinfl_negbin_strip <- tablelight::strip(zeroinfl_negbin)
 
 testthat::expect_equal(
   secoeff(zeroinfl_negbin_strip, modeltype = "count"),

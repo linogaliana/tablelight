@@ -10,7 +10,7 @@ ols <- lm(
   data = iris
 )
 
-latex_table <- texlight::light_table(ols,
+latex_table <- tablelight::light_table(ols,
                                      title = "My table title",
                                      label = "My table label",
                                      dep.var.labels = "My depvar",
@@ -80,7 +80,7 @@ testthat::test_that("Body (coefficients) correct",{
       )[2]),
     paste0(
       format(ols$coefficients['(Intercept)'],digits = 3L, nsmall = 3L),
-      texlight:::signif_stars(sd['(Intercept)']),
+      tablelight:::signif_stars(sd['(Intercept)']),
       "\\\\")
   )
 
@@ -92,7 +92,7 @@ testthat::test_that("Body (coefficients) correct",{
       )[2]),
     gsub(x = paste0(
       format(ols$coefficients['Sepal.Width'],digits = 3L, nsmall = 3L),
-      texlight:::signif_stars(sd['Sepal.Width']),
+      tablelight:::signif_stars(sd['Sepal.Width']),
       "\\\\"), pattern = "-", replacement = "$-$"
     )
   )
@@ -102,7 +102,7 @@ testthat::test_that("Body (coefficients) correct",{
 
 
 
-latex_table <- texlight::light_table(ols,
+latex_table <- tablelight::light_table(ols,
                                      title = "My table title",
                                      label = "My table label",
                                      dep.var.labels = "My depvar",
@@ -151,7 +151,7 @@ oglm <- oglmx::oglmx(
 )
 
 testthat::expect_warning(
-  x <- texlight::light_table(oglm,
+  x <- tablelight::light_table(oglm,
                              modeltype = "outcome"),
   "attributes are not identical across measure variables"
 )
@@ -163,7 +163,7 @@ testthat::expect_equal(
 )
 
 testthat::expect_warning(
-  x2 <- texlight::light_table(list(oglm, oglm),
+  x2 <- tablelight::light_table(list(oglm, oglm),
                               modeltype = c("outcome","outcome")),
   "attributes are not identical across measure variables"
 )
@@ -184,13 +184,13 @@ ols <- lm(
   data = iris
 )
 
-latex_table <- texlight::light_table(ols,
+latex_table <- tablelight::light_table(ols,
                                      title = "My table title",
                                      label = "My table label",
                                      dep.var.labels = "My depvar",
                                      column.labels = "My label column")
 
-latex_table2 <- texlight::light_table(ols,
+latex_table2 <- tablelight::light_table(ols,
                                      title = "My table title",
                                      label = "My table label",
                                      dep.var.labels = rep("My depvar",10L),

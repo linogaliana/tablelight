@@ -1,4 +1,4 @@
 library(testthat)
-library(texlight)
+library(tablelight)
 
-test_check("texlight")
+test_check("tablelight")

@@ -12,7 +12,7 @@ ols <- lm(
 testthat::test_that(
   "Coefficient names returned consistent with formula",
   testthat::expect_equal(
-    texlight::listcoeff(
+    tablelight::listcoeff(
       lm(
         Sepal.Length ~ Sepal.Width,
         data = iris
@@ -25,7 +25,7 @@ testthat::test_that(
 testthat::test_that(
   "[OLS] Coefficient names returned consistent with formula",
   testthat::expect_equal(
-    texlight::listcoeff(
+    tablelight::listcoeff(
       lm(
         Sepal.Length ~ 0 + Sepal.Width,
         data = iris
@@ -48,7 +48,7 @@ glm <- glm(
 testthat::test_that(
   "[glm] Coefficient names returned consistent with formula",
   testthat::expect_equal(
-    texlight::listcoeff(glm),
+    tablelight::listcoeff(glm),
     c("(Intercept)", "Sepal.Width")
   )
 )
@@ -56,7 +56,7 @@ testthat::test_that(
 testthat::test_that(
   "[glm] Coefficient names returned consistent with formula",
   testthat::expect_equal(
-    texlight::listcoeff(
+    tablelight::listcoeff(
       glm(
         Sepal.Length ~ 0 + Sepal.Width,
         data = iris
@@ -79,7 +79,7 @@ glmnb <- MASS::glm.nb(Days ~ Sex + Age, data = quine)
 testthat::test_that(
   "[glm] Coefficient names returned consistent with formula",
   testthat::expect_equal(
-    texlight::listcoeff(glmnb),
+    tablelight::listcoeff(glmnb),
     c("(Intercept)", paste0("Sex", levels(quine$Sex)[2]),
       paste0("Age", levels(quine$Age)[2:length(levels(quine$Age))]))
   )
@@ -89,7 +89,7 @@ testthat::test_that(
 testthat::test_that(
   "[glmnb] Coefficient names returned consistent with formula",
   testthat::expect_equal(
-    texlight::listcoeff(
+    tablelight::listcoeff(
       MASS::glm.nb(Days ~ 0 + Sex + Age, data = quine)
     ),
     c(paste0("Sex", levels(quine$Sex)),
@@ -110,7 +110,7 @@ ZINB <- pscl::zeroinfl(art ~ kid5 + phd | kid5 + phd,
 testthat::test_that(
   "[zinb] Coefficient names returned consistent with formula",
   testthat::expect_equal(
-    texlight::listcoeff(ZINB),
+    tablelight::listcoeff(ZINB),
     c("(Intercept)", "kid5", "phd")
   )
 )
@@ -120,7 +120,7 @@ testthat::test_that(
   "[zinb] Coefficient names returned consistent with formula",{
 
     testthat::expect_equal(
-      texlight::listcoeff(
+      tablelight::listcoeff(
         pscl::zeroinfl(art ~ kid5 | phd,
                        data = bioChemists, dist = "negbin")
       ),
@@ -128,7 +128,7 @@ testthat::test_that(
     )
 
     testthat::expect_equal(
-      texlight::listcoeff(
+      tablelight::listcoeff(
         pscl::zeroinfl(art ~ kid5 + phd | phd,
                        data = bioChemists, dist = "negbin")
       ),
@@ -136,7 +136,7 @@ testthat::test_that(
     )
 
     testthat::expect_equal(
-      texlight::listcoeff(
+      tablelight::listcoeff(
         pscl::zeroinfl(art ~ kid5 + phd | 1,
                        data = bioChemists, dist = "negbin")
       ),
@@ -144,7 +144,7 @@ testthat::test_that(
     )
 
     testthat::expect_equal(
-      texlight::listcoeff(
+      tablelight::listcoeff(
         pscl::zeroinfl(art ~ 1 | phd,
                        data = bioChemists, dist = "negbin")
       ),
@@ -164,20 +164,20 @@ ols <- lm(
   data = iris
 )
 
-light_ols <- texlight::strip(ols)
+light_ols <- tablelight::strip(ols)
 
 
 testthat::test_that(
   "Coefficient names returned consistent with formula", {
 
     testthat::expect_equal(
-      texlight::listcoeff(light_ols),
+      tablelight::listcoeff(light_ols),
       c("(Intercept)", "Sepal.Width")
     )
 
     testthat::expect_equal(
-      texlight::listcoeff(light_ols),
-      texlight::listcoeff(ols)
+      tablelight::listcoeff(light_ols),
+      tablelight::listcoeff(ols)
     )
 
 
@@ -195,20 +195,20 @@ glm <- glm(
   family = poisson()
 )
 
-light_glm <- texlight::strip(glm)
+light_glm <- tablelight::strip(glm)
 
 
 testthat::test_that(
   "Coefficient names returned consistent with formula", {
 
     testthat::expect_equal(
-      texlight::listcoeff(light_glm),
+      tablelight::listcoeff(light_glm),
       c("(Intercept)", "Sepal.Width")
     )
 
     testthat::expect_equal(
-      texlight::listcoeff(light_glm),
-      texlight::listcoeff(glm)
+      tablelight::listcoeff(light_glm),
+      tablelight::listcoeff(glm)
     )
 
 
@@ -223,22 +223,22 @@ testthat::test_that(
 quine <- MASS::quine
 
 glmnb <- MASS::glm.nb(Days ~ Sex + Age, data = quine)
-light_glmnb <- texlight::strip(glmnb)
+light_glmnb <- tablelight::strip(glmnb)
 
 
 testthat::test_that(
   "Coefficient names returned consistent with formula", {
 
     testthat::expect_equal(
-      texlight::listcoeff(light_glmnb),
+      tablelight::listcoeff(light_glmnb),
       c("(Intercept)", paste0("Sex", levels(quine$Sex)[2]),
         paste0("Age", levels(quine$Age)[2:length(levels(quine$Age))]))
     )
 
 
     testthat::expect_equal(
-      texlight::listcoeff(light_glmnb),
-      texlight::listcoeff(glmnb)
+      tablelight::listcoeff(light_glmnb),
+      tablelight::listcoeff(glmnb)
     )
 
 
@@ -254,8 +254,8 @@ testthat::test_that(
   "[zinb] Coefficient names returned consistent with formula",{
 
     testthat::expect_equal(
-      texlight::listcoeff(
-        texlight::strip(
+      tablelight::listcoeff(
+        tablelight::strip(
           pscl::zeroinfl(art ~ kid5 | phd,
                          data = bioChemists, dist = "negbin")
         )
@@ -264,8 +264,8 @@ testthat::test_that(
     )
 
     testthat::expect_equal(
-      texlight::listcoeff(
-        texlight::strip(
+      tablelight::listcoeff(
+        tablelight::strip(
           pscl::zeroinfl(art ~ kid5 + phd | phd,
                          data = bioChemists, dist = "negbin")
         )
@@ -274,8 +274,8 @@ testthat::test_that(
     )
 
     testthat::expect_equal(
-      texlight::listcoeff(
-        texlight::strip(
+      tablelight::listcoeff(
+        tablelight::strip(
           pscl::zeroinfl(art ~ kid5 + phd | 1,
                          data = bioChemists, dist = "negbin")
         )
@@ -284,8 +284,8 @@ testthat::test_that(
     )
 
     testthat::expect_equal(
-      texlight::listcoeff(
-        texlight::strip(
+      tablelight::listcoeff(
+        tablelight::strip(
           pscl::zeroinfl(art ~ 1 | phd,
                          data = bioChemists, dist = "negbin")
         )
@@ -316,7 +316,7 @@ testthat::test_that(
 # testthat::test_that(
 #   "Coefficient names returned consistent with formula",
 #   testthat::expect_equal(
-#     texlight::listcoeff(oglm),
+#     tablelight::listcoeff(oglm),
 #     c("(Intercept)", "Sepal.Width", "Threshold (1->2)", "Threshold (2->3)", NA)
 #   )
 # )

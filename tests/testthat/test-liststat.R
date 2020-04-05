@@ -8,8 +8,8 @@ ols <- lm(
   data = iris
 )
 
-stats_ols <- texlight:::liststats(ols)
-stats_ols_bis <- texlight::liststats(ols, add_link = TRUE)
+stats_ols <- tablelight:::liststats(ols)
+stats_ols_bis <- tablelight::liststats(ols, add_link = TRUE)
 
 ## 1.A. CHECK STATISTICS RETURNED ======
 
@@ -134,8 +134,8 @@ glm <- glm(
   family = poisson()
 )
 
-stats_glm <- texlight::liststats(glm)
-stats_glm_bis <- texlight::liststats(glm, add_link = TRUE)
+stats_glm <- tablelight::liststats(glm)
+stats_glm_bis <- tablelight::liststats(glm, add_link = TRUE)
 
 
 # 2.A. CHECK STATISTICS RETURNED ======
@@ -247,8 +247,8 @@ glmnb <- MASS::glm.nb(Days ~ Sex/(Age + Eth*Lrn), data = quine)
 
 # 3.A. CHECK STATISTICS RETURNED ======
 
-stats_glmnb <- texlight::liststats(glmnb)
-stats_glmnb_bis <- texlight::liststats(glmnb, add_link = TRUE,
+stats_glmnb <- tablelight::liststats(glmnb)
+stats_glmnb_bis <- tablelight::liststats(glmnb, add_link = TRUE,
                                        add_alpha = TRUE)
 
 
@@ -378,10 +378,10 @@ testthat::test_that(
 data("bioChemists", package = "pscl")
 
 zeroinfl_negbin <- pscl::zeroinfl(art ~ . | ., data = bioChemists, dist = "negbin")
-zeroinfl_negbin_strip <- texlight::strip(zeroinfl_negbin)
+zeroinfl_negbin_strip <- tablelight::strip(zeroinfl_negbin)
 
 
-stats_bis_zeroinfl_negbin <- texlight::liststats(zeroinfl_negbin,
+stats_bis_zeroinfl_negbin <- tablelight::liststats(zeroinfl_negbin,
                                                  add_link = TRUE,
                                                  add_alpha = TRUE)
 
@@ -508,8 +508,8 @@ testthat::test_that(
 zeroinfl_poisson <- pscl::zeroinfl(art ~ . | ., data = bioChemists)
 
 
-stats_zeroinfl_poisson <- texlight::liststats(zeroinfl_poisson)
-stats_bis_zeroinfl_poisson <- texlight::liststats(zeroinfl_poisson, add_link = TRUE,
+stats_zeroinfl_poisson <- tablelight::liststats(zeroinfl_poisson)
+stats_bis_zeroinfl_poisson <- tablelight::liststats(zeroinfl_poisson, add_link = TRUE,
                                                   add_alpha = TRUE)
 
 
@@ -617,10 +617,10 @@ ols <- lm(
   data = iris
 )
 
-light_ols <- texlight::strip(ols)
+light_ols <- tablelight::strip(ols)
 
-stats_ols <- texlight:::liststats(ols, add_link = TRUE)
-stats_ols_strip <- texlight:::liststats(light_ols, add_link = TRUE)
+stats_ols <- tablelight:::liststats(ols, add_link = TRUE)
+stats_ols_strip <- tablelight:::liststats(light_ols, add_link = TRUE)
 
 
 ## 5.A. CHECK STATISTICS RETURNED ======
@@ -734,10 +734,10 @@ glm <- glm(
   family = poisson()
 )
 
-light_glm <- texlight::strip(glm)
+light_glm <- tablelight::strip(glm)
 
-stats_glm <- texlight::liststats(glm, add_link = TRUE, add_alpha = TRUE)
-stats_glm_strip <- texlight::liststats(light_glm, add_link = TRUE)
+stats_glm <- tablelight::liststats(glm, add_link = TRUE, add_alpha = TRUE)
+stats_glm_strip <- tablelight::liststats(light_glm, add_link = TRUE)
 
 
 ## 6.A. CHECK STATISTICS RETURNED ======
@@ -826,12 +826,12 @@ testthat::test_that(
 quine <- MASS::quine
 
 glmnb <- MASS::glm.nb(Days ~ Sex/(Age + Eth*Lrn), data = quine)
-glmnb_light <- texlight::strip(glmnb)
+glmnb_light <- tablelight::strip(glmnb)
 
 # 7.A. CHECK STATISTICS RETURNED ======
 
-stats_glmnb <- texlight::liststats(glmnb)
-stats_glmnb_bis <- texlight::liststats(glmnb, add_link = TRUE,
+stats_glmnb <- tablelight::liststats(glmnb)
+stats_glmnb_bis <- tablelight::liststats(glmnb, add_link = TRUE,
                                        add_alpha = TRUE)
 
 
@@ -969,13 +969,13 @@ requireNamespace("gravity", quietly = TRUE)
 quine <- MASS::quine
 
 glmnb <- gravity::fastglm.nb(Days ~ Sex/(Age + Eth*Lrn), data = quine)
-# glmnb_light <- texlight::strip(glmnb)
+# glmnb_light <- tablelight::strip(glmnb)
 
 
 # 8.A. CHECK STATISTICS RETURNED ======
 
-stats_glmnb <- texlight::liststats(glmnb)
-stats_glmnb_bis <- texlight::liststats(glmnb_light, add_link = TRUE,
+stats_glmnb <- tablelight::liststats(glmnb)
+stats_glmnb_bis <- tablelight::liststats(glmnb_light, add_link = TRUE,
                                        add_alpha = TRUE)
 
 
@@ -1101,7 +1101,7 @@ testthat::test_that(
 data("bioChemists", package = "pscl")
 
 zeroinfl_negbin <- gravity::fastzeroinfl(art ~ . | ., data = bioChemists, dist = "negbin")
-stats_bis_zeroinfl_negbin <- texlight::liststats(zeroinfl_negbin,
+stats_bis_zeroinfl_negbin <- tablelight::liststats(zeroinfl_negbin,
                                                  add_link =TRUE, add_alpha = TRUE)
 
 
@@ -1207,8 +1207,8 @@ testthat::test_that(
 zeroinfl_poisson <- pscl::zeroinfl(art ~ . | ., data = bioChemists)
 
 
-stats_zeroinfl_poisson <- texlight::liststats(zeroinfl_poisson)
-stats_bis_zeroinfl_poisson <- texlight::liststats(zeroinfl_poisson, add_link = TRUE,
+stats_zeroinfl_poisson <- tablelight::liststats(zeroinfl_poisson)
+stats_bis_zeroinfl_poisson <- tablelight::liststats(zeroinfl_poisson, add_link = TRUE,
                                                   add_alpha = TRUE)
 
 
@@ -1318,12 +1318,12 @@ testthat::test_that(
 data("bioChemists", package = "pscl")
 
 zeroinfl_negbin <- gravity::fastzeroinfl(art ~ . | ., data = bioChemists, dist = "negbin")
-zeroinfl_negbin_strip <- texlight::strip(zeroinfl_negbin)
+zeroinfl_negbin_strip <- tablelight::strip(zeroinfl_negbin)
 
 
-stats_bis_zeroinfl_negbin <- texlight::liststats(zeroinfl_negbin, add_link = TRUE,
+stats_bis_zeroinfl_negbin <- tablelight::liststats(zeroinfl_negbin, add_link = TRUE,
                                                  add_alpha = TRUE)
-stats_bis_zeroinfl_negbin_strip <- texlight::liststats(zeroinfl_negbin_strip, add_link = TRUE,
+stats_bis_zeroinfl_negbin_strip <- tablelight::liststats(zeroinfl_negbin_strip, add_link = TRUE,
                                                        add_alpha = TRUE)
 
 
@@ -1429,12 +1429,12 @@ testthat::test_that(
 data("bioChemists", package = "pscl")
 
 zeroinfl_poisson <- pscl::zeroinfl(art ~ . | ., data = bioChemists)
-zeroinfl_poisson_strip <- texlight::strip(zeroinfl_poisson)
+zeroinfl_poisson_strip <- tablelight::strip(zeroinfl_poisson)
 
 
-stats_bis_zeroinfl_poisson <- texlight::liststats(zeroinfl_poisson, add_link = TRUE,
+stats_bis_zeroinfl_poisson <- tablelight::liststats(zeroinfl_poisson, add_link = TRUE,
                                                   add_alpha = TRUE)
-stats_bis_zeroinfl_poisson_strip <- texlight::liststats(zeroinfl_poisson_strip, add_link = TRUE,
+stats_bis_zeroinfl_poisson_strip <- tablelight::liststats(zeroinfl_poisson_strip, add_link = TRUE,
                                                         add_alpha = TRUE)
 
 
@@ -1564,8 +1564,8 @@ dataset<-data.frame(y,x1,x2)
 oglm <- oglmx::oglmx(y ~ x1 + x2 + z, data=dataset,link="probit",constantMEAN=FALSE,
                               constantSD=FALSE,delta=0,threshparam=NULL)
 
-stats_oglm <- texlight::liststats(oglm)
-stats_oglm_bis <- texlight::liststats(oglm, add_link = TRUE)
+stats_oglm <- tablelight::liststats(oglm)
+stats_oglm_bis <- tablelight::liststats(oglm, add_link = TRUE)
 
 
 # 2.A. CHECK STATISTICS RETURNED ======
