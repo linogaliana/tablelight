@@ -362,7 +362,7 @@ testthat::test_that("Summary statistics on two columns",{
     simplify = TRUE)
   testthat::expect_equal(ncol(link_row), 3L)
   testthat::expect_equal(link_row[,2L], sprintf(" \\multicolumn{2}{c}{Logit} "))
-  testthat::expect_equal(link_row[,2L], sprintf(" \\multicolumn{2}{c}{Logit} \\\\"))
+  testthat::expect_equal(link_row[,3L], sprintf(" \\multicolumn{2}{c}{Logit} \\\\"))
 
   # OBSERVATIONS
   link_obs <- stringr::str_split(
@@ -382,7 +382,7 @@ testthat::test_that("Summary statistics on two columns",{
     "&",
     simplify = TRUE)
   testthat::expect_equal(ncol(link_llk), 3L)
-  testthat::expect_equal(link_llk[,3L], sprintf(" \\multicolumn{2}{c}{%s} ",
+  testthat::expect_equal(link_llk[,2L], sprintf(" \\multicolumn{2}{c}{%s} ",
                                                 gsub("-","$-$",
                                                      format(fm_zip$loglik, big.mark = ",", digits = 0L)))
   )
