@@ -305,6 +305,32 @@ testthat::test_that("Same table except for the omit variables", {
 })
 
 
+# covariate.labels =================
+
+ols <- lm(
+  Sepal.Length ~ Sepal.Width + Petal.Length,
+  data = iris
+)
+
+latex_table1 <- tablelight::light_table(ols,
+                                        title = "My table title",
+                                        label = "My table label",
+                                        dep.var.labels = "My depvar",
+                                        column.labels = "My label column")
+
+latex_table2 <- tablelight::light_table(ols,
+                                        title = "My table title",
+                                        label = "My table label",
+                                        dep.var.labels = "My depvar",
+                                        column.labels = "My label column",
+                                        covariate.labels = c("Sepal Width", "Length Petal"))
+
+testthat::test_that("Same table except for the covariate names", {
+  latex_table1b <- gsub(pattern = "Sepal.Width", replacement = "Sepal Width", latex_table1)
+  latex_table1b <- gsub(pattern = "Petal.Length", replacement = "Length Petal", latex_table1b)
+  testthat::expect_equal(trimws(latex_table1b),trimws(latex_table2))
+})
+
 
 
 # adjustbox ==================
