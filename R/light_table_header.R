@@ -43,8 +43,9 @@ light_table_header <- function(ncols_models,
 
   } else{
 
-    labels_depvar <- rep("\\multicolumn{%s}{c}{%s}", length(dep.var.separate) + 1)
-    length_labels <- c(cumsum(dep.var.separate), ncols_models - sum(dep.var.separate))
+    labels_depvar <- rep("\\multicolumn{%s}{c}{%s}", length(dep.var.separate) - - sum(dep.var.separate))
+    length_labels <- c(dep.var.separate, ncols_models - sum(dep.var.separate))
+    length_labels <- length_labels[length_labels>0]
     labels_depvar <- sapply(1:length(length_labels), function(i){
       sprintf(
         labels_depvar[i],

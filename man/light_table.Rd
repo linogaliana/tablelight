@@ -12,7 +12,6 @@ light_table(
   dep.var.labels = "Label dep.var.labels",
   dep.var.separate = NULL,
   column.labels = "blab",
-  column.separate = NULL,
   covariate.labels = NULL,
   order_variable = NULL,
   stats.var.separate = NULL,
@@ -47,17 +46,6 @@ to the following three columns (i.e., columns
 number four, five and six).}
 
 \item{column.labels}{Label for columns}
-
-\item{column.separate}{A numeric vector that specifies how
-column.labels should be laid out across regression table
-columns. A value of \code{c(2, 1, 3)}, for instance, will apply
-the first label to the two first columns, the second label
-to the third column, and the third label will apply to
-the following three columns (i.e., columns
-number four, five and six). If the argument's value is \code{NULL}
-or the regression table contains more columns than are
-referred to in \code{column.separate}, a value of \code{1}
-is assumed for each \emph{excess} column label.}
 
 \item{covariate.labels}{A character vector of labels for
 columns in regression tables.

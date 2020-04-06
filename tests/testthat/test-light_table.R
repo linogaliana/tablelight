@@ -109,16 +109,49 @@ testthat::test_that("Body (coefficients) correct",{
 
 ## 1.2. SEVERAL MODELS =================
 
-latex_table <- tablelight::light_table(list(ols, ols),
+
+
+ols <- lm(
+  Sepal.Length ~ Sepal.Width,
+  data = iris
+)
+
+latex_table <- tablelight::light_table(list(ols, ols, ols),
                                        title = "My table title",
                                        label = "My table label",
-                                       dep.var.labels = "My depvar",
-                                       column.labels = "My label column")
+                                       dep.var.labels = c("My depvar1", "My depvar2"),
+                                       dep.var.separate = c(2,1),
+                                       column.labels = c("Label1","Label2"))
 
+# HEADER
 
-# TO DO
+testthat::test_that("Number of columns: number of models + 1", {
+  tabular_row = stringr::str_split(pattern = "\n",
+                                   latex_table[grepl("\\\\begin{tabular}", latex_table, perl = TRUE)], simplify = TRUE)[1,1]
+  testthat::expect_equal(tabular_row, sprintf("\\begin{tabular}{@{\\extracolsep{5pt}}l%s}",
+                                              paste(rep("c",3L), collapse = "")))
+})
 
+testthat::test_that("Number of columns: number of models + 1", {
+  dep_var_row <- latex_table[grepl(
+    pattern = "\\\\multicolumn\\{3\\}\\{c\\}\\{\\\\textit\\{Dependent variable:\\}\\}",
+    latex_table)]
+  dep_var_row <- as.character(stringr::str_split(pattern = "\n", dep_var_row, simplify = TRUE))
+  dep_var_row2 <- dep_var_row[(which(grepl(
+    pattern = "\\\\multicolumn\\{3\\}\\{c\\}\\{\\\\textit\\{Dependent variable:\\}\\}",
+    latex_table))):length(dep_var_row)]
+  testthat::expect_equal(dep_var_row2[1], "\\cline{2-4}")
+  testthat::expect_equal(as.character(
+    stringr::str_split(pattern = "&", dep_var_row2[2], simplify = TRUE)),
+    c("\\\\[-1.8ex] ", " \\multicolumn{2}{c}{My depvar1} ", " \\multicolumn{1}{c}{My depvar2} \\\\"))
+})
 
+testthat::test_that("Correct column labels [NAs when vector is not long enough]", {
+  testthat::expect_equal(
+    sum(grepl(" & Label1 & Label2 & NA \\\\", latex_table)),
+    1L
+  )
+})
 
 
 
@@ -234,8 +267,8 @@ fm_zip <- tablelight::strip(pscl::zeroinfl(art ~ . | ., data = bioChemists,
                                            dist = "negbin"))
 
 latex_table <- light_table(list(fm_zip, fm_zip), modeltype = c("selection","outcome"),
-            dep.var.labels = c("Selection","Outcome"),
-            stats.var.separate = 2L)
+                           dep.var.labels = c("Selection","Outcome"),
+                           stats.var.separate = 2L)
 
 
 testthat::test_that("Summary statistics on two columns",{
@@ -284,7 +317,7 @@ testthat::test_that("Summary statistics on two columns",{
   testthat::expect_equal(ncol(link_llk), 2L)
   testthat::expect_equal(link_llk[,2L], sprintf(" \\multicolumn{2}{c}{%s} \\\\",
                                                 gsub("-","$-$",
-                                                  format(fm_zip$loglik, big.mark = ",", digits = 0L)))
+                                                     format(fm_zip$loglik, big.mark = ",", digits = 0L)))
   )
 
   # OBSERVATIONS (BY OBS)
@@ -294,10 +327,10 @@ testthat::test_that("Summary statistics on two columns",{
     simplify = TRUE)
   testthat::expect_equal(ncol(link_llk2), 2L)
   testthat::expect_equal(link_llk2[,2L], sprintf(" \\multicolumn{2}{c}{%s} \\\\",
-                                                gsub("-","$-$",
-                                                     format(fm_zip$loglik/fm_zip$n,
-                                                            big.mark = ",", digits = 3L,
-                                                            nsmall = 3)))
+                                                 gsub("-","$-$",
+                                                      format(fm_zip$loglik/fm_zip$n,
+                                                             big.mark = ",", digits = 3L,
+                                                             nsmall = 3)))
   )
 
   # BIC
@@ -319,16 +352,16 @@ testthat::test_that("Summary statistics on two columns",{
 
 data("bioChemists", package = "pscl")
 fm_zip <- tablelight::strip(pscl::zeroinfl(art ~ . | ., data = bioChemists,
-                                            dist = "poisson"))
+                                           dist = "poisson"))
 fm_zinb <- tablelight::strip(pscl::zeroinfl(art ~ . | ., data = bioChemists,
-                                           dist = "negbin"))
+                                            dist = "negbin"))
 
 latex_table <- tablelight::light_table(list(fm_zip, fm_zip,
-                                fm_zinb, fm_zinb),
-                           modeltype = c("selection","outcome","selection","outcome"),
-#                           dep.var.labels = c("ZIP","ZINB"),
-#                           dep.var.separate = 2L,
-                           stats.var.separate = c(2L, 2L)
+                                            fm_zinb, fm_zinb),
+                                       modeltype = c("selection","outcome","selection","outcome"),
+                                       #                           dep.var.labels = c("ZIP","ZINB"),
+                                       #                           dep.var.separate = 2L,
+                                       stats.var.separate = c(2L, 2L)
 )
 
 

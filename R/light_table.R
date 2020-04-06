@@ -30,16 +30,6 @@
 #'  argument `column.separate`.
 #' @param order_variable A vector that indicates the order
 #'  in which variables will appear in the output.
-#' @param column.separate A numeric vector that specifies how
-#'  column.labels should be laid out across regression table
-#'  columns. A value of `c(2, 1, 3)`, for instance, will apply
-#'  the first label to the two first columns, the second label
-#'  to the third column, and the third label will apply to
-#'  the following three columns (i.e., columns
-#'  number four, five and six). If the argument's value is `NULL`
-#'  or the regression table contains more columns than are
-#'  referred to in `column.separate`, a value of `1`
-#'  is assumed for each *excess* column label.
 #' @param add.lines Rows to add in object statistics part
 #' @param notes Notes that should be added at the end
 #' @param omit List of variables that should be removed from
@@ -92,7 +82,6 @@ light_table <- function(object,
                         dep.var.labels = "Label dep.var.labels",
                         dep.var.separate = NULL,
                         column.labels = "blab",
-                        column.separate = NULL,
                         covariate.labels = NULL,
                         order_variable = NULL,
                         stats.var.separate = NULL,
@@ -115,7 +104,6 @@ light_table.default <- function(
   dep.var.labels = "Label dep.var.labels",
   dep.var.separate = NULL,
   column.labels = "blab",
-  column.separate = NULL,
   covariate.labels = NULL,
   order_variable = NULL,
   stats.var.separate = NULL,
