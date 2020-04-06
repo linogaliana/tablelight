@@ -201,7 +201,7 @@ ols <- lm(
   data = iris
 )
 
-# dep.var.options
+# dep.var.options ===============
 
 latex_table <- tablelight::light_table(ols,
                                        title = "My table title",
@@ -221,8 +221,58 @@ testthat::test_that("Too many dep.var.labels do not change the output", {
   )
 })
 
+# order_variable ============
 
-# adjustbox
+ols <- lm(
+  Sepal.Length ~ Sepal.Width + Petal.Length,
+  data = iris
+)
+
+latex_table1 <- tablelight::light_table(ols,
+                                        title = "My table title",
+                                        label = "My table label",
+                                        dep.var.labels = "My depvar",
+                                        column.labels = "My label column")
+latex_table2 <- tablelight::light_table(ols,
+                                        title = "My table title",
+                                        label = "My table label",
+                                        dep.var.labels = "My depvar",
+                                        column.labels = "My label column",
+                                        order = c("(Intercept)","Petal.Length", "Sepal.Width"))
+
+testthat::test_that("Same table except order of variables", {
+  row_coef <- grep("Sepal.Width", latex_table1)
+  testthat::expect_equal(c(
+    latex_table1[1:(row_coef-1)],
+    latex_table1[(row_coef+3):(row_coef+5)],
+    latex_table1[(row_coef):(row_coef+2)],
+    latex_table1[(row_coef+6):length(latex_table1)]
+  ),
+  latex_table2
+  )
+})
+
+latex_table2b <- tablelight::light_table(ols,
+                                        title = "My table title",
+                                        label = "My table label",
+                                        dep.var.labels = "My depvar",
+                                        column.labels = "My label column",
+                                        order = c("Petal.Length", "Sepal.Width"))
+
+testthat::test_that("Without (Intercept), constant goes at the bottom", {
+  row_coef <- grep("(Intercept)", latex_table2)
+  row_coef2 <- grep("Sepal.Width", latex_table2)
+  testthat::expect_equal(c(
+    latex_table2[1:(row_coef-1)],
+    latex_table2[(row_coef+3):(row_coef2+2)],
+    latex_table2[(row_coef):(row_coef+2)],
+    latex_table2[(row_coef2+3):length(latex_table1)]
+  ),
+  latex_table2b
+  )
+})
+
+# adjustbox ==================
 
 latex_table <- tablelight::light_table(ols,
                                        title = "My table title",
@@ -460,4 +510,7 @@ testthat::test_that("Summary statistics on two columns",{
 
 
 })
+
+
+
 
