@@ -42,7 +42,7 @@ quine.nb1 <- MASS::glm.nb(Days ~ Sex/(Age + Eth*Lrn), data = MASS::quine)
 
 testthat::expect_equal(
   tablelight:::secoeff(quine.nb1),
-  summary(quine.nb1)$estimate
+  summary(quine.nb1)$coefficients
 )
 
 
@@ -89,6 +89,10 @@ fastquine.nb1 <- gravity::fastglm.nb(Days ~ Sex/(Age + Eth*Lrn), data = MASS::qu
 quine.nb1 <- MASS::glm.nb(Days ~ Sex/(Age + Eth*Lrn), data = MASS::quine)
 
 testthat::expect_equal(
-  tablelight:::secoeff(quine.nb1),
-  tablelight:::secoeff(fastquine.nb1)
+  as.numeric(tablelight:::secoeff(quine.nb1)[,'Estimate']),
+  as.numeric(tablelight:::secoeff(fastquine.nb1)[,'Estimate'])
+)
+testthat::expect_equal(
+  as.numeric(tablelight:::secoeff(quine.nb1)[,'Std. Error']),
+  as.numeric(tablelight:::secoeff(fastquine.nb1)[,'Std. Error'])
 )

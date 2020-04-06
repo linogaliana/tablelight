@@ -82,7 +82,7 @@ secoeff.negbin <- function(object, ...){
     se <- object$se
   } else{
     return(
-      summary(object)$estimate
+      summary(object)$coefficients
     )
   }
 
