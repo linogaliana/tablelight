@@ -88,7 +88,7 @@ light_table <- function(object,
                         notes = "notes to add",
                         add.lines = "",
                         rules_between_covariates = NULL,
-                        omit = "",
+                        omit = NULL,
                         landscape = FALSE,
                         adjustbox_width = c(NULL, 1.1),
                         ...){
@@ -110,7 +110,7 @@ light_table.default <- function(
   notes = "notes to add",
   add.lines = "",
   rules_between_covariates = NULL,
-  omit = "",
+  omit = NULL,
   landscape = FALSE,
   adjustbox_width = c(NULL, 1.1),
   ...){

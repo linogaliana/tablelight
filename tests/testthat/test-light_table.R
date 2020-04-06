@@ -272,6 +272,41 @@ testthat::test_that("Without (Intercept), constant goes at the bottom", {
   )
 })
 
+
+# omit ============
+
+
+ols <- lm(
+  Sepal.Length ~ Sepal.Width + Petal.Length,
+  data = iris
+)
+
+latex_table1 <- tablelight::light_table(ols,
+                                        title = "My table title",
+                                        label = "My table label",
+                                        dep.var.labels = "My depvar",
+                                        column.labels = "My label column")
+latex_table2 <- tablelight::light_table(ols,
+                                        title = "My table title",
+                                        label = "My table label",
+                                        dep.var.labels = "My depvar",
+                                        column.labels = "My label column",
+                                        omit = c("Petal.Length", "Sepal.Width"))
+
+testthat::test_that("Same table except for the omit variables", {
+  row_coef <- grep("(Intercept)", latex_table1)
+  row_coef2 <- grep("Petal.Length", latex_table1)
+  testthat::expect_equal(c(
+    latex_table1[1:(row_coef+2)],
+    latex_table1[(row_coef2+3):length(latex_table1)]
+  ),
+  latex_table2
+  )
+})
+
+
+
+
 # adjustbox ==================
 
 latex_table <- tablelight::light_table(ols,

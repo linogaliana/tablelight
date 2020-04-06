@@ -18,7 +18,7 @@ light_table(
   notes = "notes to add",
   add.lines = "",
   rules_between_covariates = NULL,
-  omit = "",
+  omit = NULL,
   landscape = FALSE,
   adjustbox_width = c(NULL, 1.1),
   ...

@@ -21,7 +21,7 @@ light_table_coefficients <- function(object,
 
   # REMOVE UNECESSARY COEFFICIENTS -----------------------
 
-  if (omit != ""){
+  if (!is.null(omit)){
     coeff_body <- coeff_body[!(coeff_body[,'variable'] %in% omit),]
   }
 
