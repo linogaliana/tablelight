@@ -131,11 +131,11 @@ liststats.light.glm <- function(object, ...){
   llk <- as.numeric(logLik(object))
   bic <- BIC(object)
   if (as.character(object$call[1]) %in% c("glm.nb",
-                            "MASS::glm.nb",
-                            "MASS:::glm.nb",
-                            "fastglm.nb",
-                            "gravity::fastglm.nb",
-                            "gravity:::fastglm.nb")){
+                                          "MASS::glm.nb",
+                                          "MASS:::glm.nb",
+                                          "fastglm.nb",
+                                          "gravity::fastglm.nb",
+                                          "gravity:::fastglm.nb")){
     link_count <- "Negative Binomial"
   } else{
     link_count <- "Poisson"
@@ -195,32 +195,16 @@ liststats.default <- function(object, ...){
   if ('add_link' %in% names(args)){
 
 
-    if (!(inherits(object, "zeroinfl"))){
-
-      if (inherits(object, "glm")){
-        # Sometimes, link is given with parenthesis
-        link_count <- gsub("\\s*\\([^\\)]+\\)", "",
-                           Hmisc::capitalize(object$family$family))
-      } else if (as.character(object$call[1]) == "lm"){
-        link_count <- "Gaussian"
-      } else {
-        link_count <- ""
-      }
-      link_selection <- ""
-
-    } else{
-      link_count <- Hmisc::capitalize(object$dist)
-      link_selection <- Hmisc::capitalize(object$link)
-      if (!inherits(object, "glm")){
-        if (inherits(object, "zeroinfl")){
-          if (object$dist == "negbin") link_count <- "Negative Binomial"
-        } else{
-          link_count <- "Gaussian"
-        }
-      } else{
-        if (object$dist == "negbin") link_count <- "Negative Binomial"
-      }
+    if (inherits(object, "glm")){
+      # Sometimes, link is given with parenthesis
+      link_count <- gsub("\\s*\\([^\\)]+\\)", "",
+                         Hmisc::capitalize(object$family$family))
+    } else if (as.character(object$call[1]) == "lm"){
+      link_count <- "Gaussian"
+    } else {
+      link_count <- ""
     }
+    link_selection <- ""
 
     link_labels <- c(
       "Count distribution",
@@ -296,28 +280,18 @@ liststats.light.lm <- function(object, ...){
   if ('add_link' %in% names(args)){
 
 
-    if (!(inherits(object, "zeroinfl"))){
 
-      if (inherits(object, "glm")){
-        # Sometimes, link is given with parenthesis
-        link_count <- gsub("\\s*\\([^\\)]+\\)", "",
-                           Hmisc::capitalize(object$family$family))
-      } else if (as.character(object$call[1]) == "lm"){
-        link_count <- "Gaussian"
-      } else {
-        link_count <- ""
-      }
-      link_selection <- ""
-
-    } else{
-      link_count <- Hmisc::capitalize(object$dist)
-      link_selection <- Hmisc::capitalize(object$link)
-      if (inherits(object, "glm")){
-        if (object$dist == "negbin") link_count <- "Negative Binomial"
-      } else{
-        link_count <- "Gaussian"
-      }
+    if (inherits(object, "glm")){
+      # Sometimes, link is given with parenthesis
+      link_count <- gsub("\\s*\\([^\\)]+\\)", "",
+                         Hmisc::capitalize(object$family$family))
+    } else if (as.character(object$call[1]) == "lm"){
+      link_count <- "Gaussian"
+    } else {
+      link_count <- ""
     }
+    link_selection <- ""
+
 
     link_labels <- c(
       "Count distribution",
