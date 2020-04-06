@@ -40,10 +40,10 @@ testthat::expect_equal(
 quine.nb1 <- MASS::glm.nb(Days ~ Sex/(Age + Eth*Lrn), data = MASS::quine)
 
 
-# testthat::expect_equal(
-#   tablelight:::secoeff(quine.nb1),
-#   summary(quine.nb1)$estimate
-# )
+testthat::expect_equal(
+  tablelight:::secoeff(quine.nb1),
+  summary(quine.nb1)$estimate
+)
 
 
 # 4. secoeff.light.zeroinfl
@@ -80,4 +80,15 @@ testthat::expect_equal(
 testthat::expect_equal(
   secoeff.summary.lm(summary(object)),
   secoeff(summary(object))
+)
+
+
+# 6. gravity::fastglm.nb
+
+fastquine.nb1 <- gravity::fastglm.nb(Days ~ Sex/(Age + Eth*Lrn), data = MASS::quine)
+quine.nb1 <- MASS::glm.nb(Days ~ Sex/(Age + Eth*Lrn), data = MASS::quine)
+
+testthat::expect_equal(
+  tablelight:::secoeff(quine.nb1),
+  tablelight:::secoeff(fastquine.nb1)
 )

@@ -76,14 +76,14 @@ secoeff.light.zeroinfl <- function(object, ...){
 #' @export
 secoeff.negbin <- function(object, ...){
 
-  args <- list(...)
 
   if ('se' %in% names(object)){
     object2 <- object
     se <- object$se
   } else{
-    object2 <- summary(object)
-    se <- object2$coefficients[,"Std. Error"]
+    return(
+      summary(object)$estimate
+    )
   }
 
 
