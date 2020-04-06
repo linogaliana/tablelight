@@ -90,7 +90,7 @@ light_table_coefficients <- function(object,
     labels_covariates <- covariate.labels[1:n_replace]
     value_covariates <- list_variables[list_variables != "(Intercept)"]
     names(labels_covariates) <- value_covariates[1:n_replace]
-    body_table <-  qdap::mgsub(
+    body_table <-  mgsub(
       pattern = value_covariates,
       replacement = labels_covariates,
       body_table,

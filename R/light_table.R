@@ -70,7 +70,6 @@
 #' )
 #' }
 #'
-#' @importFrom qdap mgsub
 #' @importFrom reshape2 melt
 #' @importFrom stats na.omit
 #' @export
