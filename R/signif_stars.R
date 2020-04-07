@@ -12,6 +12,6 @@ signif_stars <- function(pvalue, type = c("latex", "html")){
   if (is.na(pvalue)) return("")
   if (pvalue<0.01) return(sprintf("%s***%s", wildcard1, wildcard2))
   if (pvalue<0.05) return(sprintf("%s**%s", wildcard1, wildcard2))
-  if (pvalue<0.1) return(sprintf("%s*%s$", wildcard1, wildcard2))
+  if (pvalue<0.1) return(sprintf("%s*%s", wildcard1, wildcard2))
   return("")
 }
