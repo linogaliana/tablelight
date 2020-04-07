@@ -6,7 +6,9 @@
 #' @inheritParams light_table
 #' @param text_coeff Output from \link{secoeff}
 #'
-arrange_coeff <- function(text_coeff, order_variable = NULL){
+arrange_coeff <- function(text_coeff, order_variable = NULL, type = c("latex","html")){
+
+  type <- match.arg(type)
 
   namescol <- colnames(text_coeff)
   text_coeff <- data.frame(text_coeff)
@@ -58,7 +60,11 @@ arrange_coeff <- function(text_coeff, order_variable = NULL){
   }
   body_table$variable <- as.character(body_table$variable)
 
-  body_table$value <- paste0(" & ", body_table$value)
+  if (type == "latex"){
+    body_table$value <- paste0(" & ", body_table$value)
+  } else{
+    body_table$value <- paste0("<td>", body_table$value, "</td>")
+  }
 
   return(body_table)
 }

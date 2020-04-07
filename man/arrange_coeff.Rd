@@ -4,7 +4,7 @@
 \alias{arrange_coeff}
 \title{Arrange coefficients for the table}
 \usage{
-arrange_coeff(text_coeff, order_variable = NULL)
+arrange_coeff(text_coeff, order_variable = NULL, type = c("latex", "html"))
 }
 \arguments{
 \item{text_coeff}{Output from \link{secoeff}}
