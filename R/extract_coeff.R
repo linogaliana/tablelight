@@ -103,12 +103,12 @@ extract_coeff.oglmx <- function(object, ...){
                               digits = 3L,
                               nsmall = 3L, big.mark=",", scientific = FALSE),
                        sapply(coeff_list[,tstat_var], signif_stars, type = args[['type']])
-                       )
+  )
   text_coeff <- gsub(x = text_coeff, pattern = " ", replacement = "")
 
   text_sd <- paste0("(",format(round(coeff_list[,'Std. error'], 3L),
-                           digits = 3L,
-                           nsmall = 3L, big.mark=",", scientific = FALSE),
+                               digits = 3L,
+                               nsmall = 3L, big.mark=",", scientific = FALSE),
                     ")")
   text_sd <- gsub(x = text_sd, pattern = " ", replacement = "")
 

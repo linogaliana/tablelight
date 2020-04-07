@@ -1,8 +1,45 @@
 #' Header for the regression table
 #' @inheritParams light_table
 #' @param ncols_models Number of columns
+#'
 
 light_table_header <- function(ncols_models,
+                               type = c("latex","html"),
+                               title = "Title",
+                               label = "label",
+                               dep.var.labels = "Label dep.var.labels",
+                               dep.var.separate = NULL,
+                               column.labels = "blab",
+                               adjustbox_width = c(NULL, 1.1)){
+
+  type <- match.arg(type)
+
+  if (type == "latex"){
+    return(
+    light_table_header_latex(ncols_models = ncols_models,
+                             title = title,
+                             label = label,
+                             dep.var.labels = dep.var.labels,
+                             dep.var.separate = dep.var.separate,
+                             column.labels = column.labels,
+                             adjustbox_width = adjustbox_width)
+  )
+  } else{
+
+    return(
+      light_table_header_html(ncols_models,
+                                        title = title,
+                                        label = label,
+                                        dep.var.labels = dep.var.labels,
+                                        dep.var.separate = dep.var.separate,
+                                        column.labels = column.labels)
+    )
+
+  }
+
+}
+
+light_table_header_latex <- function(ncols_models,
                                title = "Title",
                                label = "label",
                                dep.var.labels = "Label dep.var.labels",
