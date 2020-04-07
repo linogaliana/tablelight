@@ -168,10 +168,11 @@ light_table_coefficients_html <- function(object,
 
 
   coeff_body <- coeff_body[,!(names(coeff_body) %in% c("obj","order"))]
+
+  coeff_body$variable <- sprintf('<tr><td style="text-align:left">%s</td>', coeff_body$variable)
+
   body_table <- apply(coeff_body, 1, paste, collapse="")
 
-  body_table <- gsub(pattern = "-", replacement = "$-$",
-                     body_table)
 
 
   # PUT CONSTANT IN LAST POSITION ---------------------
@@ -183,7 +184,6 @@ light_table_coefficients_html <- function(object,
     coeff_body <- coeff_body[c(rows, constant_idx),]
   }
 
-  body_table <- paste0(body_table, "\\\\")
 
 
   # REPLACE COVARIATES BY LABELS -------------------------

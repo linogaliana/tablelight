@@ -64,7 +64,7 @@ light_table_stats_html <- function(object, ncols_models, stats.var.separate, ...
     statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
                       statsdf)
   } else{
-    statsdf <- liststats(object, ...)
+    statsdf <- liststats(object,...)
   }
 
   statsdf <- statsdf[order(statsdf$order),]
@@ -96,14 +96,18 @@ light_table_stats_html <- function(object, ncols_models, stats.var.separate, ...
           statsdf[,1 + 2*i])
       }
       )
-      statsdf <- cbind(sprintf('<tr><td style="text-align:left">%s/td>', statsdf[,1]),
+      statsdf <- cbind(sprintf('<tr><td style="text-align:left">%s</td>', statsdf[,1]),
                        do.call(cbind, statsdf2),
                        "</tr>")
     }
+  } else{
+    statsdf <- cbind(sprintf('<tr><td style="text-align:left">%s</td>', statsdf[,1]),
+                      do.call(cbind, lapply(2:ncol(statsdf), function(d) sprintf("<td>%s</td>", statsdf[,d]))),
+                     "</tr>")
   }
 
 
   statsdf <- apply(statsdf, 1, paste, collapse = "")
 
-  return(stats_table)
+  return(statsdf)
 }

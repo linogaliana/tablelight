@@ -162,6 +162,10 @@ light_table_header_html <- function(ncols_models,
 
   table_total <- c(table_total, colvar_header)
 
+  table_total <- c(
+    table_total,
+    sprintf('<tr><td colspan="%s" style="border-bottom: 1px solid black"></td></tr>', ncols_models+1)
+  )
 
   return(table_total)
 

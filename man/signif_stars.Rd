@@ -4,7 +4,7 @@
 \alias{signif_stars}
 \title{Transform pvalues into significance stars}
 \usage{
-signif_stars(pvalue)
+signif_stars(pvalue, type = c("latex", "html"))
 }
 \arguments{
 \item{pvalue}{pvalue for coefficients}

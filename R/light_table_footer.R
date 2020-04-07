@@ -28,3 +28,17 @@ light_table_footer <- function(ncols_models, add.lines,
 }
 
 
+
+light_table_footer_html <- function(ncols_models, add.lines){
+
+  return(
+    c(
+      sprintf('<tr><td colspan="%s" style="border-bottom: 1px solid black"></td></tr>', ncols_models+1),
+      paste0(sprintf('<tr><td style="text-align:left"><em>Note:</em></td><td colspan="%s" style="text-align:right">', ncols_models),
+             '<sup>*</sup>p<0.1; <sup>**</sup>p<0.05; <sup>***</sup>p<0.01</td></tr>',
+             "</table>")
+    )
+  )
+
+}
+

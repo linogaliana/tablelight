@@ -124,14 +124,15 @@ light_table.default <- function(
   }
 
   if (identical(ncols_models, 1L)){
-    coeff_data <- extract_coeff(object)
+    coeff_data <- extract_coeff(object, type = "latex")
   } else{
     coeff_data <- lapply(1:length(object),
                          function(k){
                            return(
                              extract_coeff(
                                object = object[[k]],
-                               modeltype = modeltype[k]
+                               modeltype = modeltype[k],
+                               type = "latex"
                              )
                            )
                          })
@@ -192,6 +193,109 @@ light_table.default <- function(
   table_total <- c(table_total, foot_table)
 
   if (landscape) table_total <- c("\\begin{landscape}", table_total, "\\end{landscape}")
+
+  return(table_total)
+}
+
+
+
+
+#' @export
+light_table_html <- function(
+  object,
+  modeltype = "outcome",
+  title = "Title",
+  label = "label",
+  dep.var.labels = "Label dep.var.labels",
+  dep.var.separate = NULL,
+  column.labels = "blab",
+  covariate.labels = NULL,
+  order_variable = NULL,
+  stats.var.separate = NULL,
+  notes = "notes to add",
+  add.lines = "",
+  rules_between_covariates = NULL,
+  omit = NULL,
+  ...){
+
+
+
+  if (isFALSE(inherits(object, "list"))){
+    ncols_models <- 1L
+  } else{
+    ncols_models <- length(object)
+  }
+
+  if (identical(ncols_models, 1L)){
+    coeff_data <- extract_coeff(object, type = "html")
+  } else{
+    coeff_data <- lapply(1:length(object),
+                         function(k){
+                           return(
+                             extract_coeff(
+                               object = object[[k]],
+                               modeltype = modeltype[k],
+                               type = "html"
+                             )
+                           )
+                         })
+  }
+
+
+
+
+
+  # PART I : HEAD -------
+
+
+  table_total <- light_table_header_html(
+    ncols_models,
+    title = title,
+    label = label,
+    dep.var.labels = dep.var.labels,
+    dep.var.separate = dep.var.separate,
+    column.labels = column.labels)
+
+
+  # PART II : BODY -------
+
+  body_table <- light_table_coefficients_html(
+    object = object,
+    ncols_models = ncols_models,
+    coeff_data = coeff_data,
+    order_variable = order_variable,
+    omit = omit,
+    covariate.labels = covariate.labels,
+    rules_between_covariates = rules_between_covariates
+  )
+
+  table_total <- c(table_total, body_table)
+
+  table_total <- c(
+    table_total,
+    sprintf('<tr><td colspan="%s" style="border-bottom: 1px solid black"></td></tr>', ncols_models+1)
+  )
+
+
+  # PART III: STATISTICS -----
+
+  stats_table <- light_table_stats_html(object = object,
+                                   ncols_models = ncols_models,
+                                   stats.var.separate = stats.var.separate,
+                                   ...)
+
+  table_total <- c(table_total, stats_table)
+
+  # PART IV: FOOTER -----
+
+  foot_table <- light_table_footer_html(
+    ncols_models = ncols_models,
+    add.lines = add.lines)
+
+  table_total <- c(table_total, foot_table)
+
+
+  table_total <- paste(table_total, collapse = "")
 
   return(table_total)
 }
