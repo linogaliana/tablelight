@@ -7,6 +7,7 @@
 light_table_coefficients(
   object,
   ncols_models,
+  type,
   coeff_data,
   order_variable,
   omit,

@@ -1,4 +1,24 @@
-light_table_footer <- function(ncols_models, add.lines,
+light_table_footer <- function(ncols_models, type = c("latex","html"),
+                               add.lines,
+                               adjustbox_width){
+
+  if (identical(type, "latex")){
+    return(
+      light_table_footer_latex(ncols_models = ncols_models,
+                               add.lines = add.lines,
+                               adjustbox_width = adjustbox_width)
+    )
+  } else{
+    return(
+      light_table_footer_html(ncols_models = ncols_models,
+                               add.lines = add.lines)
+    )
+  }
+
+
+}
+
+light_table_footer_latex <- function(ncols_models, add.lines,
                                adjustbox_width){
 
   foot_table <- sprintf(

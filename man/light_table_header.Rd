@@ -6,6 +6,7 @@
 \usage{
 light_table_header(
   ncols_models,
+  type = c("latex", "html"),
   title = "Title",
   label = "label",
   dep.var.labels = "Label dep.var.labels",

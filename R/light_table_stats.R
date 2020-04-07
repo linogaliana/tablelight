@@ -1,4 +1,26 @@
-light_table_stats <- function(object, ncols_models, stats.var.separate, ...){
+light_table_stats <- function(object, type = c("latex", "html"), ncols_models, stats.var.separate, ...){
+
+  if (type == "latex"){
+    return(
+      light_table_stats_latex(
+        object = object, ncols_models = ncols_models,
+        stat.var.separate = stats.var.separate,
+        ...
+      )
+    )
+  } else{
+    return(
+      light_table_stats_html(
+        object = object, ncols_models = ncols_models,
+        stat.var.separate = stats.var.separate,
+        ...
+      )
+    )
+  }
+
+}
+
+light_table_stats_latex <- function(object, ncols_models, stats.var.separate, ...){
 
   # COMPUTE STATISTICS -------------------
 
@@ -23,7 +45,7 @@ light_table_stats <- function(object, ncols_models, stats.var.separate, ...){
     if (isTRUE(length(stats.var.separate)==1)){
 
       statsdf2 <- sprintf(paste0(sprintf("\\multicolumn{%s}{c}", ncols_models),
-                          "{%s}"), statsdf[,2])
+                                 "{%s}"), statsdf[,2])
       statsdf <- cbind(statsdf[,1], statsdf2)
 
     } else{
@@ -102,7 +124,7 @@ light_table_stats_html <- function(object, ncols_models, stats.var.separate, ...
     }
   } else{
     statsdf <- cbind(sprintf('<tr><td style="text-align:left">%s</td>', statsdf[,1]),
-                      do.call(cbind, lapply(2:ncol(statsdf), function(d) sprintf("<td>%s</td>", statsdf[,d]))),
+                     do.call(cbind, lapply(2:ncol(statsdf), function(d) sprintf("<td>%s</td>", statsdf[,d]))),
                      "</tr>")
   }
 
