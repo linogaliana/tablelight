@@ -1,7 +1,7 @@
 #' Transform pvalues into significance stars
 #'
 #' @param pvalue pvalue for coefficients
-#' @param signif_stars Should the stars be *latex*
+#' @param type Should the stars be *latex*
 #'   or *html* formatted ?
 
 signif_stars <- function(pvalue, type = c("latex", "html")){

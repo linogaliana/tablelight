@@ -9,7 +9,7 @@ signif_stars(pvalue, type = c("latex", "html"))
 \arguments{
 \item{pvalue}{pvalue for coefficients}
 
-\item{signif_stars}{Should the stars be \emph{latex}
+\item{type}{Should the stars be \emph{latex}
 or \emph{html} formatted ?}
 }
 \description{

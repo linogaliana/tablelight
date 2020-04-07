@@ -6,9 +6,13 @@
 \usage{
 view_html(x)
 }
-\description{
-@param x HTML code
-@return Returns nothing, HTML reported in
+\arguments{
+\item{x}{HTML code}
+}
+\value{
+Returns nothing, HTML reported in
 Rstudio viewer
-@importFrom rstudioapi viewer
+}
+\description{
+Report HTML table in Rstudio viewer
 }
