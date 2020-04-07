@@ -94,6 +94,8 @@ extract_coeff.light.glm <- function(object, ...){
 #' @export
 extract_coeff.oglmx <- function(object, ...){
 
+  args <- list(...)
+
   coeff_list <- secoeff(object)
 
   tstat_var <- "Pr(>|t|)"

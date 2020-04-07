@@ -6,6 +6,7 @@
 \usage{
 light_table(
   object,
+  type = c("latex", "html"),
   modeltype = "outcome",
   title = "Title",
   label = "label",

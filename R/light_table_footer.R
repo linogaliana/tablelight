@@ -2,7 +2,7 @@ light_table_footer <- function(ncols_models, type = c("latex","html"),
                                add.lines,
                                adjustbox_width){
 
-  if (identical(type, "latex")){
+  if (type == "latex"){
     return(
       light_table_footer_latex(ncols_models = ncols_models,
                                add.lines = add.lines,

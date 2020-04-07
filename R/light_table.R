@@ -75,6 +75,7 @@
 #' @export
 
 light_table <- function(object,
+                        type = c("latex","html"),
                         modeltype = "outcome",
                         title = "Title",
                         label = "label",

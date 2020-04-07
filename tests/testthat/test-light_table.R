@@ -17,11 +17,6 @@ latex_table <- tablelight::light_table(ols,
                                        label = "My table label",
                                        dep.var.labels = "My depvar",
                                        column.labels = "My label column")
-html_table <- tablelight::light_table_html(ols,
-                                       title = "My table title",
-                                       label = "My table label",
-                                       dep.var.labels = "My depvar",
-                                       column.labels = "My label column")
 
 
 testthat::test_that("Table header is correct",{

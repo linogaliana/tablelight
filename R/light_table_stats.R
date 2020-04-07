@@ -4,7 +4,7 @@ light_table_stats <- function(object, type = c("latex", "html"), ncols_models, s
     return(
       light_table_stats_latex(
         object = object, ncols_models = ncols_models,
-        stat.var.separate = stats.var.separate,
+        stats.var.separate = stats.var.separate,
         ...
       )
     )
@@ -12,7 +12,7 @@ light_table_stats <- function(object, type = c("latex", "html"), ncols_models, s
     return(
       light_table_stats_html(
         object = object, ncols_models = ncols_models,
-        stat.var.separate = stats.var.separate,
+        stats.var.separate = stats.var.separate,
         ...
       )
     )
