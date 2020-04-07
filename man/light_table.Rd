@@ -28,6 +28,9 @@ light_table(
 \arguments{
 \item{object}{List of object}
 
+\item{type}{Reporting output used. Accepted values are
+\emph{latex} and \emph{html}}
+
 \item{modeltype}{Character vectors indicating whether
 we should use selection or outcome object. Ignored if
 object is not zeroinfl}

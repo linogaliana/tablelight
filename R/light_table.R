@@ -1,6 +1,8 @@
 #' Produce latex tables from stripped objects to reduce memory needs
 #'
 #' @param object List of object
+#' @param type Reporting output used. Accepted values are
+#'   *latex* and *html*
 #' @param modeltype Character vectors indicating whether
 #'  we should use selection or outcome object. Ignored if
 #'  object is not zeroinfl

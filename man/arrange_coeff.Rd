@@ -11,6 +11,9 @@ arrange_coeff(text_coeff, order_variable = NULL, type = c("latex", "html"))
 
 \item{order_variable}{A vector that indicates the order
 in which variables will appear in the output.}
+
+\item{type}{Should the coeff be formatted for latex
+or html reporting}
 }
 \description{
 Transform output from \link{secoeff} into

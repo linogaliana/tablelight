@@ -5,6 +5,8 @@
 #'  after some transformation in a table
 #' @inheritParams light_table
 #' @param text_coeff Output from \link{secoeff}
+#' @param type Should the coeff be formatted for latex
+#'  or html reporting
 #'
 arrange_coeff <- function(text_coeff, order_variable = NULL, type = c("latex","html")){
 

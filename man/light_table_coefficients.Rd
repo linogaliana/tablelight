@@ -20,6 +20,9 @@ light_table_coefficients(
 
 \item{ncols_models}{Number of columns}
 
+\item{type}{Reporting output used. Accepted values are
+\emph{latex} and \emph{html}}
+
 \item{coeff_data}{Output from \link{secoeff}}
 
 \item{order_variable}{A vector that indicates the order

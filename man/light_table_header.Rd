@@ -18,6 +18,9 @@ light_table_header(
 \arguments{
 \item{ncols_models}{Number of columns}
 
+\item{type}{Reporting output used. Accepted values are
+\emph{latex} and \emph{html}}
+
 \item{title}{Table caption}
 
 \item{label}{Table label}
