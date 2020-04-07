@@ -18,20 +18,6 @@ one which are  a replacement for matched pattern.}
 Overrides all conflicting arguments.}
 
 \item{\dots}{Additional arguments passed to \code{\link[base]{gsub}}.}
-
-\item{leadspace}{logical.  If \code{TRUE} inserts a leading space in the
-replacements.}
-
-\item{trailspace}{logical.  If \code{TRUE} inserts a trailing space in the
-replacements.}
-
-\item{trim}{logical.  If \code{TRUE} leading and trailing white spaces are
-removed and multiple white spaces are reduced to a single white space.}
-
-\item{order.pattern}{logical.  If \code{TRUE} and \code{fixed = TRUE}, the
-\code{pattern} string is sorted by number of characters to prevent substrings
-replacing meta strings (e.g., \code{pattern = c("the", "then")} resorts to
-search for "then" first).}
 }
 \value{
 \code{multigsub} - Returns a vector with the pattern replaced.
