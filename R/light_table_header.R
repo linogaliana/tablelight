@@ -91,3 +91,78 @@ light_table_header <- function(ncols_models,
   return(table_total)
 
 }
+
+
+
+light_table_header_html <- function(ncols_models,
+                                    title = "Title",
+                                    label = "label",
+                                    dep.var.labels = "Label dep.var.labels",
+                                    dep.var.separate = NULL,
+                                    column.labels = "blab",
+                                    adjustbox_width = c(NULL, 1.1)){
+
+
+  header <- c(
+    '<table style="text-align:center"><tr>',
+    sprintf('<td colspan="%s"', ncols_models+1)
+  )
+
+  tabular_header <- c(
+    'style="border-bottom: 1px solid black"></td></tr>',
+    '<tr><td style="text-align:left"></td><td>',
+    '<em>Dependent variable:</em></td></tr>',
+    sprintf('<tr><td></td><td colspan="%s"', ncols_models),
+    'style="border-bottom: 1px solid black"></td></tr>'
+  )
+
+
+  table_total <- c(header,tabular_header)
+
+
+  if ((ncols_models == 1) || is.null(dep.var.separate) || (length(dep.var.labels)==1)){
+
+    depvar_header <- c(
+      sprintf(
+        '<tr><td style="text-align:left"></td><td colspan="%s">%s</td></tr>',
+        ncols_models,
+        dep.var.labels[1]
+      )
+    )
+
+  } else{
+
+    labels_depvar <- rep('<td colspan="%s">%s</td>', length(dep.var.separate) + 1)
+    length_labels <- c(cumsum(dep.var.separate), ncols_models - cumsum(dep.var.separate))
+    length_labels <- length_labels[length_labels>0]
+    labels_depvar <- sapply(1:length(length_labels), function(i){
+      sprintf(
+        labels_depvar[i],
+        length_labels[i],
+        dep.var.labels[i])
+    }
+    )
+    depvar_header <- paste(labels_depvar, collapse = "")
+
+
+  }
+
+  table_total <- c(table_total,depvar_header)
+
+
+
+  if (!is.null(column.labels)){
+    colvar_header <- paste(
+      c('<tr><td style="text-align:left"></td>',
+        paste(sprintf("<td>%s</td>", column.labels), collapse = ""),
+        '</tr>'), collapse = "")
+  } else{
+    colvar_header <- ""
+  }
+
+  table_total <- c(table_total, colvar_header)
+
+
+  return(table_total)
+
+}
