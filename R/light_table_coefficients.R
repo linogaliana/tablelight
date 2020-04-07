@@ -107,8 +107,8 @@ light_table_coefficients <- function(object,
 
 
 light_table_coefficients_html <- function(object,
-                                     ncols_models, coeff_data, order_variable,
-                                     omit, covariate.labels, rules_between_covariates
+                                          ncols_models, coeff_data, order_variable,
+                                          omit, covariate.labels, rules_between_covariates
 ){
 
   # ARRANGE COEFFICIENTS ORDER -------------------------
