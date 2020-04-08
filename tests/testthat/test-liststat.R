@@ -714,8 +714,9 @@ ols <- lm(
 
 light_ols <- tablelight::strip(ols)
 
-stats_ols <- tablelight:::liststats(ols, add_link = TRUE)
-stats_ols_strip <- tablelight:::liststats(light_ols, add_link = TRUE)
+stats_ols <- tablelight:::liststats(ols, add_link = TRUE, stats.list = c("n","ll","lln","bic"))
+stats_ols_strip <- tablelight:::liststats(light_ols, add_link = TRUE,
+                                          stats.list = c("n","ll","lln","bic"))
 
 
 ## 5.A. CHECK STATISTICS RETURNED ======
@@ -744,6 +745,16 @@ testthat::test_that(
     'Selection distribution'
   )
 )
+
+testthat::test_that(
+  "add_link = TRUE equivalent to stat.list 'link'",
+  testthat::expect_equal(
+    stats_ols_strip[grepl("(Count|Selection)", stats_ols_strip$stat),],
+    liststats(light_ols, add_link = TRUE,
+              stats.list = c("link"))
+      )
+)
+
 
 testthat::test_that(
   "add_link = TRUE does not modify other rows",
@@ -810,11 +821,6 @@ testthat::test_that(
   }
 
 )
-
-
-
-
-
 
 
 

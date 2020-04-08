@@ -35,9 +35,23 @@ liststats.light.zeroinfl <- function(object, ...){
   if (!inherits(object, "light.zeroinfl")) stop("Object is not light.zeroinfl")
 
   args <- list(...)
+
   if (isFALSE("stats.list" %in% names(args))){
     stats.list <- c("n","lln","bic")
+  } else{
+    stats.list <- args[['stats.list']]
   }
+
+  if (isTRUE('add_link' %in% names(args))){
+    stats.list <- c(stats.list, "link")
+  }
+  if (isTRUE('add_sigma' %in% names(args))){
+    stats.list <- c(stats.list, "sigma")
+  }
+  if (isTRUE('add_alpha' %in% names(args))){
+    stats.list <- c(stats.list, "alpha")
+  }
+
 
   llk <- object$loglik
   bic <- BIC(object)
@@ -74,6 +88,11 @@ liststats.light.zeroinfl <- function(object, ...){
                          order = 0,
                          val = alpha_value), df
   )
+
+  df$shortlist <- c("alpha","link","link","n","ll","lln","bic")
+
+  df <- df[df$shortlist %in% stats.list, ]
+  df$shortlist <- NULL
 
   return(df)
 }
@@ -147,6 +166,7 @@ liststats.zeroinfl <- function(object, ...){
 
   df <- df[df$shortlist %in% stats.list, ]
   df$shortlist <- NULL
+
   return(df)
 }
 
@@ -339,10 +359,28 @@ liststats.light.lm <- function(object, ...){
   if (inherits(object, "light.glm")) return(liststats.light.glm(object, ...))
 
 
+  if (isFALSE("stats.list" %in% names(args))){
+    stats.list <- c("n","lln","bic")
+  } else{
+    stats.list <- args[['stats.list']]
+  }
+
+  if (isTRUE('add_link' %in% names(args))){
+    stats.list <- c(stats.list, "link")
+  }
+  if (isTRUE('add_sigma' %in% names(args))){
+    stats.list <- c(stats.list, "sigma")
+  }
+  if (isTRUE('add_alpha' %in% names(args))){
+    stats.list <- c(stats.list, "alpha")
+  }
+
+
+
   llk <- object$loglikelihood
   bic <- object$bic
 
-  if ('add_link' %in% names(args)){
+  if (isTRUE('link' %in% stats.list)){
 
 
 
@@ -381,11 +419,15 @@ liststats.light.lm <- function(object, ...){
     format(bic, digits = 0L, big.mark=",", scientific = FALSE)
   )
 
+  stat_shortcode <- c(
+    "n", "ll", "lln", "bic"
+  )
 
-  if ('add_link' %in% names(args)){
+  if (isTRUE('link' %in% stats.list)){
     stat_labels <- c(link_labels,
                      stat_labels)
     stat_val <- c(link_count, link_selection, stat_val)
+    stat_shortcode <- c("link", "link", stat_shortcode)
   }
 
 
@@ -396,21 +438,27 @@ liststats.light.lm <- function(object, ...){
   )
 
 
-  if ('add_alpha' %in% names(args)){
+  if (isTRUE('alpha' %in% stats.list)){
     df <- rbind(data.frame(stat = "$\\alpha$ (dispersion)",
                            order = 0,
                            val = extract_alpha(object)), df
     )
+    stat_shortcode <- c("alpha", stat_shortcode)
   }
 
-  if ('add_sigma' %in% names(args)){
+  if ('sigma' %in% stats.list){
     est_sigma <- mean(sigma(object))
     df <- rbind(data.frame(stat = "$\\widehat{\\sigma}$",
                            order = -1,
                            val = est_sigma), df
     )
+    stat_shortcode <- c("sigma", stat_shortcode)
   }
 
+  df <- cbind(df, 'shortcode' = stat_shortcode)
+  df <- df[as.character(df$shortcode) %in% stats.list, ]
+
+  df$shortcode <- NULL
 
   return(df)
 }
