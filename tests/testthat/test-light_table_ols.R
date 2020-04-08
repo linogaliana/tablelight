@@ -222,11 +222,11 @@ latex_table <- tablelight::light_table(list(ols, ols, ols),
                                        column.labels = c("Label1","Label2"))
 
 html_table <- tablelight::light_table(list(ols, ols, ols),
-                                       type = "html",
-                                       title = "My table title",
-                                       dep.var.labels = c("My depvar1", "My depvar2","toomanyvar"),
-                                       dep.var.separate = c(2,1),
-                                       column.labels = c("Label1","Label2"))
+                                      type = "html",
+                                      title = "My table title",
+                                      dep.var.labels = c("My depvar1", "My depvar2","toomanyvar"),
+                                      dep.var.separate = c(2,1),
+                                      column.labels = c("Label1","Label2"))
 
 
 # HEADER
@@ -252,7 +252,7 @@ testthat::test_that("[html] Number of columns: number of models + 1", {
 testthat::test_that("[html] Number of columns: number of models + 1", {
 
   dep_var_row <- html_table[grepl("<td></td><td colspan=\"2\">My depvar1</td><td colspan=\"1\">My depvar2</td>",
-                       html_table)]
+                                  html_table)]
   dep_var_row <- paste0(as.character(
     stringr::str_split(dep_var_row, "</td>", simplify = TRUE)
   ), "</td>")
@@ -278,7 +278,7 @@ testthat::test_that("[html] Number of columns: number of models + 1", {
   testthat::expect_equal(sum(grepl("<td>Label2</td>", dep_var_row)), 1L)
   testthat::expect_true(grepl('</tr>',
                               dep_var_row[grep("<td>Label2</td>", dep_var_row)+1])
-                        )
+  )
 
 })
 
@@ -343,11 +343,31 @@ latex_table2 <- tablelight::light_table(ols,
                                         dep.var.labels = rep("My depvar",10L),
                                         column.labels = "My label column")
 
+
+html_table <- tablelight::light_table(ols,
+                                      type = "html",
+                                      title = "My table title",
+                                      label = "My table label",
+                                      dep.var.labels = "My depvar",
+                                      column.labels = "My label column")
+
+html_table2 <- tablelight::light_table(ols,
+                                       type = "html",
+                                       title = "My table title",
+                                       label = "My table label",
+                                       dep.var.labels = rep("My depvar",10L),
+                                       column.labels = "My label column")
+
+
 testthat::test_that("Too many dep.var.labels do not change the output", {
   testthat::expect_equal(
     latex_table2, latex_table
   )
+  testthat::expect_equal(
+    html_table, html_table2
+  )
 })
+
 
 # order_variable ============
 
@@ -368,7 +388,22 @@ latex_table2 <- tablelight::light_table(ols,
                                         column.labels = "My label column",
                                         order = c("(Intercept)","Petal.Length", "Sepal.Width"))
 
-testthat::test_that("Same table except order of variables", {
+html_table1 <- tablelight::light_table(ols,
+                                       type = "html",
+                                       title = "My table title",
+                                       label = "My table label",
+                                       dep.var.labels = "My depvar",
+                                       column.labels = "My label column")
+html_table2 <- tablelight::light_table(ols,
+                                       type = "html",
+                                       title = "My table title",
+                                       label = "My table label",
+                                       dep.var.labels = "My depvar",
+                                       column.labels = "My label column",
+                                       order = c("Petal.Length", "(Intercept)", "Sepal.Width"))
+
+
+testthat::test_that("[latex] Same table except order of variables", {
   row_coef <- grep("Sepal.Width", latex_table1)
   testthat::expect_equal(c(
     latex_table1[1:(row_coef-1)],
@@ -380,6 +415,32 @@ testthat::test_that("Same table except order of variables", {
   )
 })
 
+
+testthat::test_that("[html] Same table except order of variables", {
+
+  row_coef  <- html_table1[grep("Petal.Length", html_table1)]
+  row_coef2 <- html_table2[grep("Petal.Length", html_table2)]
+
+  row_coef3 <- as.character(
+    stringr::str_split(row_coef2, "</td>", simplify = TRUE)
+  )
+  row_coef3 <- paste0(row_coef3[1:(length(row_coef3)-1)], "</td>")
+
+  var_pos <- grep("(Intercept)", row_coef3)
+  row_coef3 <- row_coef3[c(var_pos:(var_pos+11),
+                           1:(var_pos-1),(var_pos+12):length(row_coef3))]
+
+  row_coefb <- as.character(
+    stringr::str_split(row_coef, "</td>", simplify = TRUE)
+  )
+  row_coefb <- paste0(row_coefb[1:(length(row_coefb)-1)], "</td>")
+
+  testthat::expect_equal(
+    row_coef3,
+    row_coefb)
+})
+
+
 latex_table2b <- tablelight::light_table(ols,
                                          title = "My table title",
                                          label = "My table label",
@@ -387,7 +448,7 @@ latex_table2b <- tablelight::light_table(ols,
                                          column.labels = "My label column",
                                          order = c("Petal.Length", "Sepal.Width"))
 
-testthat::test_that("Without (Intercept), constant goes at the bottom", {
+testthat::test_that("[latex] Without (Intercept), constant goes at the bottom", {
   row_coef <- grep("(Intercept)", latex_table2)
   row_coef2 <- grep("Sepal.Width", latex_table2)
   testthat::expect_equal(c(
@@ -398,6 +459,39 @@ testthat::test_that("Without (Intercept), constant goes at the bottom", {
   ),
   latex_table2b
   )
+})
+
+
+html_table2b <- tablelight::light_table(ols,
+                                        type = "html",
+                                        title = "My table title",
+                                        label = "My table label",
+                                        dep.var.labels = "My depvar",
+                                        column.labels = "My label column",
+                                        order = c("Petal.Length", "Sepal.Width"))
+
+testthat::test_that("[html] Same table except order of variables", {
+
+  row_coef  <- html_table1[grep("Petal.Length", html_table2)]
+  row_coef2 <- html_table2[grep("Petal.Length", html_table2b)]
+
+  row_coef3 <- as.character(
+    stringr::str_split(row_coef2, "</td>", simplify = TRUE)
+  )
+  row_coef3 <- paste0(row_coef3[1:(length(row_coef3)-1)], "</td>")
+
+  var_pos <- grep("(Intercept)", row_coef3)
+  row_coef3 <- row_coef3[c(var_pos:(var_pos+11),
+                           1:(var_pos-1),(var_pos+12):length(row_coef3))]
+
+  row_coefb <- as.character(
+    stringr::str_split(row_coef, "</td>", simplify = TRUE)
+  )
+  row_coefb <- paste0(row_coefb[1:(length(row_coefb)-1)], "</td>")
+
+  testthat::expect_equal(
+    row_coef3,
+    row_coefb)
 })
 
 
