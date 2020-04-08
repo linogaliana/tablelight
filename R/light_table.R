@@ -180,7 +180,13 @@ light_table.default <- function(
 
   table_total <- c(table_total, body_table)
 
-  if (type == "latex") table_total <- c(table_total, "\\hline \\hline \\\\[-1.8ex] ")
+  if (identical(type, "latex")){
+    table_total <- c(table_total, "\\hline \\hline \\\\[-1.8ex] ")
+  } else{
+    table_total <- c(table_total,
+                     sprintf("<tr><td colspan=\"%s\"style=\"border-bottom: 1px solid black\"></td></tr>", ncols_models + 1)
+                     )
+  }
 
 
 
