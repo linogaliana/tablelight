@@ -221,36 +221,66 @@ latex_table <- tablelight::light_table(list(ols, ols, ols),
                                        dep.var.separate = c(2,1),
                                        column.labels = c("Label1","Label2"))
 
+html_table <- tablelight::light_table(list(ols, ols, ols),
+                                       type = "html",
+                                       title = "My table title",
+                                       dep.var.labels = c("My depvar1", "My depvar2","toomanyvar"),
+                                       dep.var.separate = c(2,1),
+                                       column.labels = c("Label1","Label2"))
+
+
 # HEADER
 
-testthat::test_that("Number of columns: number of models + 1", {
+testthat::test_that("[latex] Number of columns: number of models + 1", {
   tabular_row = stringr::str_split(pattern = "\n",
                                    latex_table[grepl("\\\\begin{tabular}", latex_table, perl = TRUE)], simplify = TRUE)[1,1]
   testthat::expect_equal(tabular_row, sprintf("\\begin{tabular}{@{\\extracolsep{5pt}}l%s}",
                                               paste(rep("c",3L), collapse = "")))
 })
 
-testthat::test_that("Number of columns: number of models + 1", {
-  dep_var_row <- latex_table[grepl(
-    pattern = "\\\\multicolumn\\{3\\}\\{c\\}\\{\\\\textit\\{Dependent variable:\\}\\}",
-    latex_table)]
-  dep_var_row <- as.character(stringr::str_split(pattern = "\n", dep_var_row, simplify = TRUE))
-  dep_var_row2 <- dep_var_row[(which(grepl(
-    pattern = "\\\\multicolumn\\{3\\}\\{c\\}\\{\\\\textit\\{Dependent variable:\\}\\}",
-    latex_table))):length(dep_var_row)]
-  testthat::expect_equal(dep_var_row2[1], "\\cline{2-4}")
-  testthat::expect_equal(as.character(
-    stringr::str_split(pattern = "&", dep_var_row2[2], simplify = TRUE)),
-    c("\\\\[-1.8ex] ", " \\multicolumn{2}{c}{My depvar1} ", " \\multicolumn{1}{c}{My depvar2} \\\\"))
+testthat::test_that("[html] Number of columns: number of models + 1", {
+
+  testthat::expect_true(
+    grepl(sprintf("<td colspan=\"%s\"style=\"border-bottom: 1px solid black\"></td></tr>", 3L + 1L),
+          html_table[1]
+    )
+  )
+
 })
 
-testthat::test_that("Correct column labels [NAs when vector is not long enough]", {
+
+testthat::test_that("[html] Number of columns: number of models + 1", {
+
+  dep_var_row <- html_table[grepl("<td></td><td colspan=\"2\">My depvar1</td><td colspan=\"1\">My depvar2</td>",
+                       html_table)]
+  dep_var_row <- paste0(as.character(
+    stringr::str_split(dep_var_row, "</td>", simplify = TRUE)
+  ), "</td>")
+
+  # 1 - First model supposed to be on two columns
   testthat::expect_equal(
-    sum(grepl(" & Label1 & Label2 & NA \\\\", latex_table)),
+    sum(grepl("<td colspan=\"2\">My depvar1</td>", dep_var_row)),
     1L
   )
-})
 
+  # 2 - Second model supposed to be on two columns
+  testthat::expect_equal(
+    sum(grepl("<td colspan=\"1\">My depvar2</td>", dep_var_row)),
+    1L
+  )
+
+  # 3 - Last dep.var name does not appear (because of col.var.separate)
+  testthat::expect_equal(sum(grepl("toomanyvar", dep_var_row)), 0L)
+
+
+  # 4 - Column names Label1, Label2 and empty field (no column label!)
+  testthat::expect_equal(sum(grepl("<td>Label1</td>", dep_var_row)), 1L)
+  testthat::expect_equal(sum(grepl("<td>Label2</td>", dep_var_row)), 1L)
+  testthat::expect_true(grepl('</tr>',
+                              dep_var_row[grep("<td>Label2</td>", dep_var_row)+1])
+                        )
+
+})
 
 
 
