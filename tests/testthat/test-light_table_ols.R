@@ -530,17 +530,17 @@ testthat::test_that("[latex] Same table except for the omit variables", {
 
 html_table1 <- tablelight::light_table(ols,
                                        type = "html",
-                                        title = "My table title",
-                                        label = "My table label",
-                                        dep.var.labels = "My depvar",
-                                        column.labels = "My label column")
+                                       title = "My table title",
+                                       label = "My table label",
+                                       dep.var.labels = "My depvar",
+                                       column.labels = "My label column")
 html_table2 <- tablelight::light_table(ols,
                                        type = "html",
-                                        title = "My table title",
-                                        label = "My table label",
-                                        dep.var.labels = "My depvar",
-                                        column.labels = "My label column",
-                                        omit = c("Petal.Length", "Sepal.Width"))
+                                       title = "My table title",
+                                       label = "My table label",
+                                       dep.var.labels = "My depvar",
+                                       column.labels = "My label column",
+                                       omit = c("Petal.Length", "Sepal.Width"))
 
 
 testthat::test_that("[html] Same table except order of variables", {
@@ -597,6 +597,28 @@ testthat::test_that("Same table except for the covariate names", {
   testthat::expect_equal(trimws(latex_table1b),trimws(latex_table2))
 })
 
+
+html_table1 <- tablelight::light_table(ols,
+                                       type = "html",
+                                       title = "My table title",
+                                       label = "My table label",
+                                       dep.var.labels = "My depvar",
+                                       column.labels = "My label column")
+
+html_table2 <- tablelight::light_table(ols,
+                                       type = "html",
+                                       title = "My table title",
+                                       label = "My table label",
+                                       dep.var.labels = "My depvar",
+                                       column.labels = "My label column",
+                                       covariate.labels = c("Sepal Width", "Length Petal"))
+
+
+testthat::test_that("Same table except for the covariate names", {
+  html_table1b <- gsub(pattern = "Sepal.Width", replacement = "Sepal Width", html_table1)
+  html_table1b <- gsub(pattern = "Petal.Length", replacement = "Length Petal", html_table1b)
+  testthat::expect_equal(trimws(html_table1b),trimws(html_table2))
+})
 
 
 # adjustbox ==================
