@@ -6,6 +6,7 @@
 \usage{
 light_table_header(
   ncols_models,
+  type = c("latex", "html"),
   title = "Title",
   label = "label",
   dep.var.labels = "Label dep.var.labels",
@@ -16,6 +17,9 @@ light_table_header(
 }
 \arguments{
 \item{ncols_models}{Number of columns}
+
+\item{type}{Reporting output used. Accepted values are
+\emph{latex} and \emph{html}}
 
 \item{title}{Table caption}
 
@@ -34,12 +38,7 @@ number four, five and six).}
 \item{column.labels}{Label for columns}
 
 \item{adjustbox_width}{If the table needs to be adjusted to page width,
-what should be the parameter ?
-
-This function is designed to produce \code{latex} tables with
-stripped objects (see \link{strip}). It follows
-\code{stargazer} standards but proposes a
-simplified framework. Customization is limiteds}
+what should be the parameter ?}
 }
 \description{
 Header for the regression table

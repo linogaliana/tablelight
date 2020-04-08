@@ -4,10 +4,13 @@
 \alias{signif_stars}
 \title{Transform pvalues into significance stars}
 \usage{
-signif_stars(pvalue)
+signif_stars(pvalue, type = c("latex", "html"))
 }
 \arguments{
 \item{pvalue}{pvalue for coefficients}
+
+\item{type}{Should the stars be \emph{latex}
+or \emph{html} formatted ?}
 }
 \description{
 Transform pvalues into significance stars

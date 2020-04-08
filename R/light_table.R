@@ -1,6 +1,8 @@
 #' Produce latex tables from stripped objects to reduce memory needs
 #'
 #' @param object List of object
+#' @param type Reporting output used. Accepted values are
+#'   *latex* and *html*
 #' @param modeltype Character vectors indicating whether
 #'  we should use selection or outcome object. Ignored if
 #'  object is not zeroinfl
@@ -42,6 +44,8 @@
 #'   \link{liststats}
 #' @param adjustbox_width If the table needs to be adjusted to page width,
 #'  what should be the parameter ?
+#' @param visualize Logical condition indicating whether we want to print
+#'  the table on Rstudio viewer. Ignored if `type` = *latex*
 #'
 #' This function is designed to produce `latex` tables with
 #'  stripped objects (see \link{strip}). It follows
@@ -75,6 +79,7 @@
 #' @export
 
 light_table <- function(object,
+                        type = c("latex","html"),
                         modeltype = "outcome",
                         title = "Title",
                         label = "label",
@@ -90,6 +95,7 @@ light_table <- function(object,
                         omit = NULL,
                         landscape = FALSE,
                         adjustbox_width = c(NULL, 1.1),
+                        visualize = FALSE,
                         ...){
   UseMethod("light_table")
 }
@@ -97,6 +103,7 @@ light_table <- function(object,
 #' @export
 light_table.default <- function(
   object,
+  type = c("latex","html"),
   modeltype = "outcome",
   title = "Title",
   label = "label",
@@ -112,8 +119,10 @@ light_table.default <- function(
   omit = NULL,
   landscape = FALSE,
   adjustbox_width = c(NULL, 1.1),
+  visualize = FALSE,
   ...){
 
+  type <- match.arg(type)
 
   if (missing(adjustbox_width)) adjustbox_width <- NULL
 
@@ -124,14 +133,15 @@ light_table.default <- function(
   }
 
   if (identical(ncols_models, 1L)){
-    coeff_data <- extract_coeff(object)
+    coeff_data <- extract_coeff(object, type = type)
   } else{
     coeff_data <- lapply(1:length(object),
                          function(k){
                            return(
                              extract_coeff(
                                object = object[[k]],
-                               modeltype = modeltype[k]
+                               modeltype = modeltype[k],
+                               type = type
                              )
                            )
                          })
@@ -146,6 +156,7 @@ light_table.default <- function(
 
   table_total <- light_table_header(
     ncols_models,
+    type = type,
     title = title,
     label = label,
     dep.var.labels = dep.var.labels,
@@ -159,6 +170,7 @@ light_table.default <- function(
   body_table <- light_table_coefficients(
     object = object,
     ncols_models = ncols_models,
+    type = type,
     coeff_data = coeff_data,
     order_variable = order_variable,
     omit = omit,
@@ -166,32 +178,61 @@ light_table.default <- function(
     rules_between_covariates = rules_between_covariates
   )
 
-  table_total <- c(table_total, body_table, "\\hline \\hline \\\\[-1.8ex] ")
+  table_total <- c(table_total, body_table)
+
+  if (identical(type, "latex")){
+    table_total <- c(table_total, "\\hline \\hline \\\\[-1.8ex] ")
+  } else{
+    table_total <- c(table_total,
+                     sprintf("<tr><td colspan=\"%s\"style=\"border-bottom: 1px solid black\"></td></tr>", ncols_models + 1)
+                     )
+  }
 
 
 
   # PART III: STATISTICS -----
 
   stats_table <- light_table_stats(object = object,
+                                   type = type,
                                    ncols_models = ncols_models,
                                    stats.var.separate = stats.var.separate,
                                    ...)
 
-  table_total <- c(table_total, stats_table,
-                   "\\hline ",
-                   "\\hline \\\\[-1.8ex] ")
+  table_total <- c(table_total, stats_table)
+
+  if (identical(type, "latex")) table_total <- c(table_total,
+                                                 "\\hline ",
+                                                 "\\hline \\\\[-1.8ex] ")
 
 
   # PART IV: FOOTER -----
 
   foot_table <- light_table_footer(
     ncols_models = ncols_models,
+    type = type,
     add.lines = add.lines,
     adjustbox_width = adjustbox_width)
 
   table_total <- c(table_total, foot_table)
 
-  if (landscape) table_total <- c("\\begin{landscape}", table_total, "\\end{landscape}")
+
+  # ARRANGE OUTPUT ------
+
+  # Get one line by <tr> ... </tr> elements
+  if (identical(type, "html")){
+    table_total <- strsplit(paste(table_total, collapse = ""),
+                                                              "</tr>")[[1]]
+    table_total[1:(length(table_total)-1)] <- paste0(table_total[1:(length(table_total)-1)],
+                                                     "</tr>")
+  }
+
+
+  if (landscape && identical(type, "latex")) table_total <- c("\\begin{landscape}", table_total, "\\end{landscape}")
+
+  if (identical(type, "html") && isTRUE(visualize)) view_html(table_total)
 
   return(table_total)
 }
+
+
+

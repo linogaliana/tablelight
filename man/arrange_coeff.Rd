@@ -4,13 +4,16 @@
 \alias{arrange_coeff}
 \title{Arrange coefficients for the table}
 \usage{
-arrange_coeff(text_coeff, order_variable = NULL)
+arrange_coeff(text_coeff, order_variable = NULL, type = c("latex", "html"))
 }
 \arguments{
 \item{text_coeff}{Output from \link{secoeff}}
 
 \item{order_variable}{A vector that indicates the order
 in which variables will appear in the output.}
+
+\item{type}{Should the coeff be formatted for latex
+or html reporting}
 }
 \description{
 Transform output from \link{secoeff} into

@@ -3,17 +3,20 @@
 #' @inheritParams light_table
 #' @param ncols_models Number of columns
 #' @param coeff_data Output from \link{secoeff}
+#' @inheritParams light_table
 light_table_coefficients <- function(object,
-                                     ncols_models, coeff_data, order_variable,
+                                     ncols_models,
+                                     type,
+                                     coeff_data, order_variable,
                                      omit, covariate.labels, rules_between_covariates
-                                     ){
+){
 
   # ARRANGE COEFFICIENTS ORDER -------------------------
 
   if (ncols_models==1){
-    coeff_body <- arrange_coeff(coeff_data, order_variable)
+    coeff_body <- arrange_coeff(coeff_data, order_variable, type = type)
   } else{
-    coeff_body <- lapply(coeff_data, arrange_coeff, order_variable)
+    coeff_body <- lapply(coeff_data, arrange_coeff, order_variable, type = type)
     coeff_body <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("variable","obj"), all = TRUE),
                          coeff_body)
   }
@@ -65,11 +68,17 @@ light_table_coefficients <- function(object,
 
 
   coeff_body <- coeff_body[,!(names(coeff_body) %in% c("obj","order"))]
+
+  if (identical(type, "html")){
+    coeff_body$variable <- sprintf('<tr><td style="text-align:left">%s</td>', coeff_body$variable)
+  }
+
   body_table <- apply(coeff_body, 1, paste, collapse="")
 
-  body_table <- gsub(pattern = "-", replacement = "$-$",
-                     body_table)
-
+  if (identical(type, "latex")){
+    body_table <- gsub(pattern = "-", replacement = "$-$",
+                       body_table)
+  }
 
   # PUT CONSTANT IN LAST POSITION ---------------------
 
@@ -80,7 +89,7 @@ light_table_coefficients <- function(object,
     coeff_body <- coeff_body[c(rows, constant_idx),]
   }
 
-  body_table <- paste0(body_table, "\\\\")
+  if (identical(type, "latex")) body_table <- paste0(body_table, "\\\\")
 
 
   # REPLACE COVARIATES BY LABELS -------------------------
@@ -98,8 +107,14 @@ light_table_coefficients <- function(object,
   }
 
   if (!is.null(rules_between_covariates)){
-    body_table[rules_between_covariates*3] <- paste0(body_table[rules_between_covariates*3], " \\hline \\\\[-1.8ex] ")
+    if (type == "latex"){
+      body_table[rules_between_covariates*3] <- paste0(body_table[rules_between_covariates*3], " \\hline \\\\[-1.8ex] ")
+    } else{
+      body_table[rules_between_covariates*3] <- paste0(body_table[rules_between_covariates*3],
+                                                       sprintf("<tr><td colspan=\"%s\"style=\"border-bottom: 1px solid black\"></td></tr>", ncols_models+1))
+    }
   }
 
   return(body_table)
 }
+
