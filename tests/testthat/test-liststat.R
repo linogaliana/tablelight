@@ -39,6 +39,16 @@ testthat::test_that(
 )
 
 testthat::test_that(
+  "add_link = TRUE equivalent to link in stats.list",
+  testthat::expect_identical(
+    stats_ols_bis,
+    tablelight::liststats(ols, stats.list = c("n","lln","bic","link"))
+  )
+)
+
+
+
+testthat::test_that(
   "add_link = TRUE does not modify other rows",
   testthat::expect_equal(
     stats_ols_bis[!(stats_ols_bis$stat %in% c("Count distribution","Selection distribution")),
@@ -70,15 +80,16 @@ testthat::test_that(
 
 
 testthat::test_that(
-  "'Log likelihood' field is OK",{
+  "'Log likelihood' field is OK (when asked)",{
 
+    # Not by default
     testthat::expect_equal(
-      as.character(stats_ols_bis[stats_ols_bis$stat == "Log likelihood","val"]),
-      format(as.numeric(stats::logLik(ols)), digits = 0L, big.mark = ",")
+      sum(stats_ols_bis$stat == "Log likelihood"), 0L
     )
 
+
     testthat::expect_equal(
-      as.character(stats_ols[stats_ols$stat == "Log likelihood","val"]),
+      as.character(tablelight::liststats(ols, stats.list = "ll")[,"val"]),
       format(as.numeric(stats::logLik(ols)), digits = 0L, big.mark = ",")
     )
 
@@ -159,6 +170,17 @@ testthat::test_that(
   )
 )
 
+testthat::test_that(
+  "add_link = TRUE equivalent to 'link' in stats.list",
+  testthat::expect_equal(
+    as.character(
+      stats_glm_bis[grepl(x = as.character(stats_glm_bis$stat),
+                          pattern = "(Count|Selection)"),'val']
+  ),
+  as.character(tablelight::liststats(glm, stats.list = "link")[,'val'])
+)
+)
+
 
 ## 2.B. CHECK STATISTICS VALUES ======
 
@@ -181,17 +203,19 @@ testthat::test_that(
 
 
 testthat::test_that(
-  "'Log likelihood' field is OK",{
+  "'Log likelihood' field is OK (when asked)",{
+
+    # Not by default
+    testthat::expect_equal(
+      sum(stats_glm_bis$stat == "Log likelihood"), 0L
+    )
+
 
     testthat::expect_equal(
-      as.character(stats_glm_bis[stats_glm_bis$stat == "Log likelihood","val"]),
+      as.character(tablelight::liststats(glm, stats.list = "ll")[,"val"]),
       format(as.numeric(stats::logLik(glm)), digits = 0L, big.mark = ",")
     )
 
-    testthat::expect_equal(
-      as.character(stats_glm[stats_glm$stat == "Log likelihood","val"]),
-      format(as.numeric(stats::logLik(glm)), digits = 0L, big.mark = ",")
-    )
 
   }
 
@@ -249,7 +273,7 @@ glmnb <- MASS::glm.nb(Days ~ Sex/(Age + Eth*Lrn), data = quine)
 
 stats_glmnb <- tablelight::liststats(glmnb)
 stats_glmnb_bis <- tablelight::liststats(glmnb, add_link = TRUE,
-                                       add_alpha = TRUE)
+                                         add_alpha = TRUE)
 
 
 
@@ -382,8 +406,8 @@ zeroinfl_negbin_strip <- tablelight::strip(zeroinfl_negbin)
 
 
 stats_bis_zeroinfl_negbin <- tablelight::liststats(zeroinfl_negbin,
-                                                 add_link = TRUE,
-                                                 add_alpha = TRUE)
+                                                   add_link = TRUE,
+                                                   add_alpha = TRUE)
 
 
 
@@ -510,7 +534,7 @@ zeroinfl_poisson <- pscl::zeroinfl(art ~ . | ., data = bioChemists)
 
 stats_zeroinfl_poisson <- tablelight::liststats(zeroinfl_poisson)
 stats_bis_zeroinfl_poisson <- tablelight::liststats(zeroinfl_poisson, add_link = TRUE,
-                                                  add_alpha = TRUE)
+                                                    add_alpha = TRUE)
 
 
 
@@ -832,7 +856,7 @@ glmnb_light <- tablelight::strip(glmnb)
 
 stats_glmnb <- tablelight::liststats(glmnb)
 stats_glmnb_bis <- tablelight::liststats(glmnb, add_link = TRUE,
-                                       add_alpha = TRUE)
+                                         add_alpha = TRUE)
 
 
 
@@ -976,7 +1000,7 @@ glmnb <- gravity::fastglm.nb(Days ~ Sex/(Age + Eth*Lrn), data = quine)
 
 stats_glmnb <- tablelight::liststats(glmnb)
 stats_glmnb_bis <- tablelight::liststats(glmnb_light, add_link = TRUE,
-                                       add_alpha = TRUE)
+                                         add_alpha = TRUE)
 
 
 testthat::test_that(
@@ -1102,7 +1126,7 @@ data("bioChemists", package = "pscl")
 
 zeroinfl_negbin <- gravity::fastzeroinfl(art ~ . | ., data = bioChemists, dist = "negbin")
 stats_bis_zeroinfl_negbin <- tablelight::liststats(zeroinfl_negbin,
-                                                 add_link =TRUE, add_alpha = TRUE)
+                                                   add_link =TRUE, add_alpha = TRUE)
 
 
 
@@ -1209,7 +1233,7 @@ zeroinfl_poisson <- pscl::zeroinfl(art ~ . | ., data = bioChemists)
 
 stats_zeroinfl_poisson <- tablelight::liststats(zeroinfl_poisson)
 stats_bis_zeroinfl_poisson <- tablelight::liststats(zeroinfl_poisson, add_link = TRUE,
-                                                  add_alpha = TRUE)
+                                                    add_alpha = TRUE)
 
 
 
@@ -1322,9 +1346,9 @@ zeroinfl_negbin_strip <- tablelight::strip(zeroinfl_negbin)
 
 
 stats_bis_zeroinfl_negbin <- tablelight::liststats(zeroinfl_negbin, add_link = TRUE,
-                                                 add_alpha = TRUE)
+                                                   add_alpha = TRUE)
 stats_bis_zeroinfl_negbin_strip <- tablelight::liststats(zeroinfl_negbin_strip, add_link = TRUE,
-                                                       add_alpha = TRUE)
+                                                         add_alpha = TRUE)
 
 
 
@@ -1433,9 +1457,9 @@ zeroinfl_poisson_strip <- tablelight::strip(zeroinfl_poisson)
 
 
 stats_bis_zeroinfl_poisson <- tablelight::liststats(zeroinfl_poisson, add_link = TRUE,
-                                                  add_alpha = TRUE)
+                                                    add_alpha = TRUE)
 stats_bis_zeroinfl_poisson_strip <- tablelight::liststats(zeroinfl_poisson_strip, add_link = TRUE,
-                                                        add_alpha = TRUE)
+                                                          add_alpha = TRUE)
 
 
 
@@ -1562,7 +1586,7 @@ dataset<-data.frame(y,x1,x2)
 
 
 oglm <- oglmx::oglmx(y ~ x1 + x2 + z, data=dataset,link="probit",constantMEAN=FALSE,
-                              constantSD=FALSE,delta=0,threshparam=NULL)
+                     constantSD=FALSE,delta=0,threshparam=NULL)
 
 stats_oglm <- tablelight::liststats(oglm)
 stats_oglm_bis <- tablelight::liststats(oglm, add_link = TRUE)
@@ -1583,7 +1607,7 @@ testthat::test_that(
   testthat::expect_equal(
     tolower(
       as.character(stats_oglm_bis[grepl(x = as.character(stats_oglm_bis$stat),
-                                       pattern = "(Count|Selection)"),'val'])
+                                        pattern = "(Count|Selection)"),'val'])
     ),
     c('', '')
   )

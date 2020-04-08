@@ -208,6 +208,16 @@ liststats.default <- function(object, ...){
     stats.list <- args[['stats.list']]
   }
 
+  if (isTRUE('add_link' %in% names(args))){
+    stats.list <- c(stats.list, "link")
+  }
+  if (isTRUE('add_sigma' %in% names(args))){
+    stats.list <- c(stats.list, "sigma")
+  }
+  if (isTRUE('add_alpha' %in% names(args))){
+    stats.list <- c(stats.list, "alpha")
+  }
+
 
   if (as.character(object$call[1]) == "lm" && inherits(object, "light.lm"))
     return(liststats.light.lm(object, ...))
@@ -216,7 +226,7 @@ liststats.default <- function(object, ...){
   llk <- as.numeric(logLik(object))
   bic <- BIC(object)
 
-  if (isTRUE('add_link' %in% names(args)) || isTRUE('link' %in% stats.list)){
+  if (isTRUE('link' %in% stats.list)){
 
 
     if (inherits(object, "glm")){
@@ -258,11 +268,11 @@ liststats.default <- function(object, ...){
   )
 
 
-  if (isTRUE('add_link' %in% names(args)) || isTRUE('link' %in% stats.list)){
+  if (isTRUE('link' %in% stats.list)){
     stat_labels <- c(link_labels,
                      stat_labels)
     stat_val <- c(link_count, link_selection, stat_val)
-    stat_shortcode <- c(stat_shortcode, "link")
+    stat_shortcode <- c("link", "link", stat_shortcode)
   }
 
 
@@ -273,7 +283,7 @@ liststats.default <- function(object, ...){
   )
 
 
-  if (isTRUE('add_alpha' %in% names(args)) || isTRUE('alpha' %in% stats.list)){
+  if (isTRUE('alpha' %in% stats.list)){
 
     df <- rbind(data.frame(stat = "$\\alpha$ (dispersion)",
                            order = 0,
@@ -283,7 +293,7 @@ liststats.default <- function(object, ...){
 
   }
 
-  if (isTRUE('add_sigma' %in% names(args)) || isTRUE('sigma' %in% stats.list)){
+  if (isTRUE('sigma' %in% stats.list)){
     est_sigma <- mean(sigma(object))
     df <- rbind(data.frame(stat = "$\\widehat{\\sigma}$",
                            order = -1,
@@ -294,6 +304,8 @@ liststats.default <- function(object, ...){
 
   df <- cbind(df, 'shortcode' = stat_shortcode)
   df <- df[as.character(df$shortcode) %in% stats.list, ]
+
+  df$shortcode <- NULL
 
   return(df)
 }
