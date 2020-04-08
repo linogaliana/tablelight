@@ -137,7 +137,7 @@ regression2 <- lm(y ~ x, df2)
 get_required_RAM(profvis(
   capture.output(stargazer::stargazer(regression1, regression2)))
 )
-#> [1] 118.8371
+#> [1] 126.4663
 ```
 
 With `tablelight`, you will :
@@ -154,8 +154,8 @@ regression2 <- tablelight::strip(lm(y ~ x, df2))
 
 get_required_RAM(profvis(
   capture.output(light_table(list(regression1, regression2))))
-  )
-#> [1] 0.6818161
+)
+#> [1] 0.7156754
 ```
 
 This is, approximatively,  times less memory needed.
@@ -176,12 +176,15 @@ equations in a zero-inflated Poisson model:
 ``` r
 data("bioChemists", package = "pscl")
 fm_zip <- strip(pscl::zeroinfl(art ~ . | ., data = bioChemists))
+fm_zinb <- strip(pscl::zeroinfl(art ~ . | ., data = bioChemists, dist = "negbin"))
 ```
 
 In that case, you will use
 
 ``` r
-light_table(list(fm_zip, fm_zip), modeltype = c("selection","outcome"),
+light_table(list(fm_zip, fm_zip),
+            type = "html", 
+            modeltype = c("selection","outcome"),
             dep.var.labels = c("Selection","Outcome"),
             stats.var.separate = 2L)
 ```
@@ -194,11 +197,12 @@ binomial models, you can use the following template:
 
 ``` r
 latex_table <- tablelight::light_table(list(fm_zip, fm_zip,
-                                fm_zinb, fm_zinb),
-                           modeltype = c("selection","outcome","selection","outcome"),
-                           dep.var.labels = c("ZIP","ZINB"),
-                           dep.var.separate = 2L,
-                           column.labels = rep(c("Selection","Outcome"),2L),
-                           stats.var.separate = c(2L, 2L)
+                                            fm_zinb, fm_zinb),
+                                       type = "html",
+                                       modeltype = c("selection","outcome","selection","outcome"),
+                                       dep.var.labels = c("ZIP","ZINB"),
+                                       dep.var.separate = 2L,
+                                       column.labels = rep(c("Selection","Outcome"),2L),
+                                       stats.var.separate = c(2L, 2L)
 )
 ```
