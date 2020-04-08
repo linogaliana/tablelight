@@ -172,6 +172,7 @@ testthat::test_that("Body (coefficients) correct [latex]",{
   )
 
   sd <- summary(ols)$coefficients[,"Std. Error"]
+  pvalues <- summary(ols)$coefficients[,"Pr(>|t|)"]
 
   # Coefficients are ok
   testthat::expect_equal(
@@ -179,7 +180,7 @@ testthat::test_that("Body (coefficients) correct [latex]",{
     paste0(
       "<td>",
       format(ols$coefficients['Sepal.Width'],digits = 3L, nsmall = 3L),
-      tablelight:::signif_stars(sd['Sepal.Width'], type = "html"),
+      tablelight:::signif_stars(pvalues['Sepal.Width'], type = "html"),
       "</td>")
   )
   testthat::expect_equal(
@@ -187,7 +188,7 @@ testthat::test_that("Body (coefficients) correct [latex]",{
     paste0(
       "<td>",
       format(ols$coefficients['(Intercept)'],digits = 3L, nsmall = 3L),
-      tablelight:::signif_stars(sd['(Intercept)'], type = "html"),
+      tablelight:::signif_stars(pvalues['(Intercept)'], type = "html"),
       "</td>")
   )
 
