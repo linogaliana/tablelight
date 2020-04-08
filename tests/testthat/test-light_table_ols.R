@@ -74,7 +74,7 @@ testthat::test_that("Label is ignored in HTML tables",{
 
 # BODY ===================================
 
-testthat::test_that("Body (coefficients) correct",{
+testthat::test_that("Body (coefficients) correct [latex]",{
 
   rows_coeff <- latex_table[
     which(
@@ -135,6 +135,67 @@ testthat::test_that("Body (coefficients) correct",{
     )
   )
 
+
+})
+
+
+testthat::test_that("Body (coefficients) correct [latex]",{
+
+  coeff_part <- html_table[
+    grepl(paste(c("(Intercept)", "Sepal.Width"), collapse = "|"), html_table)
+    ]
+
+  coeff_part <- paste0(as.character(
+    stringr::str_split(coeff_part, pattern = "</td>", simplify = TRUE)
+  ), "</td>")
+
+  rows_coeff <- coeff_part[
+    c(grep(paste(c("(Intercept)", "Sepal.Width"), collapse = "|"), coeff_part),
+      grep(paste(c("(Intercept)", "Sepal.Width"), collapse = "|"), coeff_part) + 1)
+    ]
+
+
+  rows_sd <- coeff_part[
+    grep(paste(c("(Intercept)", "Sepal.Width"), collapse = "|"), coeff_part) + 3
+    ]
+
+  # Coefficient names are ok [intercept]
+  testthat::expect_equal(
+    grep("(Intercept)", rows_coeff),
+    1L
+  )
+
+  # Coefficient names are ok [x covariate]
+  testthat::expect_equal(
+    grep("Sepal.Width", rows_coeff),
+    2L
+  )
+
+  sd <- summary(ols)$coefficients[,"Std. Error"]
+
+  # Coefficients are ok
+  testthat::expect_equal(
+    rows_coeff[grep("Sepal.Width", rows_coeff)+2],
+    paste0(
+      "<td>",
+      format(ols$coefficients['Sepal.Width'],digits = 3L, nsmall = 3L),
+      tablelight:::signif_stars(sd['Sepal.Width'], type = "html"),
+      "</td>")
+  )
+  testthat::expect_equal(
+    rows_coeff[grep("(Intercept)", rows_coeff)+2],
+    paste0(
+      "<td>",
+      format(ols$coefficients['(Intercept)'],digits = 3L, nsmall = 3L),
+      tablelight:::signif_stars(sd['(Intercept)'], type = "html"),
+      "</td>")
+  )
+
+  # standard errors are ok
+  testthat::expect_equal(
+    paste0("<td>(", format(sd, digits = 3L, nsmall = 3L), ")</td>"),
+    rows_sd
+  )
 
 })
 
