@@ -837,8 +837,11 @@ glm <- glm(
 
 light_glm <- tablelight::strip(glm)
 
-stats_glm <- tablelight::liststats(glm, add_link = TRUE, add_alpha = TRUE)
-stats_glm_strip <- tablelight::liststats(light_glm, add_link = TRUE)
+stats_glm <- tablelight::liststats(glm, add_link = TRUE, add_alpha = TRUE,
+                                   list.stats = c("n","ll","lln","bic"))
+stats_glm_strip <- tablelight::liststats(light_glm, add_link = TRUE,
+                                         add_alpha = TRUE,
+                                         list.stats = c("n","ll","lln","bic"))
 
 
 ## 6.A. CHECK STATISTICS RETURNED ======

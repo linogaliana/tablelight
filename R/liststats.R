@@ -178,8 +178,21 @@ liststats.light.glm <- function(object, ...){
   if (!inherits(object, "light.glm")) stop("Object is not light.glm")
 
   args <- list(...)
-  if (isFALSE("stats.list" %in% names(args))){
+
+  if (isFALSE("list.stats" %in% names(args))){
     stats.list <- c("n","lln","bic")
+  } else{
+    stats.list <- args[['stats.list']]
+  }
+
+  if (isTRUE('add_link' %in% names(args))){
+    stats.list <- c(stats.list, "link")
+  }
+  if (isTRUE('add_sigma' %in% names(args))){
+    stats.list <- c(stats.list, "sigma")
+  }
+  if (isTRUE('add_alpha' %in% names(args))){
+    stats.list <- c(stats.list, "alpha")
   }
 
 
@@ -229,6 +242,11 @@ liststats.light.glm <- function(object, ...){
   df <- rbind(data.frame(stat = "$\\alpha$ (dispersion)",
                          order = 0,
                          val = alpha), df)
+
+  df$shortlist <- c("alpha","link","link","n","ll","lln","bic")
+
+  df <- df[df$shortlist %in% stats.list, ]
+  df$shortlist <- NULL
 
   return(df)
 }
