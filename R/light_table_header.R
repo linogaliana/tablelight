@@ -133,15 +133,16 @@ light_table_header_latex <- function(ncols_models,
 
 light_table_header_html <- function(ncols_models,
                                     title = "Title",
-                                    label = "label",
                                     dep.var.labels = "Label dep.var.labels",
                                     dep.var.separate = NULL,
                                     column.labels = "blab",
-                                    adjustbox_width = c(NULL, 1.1)){
+                                    adjustbox_width = c(NULL, 1.1),
+                                    ...){
 
 
   header <- c(
     '<table style="text-align:center"><tr>',
+    sprintf('<caption>%s</caption>', title),
     sprintf('<td colspan="%s"', ncols_models+1)
   )
 

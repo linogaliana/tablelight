@@ -89,7 +89,7 @@ light_table_coefficients <- function(object,
     coeff_body <- coeff_body[c(rows, constant_idx),]
   }
 
-  body_table <- paste0(body_table, "\\\\")
+  if (identical(type, "latex")) body_table <- paste0(body_table, "\\\\")
 
 
   # REPLACE COVARIATES BY LABELS -------------------------

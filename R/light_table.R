@@ -44,6 +44,8 @@
 #'   \link{liststats}
 #' @param adjustbox_width If the table needs to be adjusted to page width,
 #'  what should be the parameter ?
+#' @param visualize Logical condition indicating whether we want to print
+#'  the table on Rstudio viewer. Ignored if `type` = *latex*
 #'
 #' This function is designed to produce `latex` tables with
 #'  stripped objects (see \link{strip}). It follows
@@ -93,6 +95,7 @@ light_table <- function(object,
                         omit = NULL,
                         landscape = FALSE,
                         adjustbox_width = c(NULL, 1.1),
+                        visualize = FALSE,
                         ...){
   UseMethod("light_table")
 }
@@ -116,6 +119,7 @@ light_table.default <- function(
   omit = NULL,
   landscape = FALSE,
   adjustbox_width = c(NULL, 1.1),
+  visualize = FALSE,
   ...){
 
   type <- match.arg(type)
@@ -174,8 +178,9 @@ light_table.default <- function(
     rules_between_covariates = rules_between_covariates
   )
 
+  table_total <- c(table_total, body_table)
 
-  if (type == "latex") table_total <- c(table_total, body_table, "\\hline \\hline \\\\[-1.8ex] ")
+  if (type == "latex") table_total <- c(table_total, "\\hline \\hline \\\\[-1.8ex] ")
 
 
 
@@ -187,7 +192,9 @@ light_table.default <- function(
                                    stats.var.separate = stats.var.separate,
                                    ...)
 
-  if (identical(type, "latex")) table_total <- c(table_total, stats_table,
+  table_total <- c(table_total, stats_table)
+
+  if (identical(type, "latex")) table_total <- c(table_total,
                                                  "\\hline ",
                                                  "\\hline \\\\[-1.8ex] ")
 
@@ -196,12 +203,27 @@ light_table.default <- function(
 
   foot_table <- light_table_footer(
     ncols_models = ncols_models,
+    type = type,
     add.lines = add.lines,
     adjustbox_width = adjustbox_width)
 
   table_total <- c(table_total, foot_table)
 
+
+  # ARRANGE OUTPUT ------
+
+  # Get one line by <tr> ... </tr> elements
+  if (identical(type, "html")){
+    table_total <- strsplit(paste(table_total, collapse = ""),
+                                                              "</tr>")[[1]]
+    table_total[1:(length(table_total)-1)] <- paste0(table_total[1:(length(table_total)-1)],
+                                                     "</tr>")
+  }
+
+
   if (landscape && identical(type, "latex")) table_total <- c("\\begin{landscape}", table_total, "\\end{landscape}")
+
+  if (identical(type, "html") && isTRUE(visualize)) view_html(table_total)
 
   return(table_total)
 }

@@ -1,5 +1,7 @@
 light_table_stats <- function(object, type = c("latex", "html"), ncols_models, stats.var.separate, ...){
 
+  type <- match.arg(type)
+
   if (type == "latex"){
     return(
       light_table_stats_latex(

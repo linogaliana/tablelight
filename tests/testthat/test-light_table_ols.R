@@ -1,11 +1,7 @@
-testthat::context("light_table produces the expected table")
+testthat::context("[OLS] light_table produces the expected table")
 
 
-# PART 1: BY MODEL TYPE -------------
-
-# 1. OLS ==================
-
-## 1.1. ONE MODEL
+# SINGLE OLS MODEL ----------------------------
 
 ols <- lm(
   Sepal.Length ~ Sepal.Width,
@@ -18,8 +14,16 @@ latex_table <- tablelight::light_table(ols,
                                        dep.var.labels = "My depvar",
                                        column.labels = "My label column")
 
+html_table <- tablelight::light_table(ols,
+                                      type = "html",
+                                      title = "My table title",
+                                      dep.var.labels = "My depvar",
+                                      column.labels = "My label column")
 
-testthat::test_that("Table header is correct",{
+
+# HEADER =========================
+
+testthat::test_that("Table header is correct [latex]",{
 
   testthat::expect_true(startsWith(prefix = "\\begin{table}[!htbp]", latex_table[1])
   )
@@ -37,6 +41,38 @@ testthat::test_that("Table header is correct",{
 }
 )
 
+testthat::test_that("Table header is correct [html]",{
+
+  testthat::expect_true(startsWith(prefix = "<table style=\"text-align:center\"><tr>", html_table[1])
+  )
+  testthat::expect_true(grepl(sprintf("<td colspan=\"%s\"style=\"border-bottom: 1px solid black\"></td>",2L),
+                              html_table[1]))
+  testthat::expect_true(grepl(sprintf("<caption>%s</caption>","My table title"),
+                              html_table[1]))
+
+}
+)
+
+testthat::test_that("Label is ignored in HTML tables",{
+  testthat::expect_equal(
+    tablelight::light_table(ols,
+                            type = "html",
+                            title = "My table title",
+                            label = "My table label",
+                            dep.var.labels = "My depvar",
+                            column.labels = "My label column"),
+    tablelight::light_table(ols,
+                            type = "html",
+                            title = "My table title",
+                            label = "Label ignored",
+                            dep.var.labels = "My depvar",
+                            column.labels = "My label column")
+  )
+}
+)
+
+
+# BODY ===================================
 
 testthat::test_that("Body (coefficients) correct",{
 
@@ -253,11 +289,11 @@ testthat::test_that("Same table except order of variables", {
 })
 
 latex_table2b <- tablelight::light_table(ols,
-                                        title = "My table title",
-                                        label = "My table label",
-                                        dep.var.labels = "My depvar",
-                                        column.labels = "My label column",
-                                        order = c("Petal.Length", "Sepal.Width"))
+                                         title = "My table title",
+                                         label = "My table label",
+                                         dep.var.labels = "My depvar",
+                                         column.labels = "My label column",
+                                         order = c("Petal.Length", "Sepal.Width"))
 
 testthat::test_that("Without (Intercept), constant goes at the bottom", {
   row_coef <- grep("(Intercept)", latex_table2)

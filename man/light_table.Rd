@@ -22,6 +22,7 @@ light_table(
   omit = NULL,
   landscape = FALSE,
   adjustbox_width = c(NULL, 1.1),
+  visualize = FALSE,
   ...
 )
 }
@@ -83,7 +84,10 @@ the table}
 use a landscape table. Default to \code{FALSE}}
 
 \item{adjustbox_width}{If the table needs to be adjusted to page width,
-what should be the parameter ?
+what should be the parameter ?}
+
+\item{visualize}{Logical condition indicating whether we want to print
+the table on Rstudio viewer. Ignored if \code{type} = \emph{latex}
 
 This function is designed to produce \code{latex} tables with
 stripped objects (see \link{strip}). It follows
