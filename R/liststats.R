@@ -87,9 +87,23 @@ liststats.zeroinfl <- function(object, ...){
 
   if (inherits(object, "light.zeroinfl")) return(liststats.light.zeroinfl(object, ...))
 
+
   args <- list(...)
+
   if (isFALSE("stats.list" %in% names(args))){
     stats.list <- c("n","lln","bic")
+  } else{
+    stats.list <- args[['stats.list']]
+  }
+
+  if (isTRUE('add_link' %in% names(args))){
+    stats.list <- c(stats.list, "link")
+  }
+  if (isTRUE('add_sigma' %in% names(args))){
+    stats.list <- c(stats.list, "sigma")
+  }
+  if (isTRUE('add_alpha' %in% names(args))){
+    stats.list <- c(stats.list, "alpha")
   }
 
 
@@ -129,6 +143,10 @@ liststats.zeroinfl <- function(object, ...){
                          val = alpha_value), df
   )
 
+  df$shortlist <- c("alpha","link","link","n","ll","lln","bic")
+
+  df <- df[df$shortlist %in% stats.list, ]
+  df$shortlist <- NULL
   return(df)
 }
 

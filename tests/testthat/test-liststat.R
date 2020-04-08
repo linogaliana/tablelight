@@ -271,8 +271,8 @@ glmnb <- MASS::glm.nb(Days ~ Sex/(Age + Eth*Lrn), data = quine)
 
 # 3.A. CHECK STATISTICS RETURNED ======
 
-stats_glmnb <- tablelight::liststats(glmnb)
-stats_glmnb_bis <- tablelight::liststats(glmnb, add_link = TRUE,
+stats_glmnb <- tablelight::liststats(glmnb, stats.list = c("n","ll","lln","bic"))
+stats_glmnb_bis <- tablelight::liststats(glmnb, add_link = TRUE, stats.list = c("n","ll","lln","bic"),
                                          add_alpha = TRUE)
 
 
@@ -296,6 +296,26 @@ testthat::test_that(
 
 
 testthat::test_that(
+  "add_link = TRUE or stat = 'link' equivalent",
+  testthat::expect_equal(
+    as.character(stats_glmnb_bis[grepl(x = as.character(stats_glmnb_bis$stat),
+                                       pattern = "(Count|Selection)"),'val']),
+    as.character(tablelight::liststats(glmnb, stats.list = c("link"))[,'val'])
+  )
+)
+
+testthat::test_that(
+  "add_link = FALSE or stat = 'link' still produces link stat",
+  testthat::expect_equal(
+    as.character(stats_glmnb_bis[grepl(x = as.character(stats_glmnb_bis$stat),
+                                       pattern = "(Count|Selection)"),'val']),
+    as.character(tablelight::liststats(glmnb, add_link = FALSE, stats.list = c("link"))[,'val'])
+  )
+)
+
+
+
+testthat::test_that(
   "If you add argument add_alpha = TRUE, dispersion parameter is returned",{
     testthat::expect_equal(
       length(as.character(stats_glmnb_bis[grepl(x = as.character(stats_glmnb_bis$stat),
@@ -314,6 +334,32 @@ testthat::test_that(
     )
   }
 )
+
+
+testthat::test_that(
+  "add_alpha = TRUE equivalent to stats.list = 'alpha' ",{
+    testthat::expect_equal(
+      as.character(
+        stats_glmnb_bis[grepl(x = as.character(stats_glmnb_bis$stat),
+                              pattern = "alpha"),'val']
+      ),
+      as.character(
+        tablelight::liststats(glmnb, stats.list = c("alpha"))[,'val']
+      )
+    )
+  }
+)
+
+testthat::test_that(
+  "add_alpha = FALSE ignored if stats.list = 'alpha' ",{
+    testthat::expect_equal(
+      tablelight::liststats(glmnb, add_alpha = FALSE, stats.list = c("alpha")),
+      tablelight::liststats(glmnb, add_alpha = TRUE, stats.list = c("alpha"))
+    )
+  }
+)
+
+
 
 ## 3.B. CHECK STATISTICS VALUES ======
 
@@ -406,6 +452,7 @@ zeroinfl_negbin_strip <- tablelight::strip(zeroinfl_negbin)
 
 
 stats_bis_zeroinfl_negbin <- tablelight::liststats(zeroinfl_negbin,
+                                                   stats.list = c("n","ll","lln","bic"),
                                                    add_link = TRUE,
                                                    add_alpha = TRUE)
 
@@ -425,6 +472,29 @@ testthat::test_that(
     as.character(stats_bis_zeroinfl_negbin[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
                                                  pattern = "(Count|Selection)"),'val']),
     c("Negative Binomial", 'Logit')
+  )
+)
+
+testthat::test_that(
+  "add_link = TRUE equivalent to stat = 'link'",
+  testthat::expect_equal(
+    as.character(stats_bis_zeroinfl_negbin[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
+                                                 pattern = "(Count|Selection)"),'val']),
+    as.character(tablelight::liststats(zeroinfl_negbin,
+                          stats.list = c("link"),
+                          add_link = TRUE)[,'val'])
+    )
+)
+
+testthat::test_that(
+  "add_link = TRUE equivalent to stat = 'link'",
+  testthat::expect_identical(
+    tablelight::liststats(zeroinfl_negbin,
+                          stats.list = c("link"),
+                          add_link = TRUE),
+    tablelight::liststats(zeroinfl_negbin,
+                          stats.list = c("link"),
+                          add_link = FALSE)
   )
 )
 
@@ -534,6 +604,7 @@ zeroinfl_poisson <- pscl::zeroinfl(art ~ . | ., data = bioChemists)
 
 stats_zeroinfl_poisson <- tablelight::liststats(zeroinfl_poisson)
 stats_bis_zeroinfl_poisson <- tablelight::liststats(zeroinfl_poisson, add_link = TRUE,
+                                                    stats.list = c("n","ll","lln","bic"),
                                                     add_alpha = TRUE)
 
 
