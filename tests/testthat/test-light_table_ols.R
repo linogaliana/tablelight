@@ -515,7 +515,7 @@ latex_table2 <- tablelight::light_table(ols,
                                         column.labels = "My label column",
                                         omit = c("Petal.Length", "Sepal.Width"))
 
-testthat::test_that("Same table except for the omit variables", {
+testthat::test_that("[latex] Same table except for the omit variables", {
   row_coef <- grep("(Intercept)", latex_table1)
   row_coef2 <- grep("Petal.Length", latex_table1)
   testthat::expect_equal(c(
@@ -525,6 +525,50 @@ testthat::test_that("Same table except for the omit variables", {
   latex_table2
   )
 })
+
+
+
+html_table1 <- tablelight::light_table(ols,
+                                       type = "html",
+                                        title = "My table title",
+                                        label = "My table label",
+                                        dep.var.labels = "My depvar",
+                                        column.labels = "My label column")
+html_table2 <- tablelight::light_table(ols,
+                                       type = "html",
+                                        title = "My table title",
+                                        label = "My table label",
+                                        dep.var.labels = "My depvar",
+                                        column.labels = "My label column",
+                                        omit = c("Petal.Length", "Sepal.Width"))
+
+
+testthat::test_that("[html] Same table except order of variables", {
+
+  row_coef  <- html_table1[grep("(Intercept)", html_table1)]
+  row_coef_smaller  <- html_table2[grep("(Intercept)", html_table2)]
+
+  row_coef2 <- as.character(
+    stringr::str_split(row_coef, "</td>", simplify = TRUE)
+  )
+  row_coef2 <- paste0(row_coef2[1:(length(row_coef2)-1)], "</td>")
+
+  row_coef_smaller2 <- as.character(
+    stringr::str_split(row_coef_smaller, "</td>", simplify = TRUE)
+  )
+  row_coef_smaller2 <- paste0(row_coef_smaller2[1:(length(row_coef_smaller2)-1)], "</td>")
+
+
+  var_pos <- grep("Sepal.Width", row_coef2)
+  row_coef3 <- row_coef2[c(1:(var_pos-1),
+                           (var_pos+12):length(row_coef3))]
+
+  testthat::expect_equal(
+    row_coef3,
+    row_coef_smaller2)
+})
+
+
 
 
 # covariate.labels =================
