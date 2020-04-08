@@ -113,6 +113,7 @@ light_table.default <- function(
   covariate.labels = NULL,
   order_variable = NULL,
   stats.var.separate = NULL,
+  stats.list = c("n", "lln", "bic"),
   notes = "notes to add",
   add.lines = "",
   rules_between_covariates = NULL,
