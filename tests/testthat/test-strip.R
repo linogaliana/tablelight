@@ -8,7 +8,7 @@ df = data.frame(y = rnorm(100L),
 
 object <- lm(y ~  x, df)
 object_light <- strip(object)
-summary_light <- summary(object)
+# summary_light <- summary(object_light)
 
 testthat::test_that("New class light.", {
   testthat::expect_equal(class(object_light),
@@ -16,12 +16,12 @@ testthat::test_that("New class light.", {
   )
 })
 
-testthat::test_that('stripped summary is just summary without dev.res', {
-  testthat::expect_equal(
-    names(summary(object))[(names(summary(object)) != "deviance.resid")],
-    names(summary_light)
-  )
-})
+# testthat::test_that('stripped summary is just summary without dev.res', {
+#   testthat::expect_equal(
+#     names(summary(object))[(names(summary(object)) != "deviance.resid")],
+#     names(summary_light)
+#   )
+# })
 
 
 testthat::test_that("Coefficients field is same than summary(object)$coefficients", {
@@ -64,6 +64,19 @@ testthat::test_that("link_selection is empty", {
     object_light$link_selection,
     ""
   )
+})
+
+testthat::test_that("R2 and Adjusted R2 fields same than summary(object)", {
+
+  testthat::expect_equal(
+    object_light$rsq,
+    summary(object)$r.squared
+  )
+  testthat::expect_equal(
+    object_light$adjrsq,
+    summary(object)$adj.r.squared
+  )
+
 })
 
 

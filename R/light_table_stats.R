@@ -58,11 +58,12 @@ light_table_stats_latex <- function(object, ncols_models, stats.var.separate, st
       labels_stats <- rep("\\multicolumn{%s}{c}{%s}", length(stats.var.separate) + ncols_models - sum(stats.var.separate))
       length_labels <- c(stats.var.separate, ncols_models - sum(stats.var.separate))
       length_labels <- length_labels[length_labels>0]
+      value_position <- 1 + cumsum(length_labels) - length_labels #Where to start from - number of models
       statsdf2 <- lapply(1:length(length_labels), function(i){
         sprintf(
           labels_stats[i],
           length_labels[i],
-          statsdf[,1 + cumsum(length_labels)[i]])
+          statsdf[,1 + value_position[i]])
       }
       )
       statsdf <- cbind(statsdf[,1], do.call(cbind, statsdf2))
@@ -89,8 +90,8 @@ light_table_stats_html <- function(object, ncols_models, stats.var.separate,
 
   if (ncols_models>1){
     statsdf <- lapply(object, liststats, stats.list = stats.list, ...)
-    statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
-                      statsdf)
+      statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
+                        statsdf)
   } else{
     statsdf <- liststats(object, stats.list = stats.list, ...)
   }
@@ -139,6 +140,7 @@ light_table_stats_html <- function(object, ncols_models, stats.var.separate,
   statsdf <- apply(statsdf, 1, paste, collapse = "")
 
   statsdf <- gsub("\\$\\\\alpha\\$", "&alpha;", statsdf, perl = TRUE)
+  statsdf <- gsub("\\$R\\^2\\$", "R<sup>2</sup>", statsdf, perl = TRUE)
 
   return(statsdf)
 }

@@ -282,6 +282,14 @@ liststats.default <- function(object, ...){
   llk <- as.numeric(logLik(object))
   bic <- BIC(object)
 
+  if (isTRUE(as.character(object$call[1]) == "lm")){
+    rsq <- format(summary(object)$r.squared, digits = 2L, nsmall = 2L)
+    adjrsq <- format(summary(object)$adj.r.squared, digits = 2L, nsmall = 2L)
+  } else{
+    rsq <- ""
+    adjrsq <- ""
+  }
+
   if (isTRUE('link' %in% stats.list)){
 
 
@@ -358,6 +366,20 @@ liststats.default <- function(object, ...){
     stat_shortcode <- c("sigma", stat_shortcode)
   }
 
+
+  if (isTRUE('adj.rsq' %in% stats.list)){
+    df <- rbind(data.frame(stat = "Adjusted $R^2$", order = -5, val = adjrsq),
+                df)
+    stat_shortcode <- c("adj.rsq", stat_shortcode)
+  }
+
+  if (isTRUE('rsq' %in% stats.list)){
+    df <- rbind(data.frame(stat = "$R^2$", order = -10, val = rsq),
+                df)
+    stat_shortcode <- c("rsq", stat_shortcode)
+  }
+
+
   df <- cbind(df, 'shortcode' = stat_shortcode)
   df <- df[as.character(df$shortcode) %in% stats.list, ]
 
@@ -391,24 +413,6 @@ liststats.light.lm <- function(object, ...){
 
   # IF glm OBJECT USE DIFFERENT FUNCTION
   if (inherits(object, "light.glm")) return(liststats.light.glm(object, ...))
-
-
-  if (isFALSE("stats.list" %in% names(args))){
-    stats.list <- c("n","lln","bic")
-  } else{
-    stats.list <- args[['stats.list']]
-  }
-
-  if (isTRUE('add_link' %in% names(args))){
-    stats.list <- c(stats.list, "link")
-  }
-  if (isTRUE('add_sigma' %in% names(args))){
-    stats.list <- c(stats.list, "sigma")
-  }
-  if (isTRUE('add_alpha' %in% names(args))){
-    stats.list <- c(stats.list, "alpha")
-  }
-
 
 
   llk <- object$loglikelihood
@@ -487,6 +491,23 @@ liststats.light.lm <- function(object, ...){
                            val = est_sigma), df
     )
     stat_shortcode <- c("sigma", stat_shortcode)
+  }
+
+  if ('adj.rsq' %in% stats.list){
+    df <- rbind(data.frame(stat = "Adjusted $R^2$",
+                           order = -10,
+                           val = format(object$adjrsq, digits = 2L, nsmall = 2L)), df
+    )
+    stat_shortcode <- c("adj.rsq", stat_shortcode)
+  }
+
+
+  if ('rsq' %in% stats.list){
+    df <- rbind(data.frame(stat = "$R^2$",
+                           order = -10,
+                           val = format(object$rsq, digits = 2L, nsmall = 2L)), df
+    )
+    stat_shortcode <- c("rsq", stat_shortcode)
   }
 
   df <- cbind(df, 'shortcode' = stat_shortcode)
