@@ -13,7 +13,7 @@ arrange_coeff <- function(text_coeff, order_variable = NULL, type = c("latex","h
   type <- match.arg(type)
 
   namescol <- colnames(text_coeff)
-  text_coeff <- data.frame(text_coeff)
+  text_coeff <- data.frame(text_coeff, stringsAsFactors = FALSE)
   colnames(text_coeff) <- namescol
 
 
@@ -21,7 +21,9 @@ arrange_coeff <- function(text_coeff, order_variable = NULL, type = c("latex","h
     text_coeff <- rbind(text_coeff, "")
   }
 
-  text_coeff <- cbind(text_coeff, "text_zempty" = "")
+  text_coeff <- cbind(text_coeff,
+                      data.frame("text_zempty" = "", stringsAsFactors = FALSE)
+  )
   # text_coeff <- data.frame(text_coeff)
 
 
@@ -34,7 +36,7 @@ arrange_coeff <- function(text_coeff, order_variable = NULL, type = c("latex","h
   body_table <- reshape2::melt(
     text_coeff, id.vars = "variable",
     variable.name = "obj",
-    factorsAsStrings=FALSE
+    factorsAsStrings=TRUE
   )
 
 
