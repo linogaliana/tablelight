@@ -1,4 +1,5 @@
-light_table_stats <- function(object, type = c("latex", "html"), ncols_models, stats.var.separate, ...){
+light_table_stats <- function(object, type = c("latex", "html"), ncols_models, stats.var.separate,
+                              stats.list, ...){
 
   type <- match.arg(type)
 
@@ -7,6 +8,7 @@ light_table_stats <- function(object, type = c("latex", "html"), ncols_models, s
       light_table_stats_latex(
         object = object, ncols_models = ncols_models,
         stats.var.separate = stats.var.separate,
+        stats.list = stats.list,
         ...
       )
     )
@@ -15,6 +17,7 @@ light_table_stats <- function(object, type = c("latex", "html"), ncols_models, s
       light_table_stats_html(
         object = object, ncols_models = ncols_models,
         stats.var.separate = stats.var.separate,
+        stats.list = stats.list,
         ...
       )
     )
@@ -22,16 +25,16 @@ light_table_stats <- function(object, type = c("latex", "html"), ncols_models, s
 
 }
 
-light_table_stats_latex <- function(object, ncols_models, stats.var.separate, ...){
+light_table_stats_latex <- function(object, ncols_models, stats.var.separate, stats.list, ...){
 
   # COMPUTE STATISTICS -------------------
 
   if (ncols_models>1){
-    statsdf <- lapply(object, liststats, ...)
+    statsdf <- lapply(object, liststats, stats.list = stats.list, ...)
     statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
                       statsdf)
   } else{
-    statsdf <- liststats(object, ...)
+    statsdf <- liststats(object, stats.list = stats.list, ...)
   }
 
   statsdf <- statsdf[order(statsdf$order),]
@@ -79,16 +82,17 @@ light_table_stats_latex <- function(object, ncols_models, stats.var.separate, ..
 
 
 
-light_table_stats_html <- function(object, ncols_models, stats.var.separate, ...){
+light_table_stats_html <- function(object, ncols_models, stats.var.separate,
+                                   stats.list, ...){
 
   # COMPUTE STATISTICS -------------------
 
   if (ncols_models>1){
-    statsdf <- lapply(object, liststats, ...)
+    statsdf <- lapply(object, liststats, stats.list, ...)
     statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
                       statsdf)
   } else{
-    statsdf <- liststats(object,...)
+    statsdf <- liststats(object, stats.list, ...)
   }
 
   statsdf <- statsdf[order(statsdf$order),]
