@@ -177,7 +177,7 @@ strip.lm <- function(object, ...) {
   object$loglikelihood <- as.numeric(llk)
   object$bic <- as.numeric(BIC(llk))
   object$rsq  <- summary_object$r.squared
-  object$adj.rsq  <- summary_object$adj.r.squared
+  object$adjrsq  <- summary_object$adj.r.squared
   object$link_count <- "Gaussian"
   object$link_selection <- ""
 

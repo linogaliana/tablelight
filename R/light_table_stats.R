@@ -140,6 +140,7 @@ light_table_stats_html <- function(object, ncols_models, stats.var.separate,
   statsdf <- apply(statsdf, 1, paste, collapse = "")
 
   statsdf <- gsub("\\$\\\\alpha\\$", "&alpha;", statsdf, perl = TRUE)
+  statsdf <- gsub("\\$R\\^2\\$", "R<sup>2</sup>", statsdf, perl = TRUE)
 
   return(statsdf)
 }

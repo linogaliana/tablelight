@@ -283,11 +283,11 @@ liststats.default <- function(object, ...){
   bic <- BIC(object)
 
   if (isTRUE(as.character(object$call[1]) == "lm")){
-    rsq <- summary(object)$r.squared
-    rsq.adj <- summary(object)$r.squared
+    rsq <- format(summary(object)$r.squared, digits = 2L, nsmall = 2L)
+    adjrsq <- format(summary(object)$adj.r.squared, digits = 2L, nsmall = 2L)
   } else{
     rsq <- ""
-    adj.rsq <- ""
+    adjrsq <- ""
   }
 
   if (isTRUE('link' %in% stats.list)){
@@ -368,7 +368,7 @@ liststats.default <- function(object, ...){
 
 
   if (isTRUE('adj.rsq' %in% stats.list)){
-    df <- rbind(data.frame(stat = "Adjusted $R^2$", order = -5, val = adj.rsq),
+    df <- rbind(data.frame(stat = "Adjusted $R^2$", order = -5, val = adjrsq),
                 df)
     stat_shortcode <- c("adj.rsq", stat_shortcode)
   }
@@ -496,7 +496,7 @@ liststats.light.lm <- function(object, ...){
   if ('adj.rsq' %in% stats.list){
     df <- rbind(data.frame(stat = "Adjusted $R^2$",
                            order = -10,
-                           val = object$adj.rsq), df
+                           val = format(object$adjrsq, digits = 2L, nsmall = 2L)), df
     )
     stat_shortcode <- c("adj.rsq", stat_shortcode)
   }
@@ -505,7 +505,7 @@ liststats.light.lm <- function(object, ...){
   if ('rsq' %in% stats.list){
     df <- rbind(data.frame(stat = "$R^2$",
                            order = -10,
-                           val = object$rsq), df
+                           val = format(object$rsq, digits = 2L, nsmall = 2L)), df
     )
     stat_shortcode <- c("rsq", stat_shortcode)
   }

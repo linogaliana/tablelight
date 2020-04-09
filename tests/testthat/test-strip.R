@@ -73,7 +73,7 @@ testthat::test_that("R2 and Adjusted R2 fields same than summary(object)", {
     summary(object)$r.squared
   )
   testthat::expect_equal(
-    object_light$adj.rsq,
+    object_light$adjrsq,
     summary(object)$adj.r.squared
   )
 
