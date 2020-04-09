@@ -176,9 +176,9 @@ testthat::test_that(
     as.character(
       stats_glm_bis[grepl(x = as.character(stats_glm_bis$stat),
                           pattern = "(Count|Selection)"),'val']
-  ),
-  as.character(tablelight::liststats(glm, stats.list = "link")[,'val'])
-)
+    ),
+    as.character(tablelight::liststats(glm, stats.list = "link")[,'val'])
+  )
 )
 
 
@@ -481,9 +481,9 @@ testthat::test_that(
     as.character(stats_bis_zeroinfl_negbin[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
                                                  pattern = "(Count|Selection)"),'val']),
     as.character(tablelight::liststats(zeroinfl_negbin,
-                          stats.list = c("link"),
-                          add_link = TRUE)[,'val'])
-    )
+                                       stats.list = c("link"),
+                                       add_link = TRUE)[,'val'])
+  )
 )
 
 testthat::test_that(
@@ -752,7 +752,7 @@ testthat::test_that(
     stats_ols_strip[grepl("(Count|Selection)", stats_ols_strip$stat),],
     liststats(light_ols, add_link = TRUE,
               stats.list = c("link"))
-      )
+  )
 )
 
 
@@ -868,11 +868,11 @@ testthat::test_that(
 testthat::test_that(
   "add_link = TRUE equivalent to stats.list = 'link'",
   testthat::expect_identical(
-      stats_glm_strip[grepl(x = as.character(stats_glm_strip$stat),
-                                         pattern = "(Count|Selection)"), ]
+    stats_glm_strip[grepl(x = as.character(stats_glm_strip$stat),
+                          pattern = "(Count|Selection)"), ]
     ,
     tablelight::liststats(light_glm, stats.list = c("link"))
-    )
+  )
 )
 
 
@@ -972,9 +972,9 @@ testthat::test_that(
   "If you add argument add_link = TRUE, count distribution added but no selection distribution",
   testthat::expect_identical(
     stats_glmnb_bis[grepl(x = as.character(stats_glmnb_bis$stat),
-                                       pattern = "(Count|Selection)"), ],
+                          pattern = "(Count|Selection)"), ],
     tablelight::liststats(glmnb_light, stats.list = c("link"))
-    )
+  )
 )
 
 
@@ -1277,10 +1277,10 @@ testthat::test_that(
   "add_link = TRUE or list.stats = 'link' are equivalent",
   testthat::expect_identical(
     stats_bis_zeroinfl_negbin[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
-                                                 pattern = "(Count|Selection)"), ],
+                                    pattern = "(Count|Selection)"), ],
     tablelight::liststats(zeroinfl_negbin,
                           stats.list = c("link"))
-    )
+  )
 )
 
 testthat::test_that(
@@ -1473,9 +1473,9 @@ zeroinfl_negbin_strip <- tablelight::strip(zeroinfl_negbin)
 
 
 stats_bis_zeroinfl_negbin <- tablelight::liststats(zeroinfl_negbin, add_link = TRUE,
-                                                   add_alpha = TRUE)
+                                                   add_alpha = TRUE, stats.list = c("n","ll","lln","bic"))
 stats_bis_zeroinfl_negbin_strip <- tablelight::liststats(zeroinfl_negbin_strip, add_link = TRUE,
-                                                         add_alpha = TRUE)
+                                                         add_alpha = TRUE, stats.list = c("n","ll","lln","bic"))
 
 
 
@@ -1516,6 +1516,25 @@ testthat::test_that(
     )
   }
 )
+
+testthat::test_that(
+  "add_link = TRUE equivalent to stats.list = 'link'",
+  testthat::expect_identical(
+    stats_bis_zeroinfl_negbin_strip[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
+                                          pattern = "(Count|Selection)"),],
+    tablelight::liststats(zeroinfl_negbin_strip, stats.list = c("link"))
+  )
+)
+
+testthat::test_that(
+  "add_alpha = TRUE equivalent to stats.list = 'alpha'",
+  testthat::expect_identical(
+    stats_bis_zeroinfl_negbin_strip[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
+                                          pattern = "alpha"),],
+    tablelight::liststats(zeroinfl_negbin_strip, stats.list = c("alpha"))
+  )
+)
+
 
 
 # B/ CHECK STATISTICS VALUES ++++++
@@ -1584,9 +1603,11 @@ zeroinfl_poisson_strip <- tablelight::strip(zeroinfl_poisson)
 
 
 stats_bis_zeroinfl_poisson <- tablelight::liststats(zeroinfl_poisson, add_link = TRUE,
-                                                    add_alpha = TRUE)
+                                                    add_alpha = TRUE,
+                                                    stats.list = c("n","ll","lln","bic"))
 stats_bis_zeroinfl_poisson_strip <- tablelight::liststats(zeroinfl_poisson_strip, add_link = TRUE,
-                                                          add_alpha = TRUE)
+                                                          add_alpha = TRUE,
+                                                          stats.list = c("n","ll","lln","bic"))
 
 
 
@@ -1715,8 +1736,8 @@ dataset<-data.frame(y,x1,x2)
 oglm <- oglmx::oglmx(y ~ x1 + x2 + z, data=dataset,link="probit",constantMEAN=FALSE,
                      constantSD=FALSE,delta=0,threshparam=NULL)
 
-stats_oglm <- tablelight::liststats(oglm)
-stats_oglm_bis <- tablelight::liststats(oglm, add_link = TRUE)
+stats_oglm <- tablelight::liststats(oglm, stats.list = c("n","ll","lln","bic"))
+stats_oglm_bis <- tablelight::liststats(oglm, add_link = TRUE, stats.list = c("n","ll","lln","bic"))
 
 
 # 2.A. CHECK STATISTICS RETURNED ======
@@ -1737,6 +1758,16 @@ testthat::test_that(
                                         pattern = "(Count|Selection)"),'val'])
     ),
     c('', '')
+  )
+)
+
+testthat::test_that(
+  "add_link = TRUE equivalent to stats.list = 'link'",
+  testthat::expect_identical(
+    stats_oglm_bis[grepl(x = as.character(stats_oglm_bis$stat),
+                         pattern = "(Count|Selection)"),]
+    ,
+    tablelight::liststats(oglm, stats.list = c("link"))
   )
 )
 
@@ -1817,4 +1848,24 @@ testthat::test_that(
 )
 
 
+# sigma reported for oglmx objects =====
+
+oglm <- oglmx::oglmx(y ~ x1 + x2 + z, data=dataset,link="probit",constantMEAN=FALSE,
+                     constantSD=FALSE,delta=0,threshparam=NULL)
+
+# Homosckeastic model with variance one
+testthat::test_that("Reported sigmas are ok for oglmx", {
+
+  testthat::expect_equal(
+    as.character(tablelight::liststats(oglm, stats.list = c("sigma"))[,c("stat")]),
+    "$\\widehat{\\sigma}$"
+  )
+
+  testthat::expect_equal(
+    as.character(tablelight::liststats(oglm, stats.list = c("sigma"))[,c("val")]),
+    "1"
+  )
+
+
+})
 
