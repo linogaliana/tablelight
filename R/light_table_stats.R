@@ -62,7 +62,7 @@ light_table_stats_latex <- function(object, ncols_models, stats.var.separate, st
         sprintf(
           labels_stats[i],
           length_labels[i],
-          statsdf[,1 + 2*i])
+          statsdf[,1 + cumsum(length_labels)[i]])
       }
       )
       statsdf <- cbind(statsdf[,1], do.call(cbind, statsdf2))
@@ -88,11 +88,11 @@ light_table_stats_html <- function(object, ncols_models, stats.var.separate,
   # COMPUTE STATISTICS -------------------
 
   if (ncols_models>1){
-    statsdf <- lapply(object, liststats, stats.list, ...)
+    statsdf <- lapply(object, liststats, stats.list = stats.list, ...)
     statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
                       statsdf)
   } else{
-    statsdf <- liststats(object, stats.list, ...)
+    statsdf <- liststats(object, stats.list = stats.list, ...)
   }
 
   statsdf <- statsdf[order(statsdf$order),]
@@ -109,7 +109,7 @@ light_table_stats_html <- function(object, ncols_models, stats.var.separate,
 
       statsdf2 <- sprintf(paste0(sprintf('<td colspan="%s">', ncols_models),
                                  "%s","</td>"), statsdf[,2])
-      statsdf <- cbind(sprintf('<tr><td style="text-align:left">%s/td>', statsdf[,1]),
+      statsdf <- cbind(sprintf('<tr><td style="text-align:left">%s</td>', statsdf[,1]),
                        statsdf2, "</tr>")
 
     } else{
@@ -117,11 +117,12 @@ light_table_stats_html <- function(object, ncols_models, stats.var.separate,
       labels_stats <- rep('<td colspan="%s">%s</td>', length(stats.var.separate) + ncols_models - sum(stats.var.separate))
       length_labels <- c(stats.var.separate, ncols_models - sum(stats.var.separate))
       length_labels <- length_labels[length_labels>0]
+      value_position <- 1 + cumsum(length_labels) - length_labels #Where to start from - number of models
       statsdf2 <- lapply(1:length(length_labels), function(i){
         sprintf(
           labels_stats[i],
           length_labels[i],
-          statsdf[,1 + 2*i])
+          statsdf[,1 + value_position[i]])
       }
       )
       statsdf <- cbind(sprintf('<tr><td style="text-align:left">%s</td>', statsdf[,1]),
@@ -136,6 +137,8 @@ light_table_stats_html <- function(object, ncols_models, stats.var.separate,
 
 
   statsdf <- apply(statsdf, 1, paste, collapse = "")
+
+  statsdf <- gsub("\\$\\\\alpha\\$", "&alpha;", statsdf, perl = TRUE)
 
   return(statsdf)
 }
