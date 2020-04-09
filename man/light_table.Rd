@@ -71,6 +71,9 @@ will apply
 to the following three columns (i.e., columns
 number four, five and six).}
 
+\item{stats.list}{A character vector that specifies which model statistics should
+be kept in the regression table output. See \code{details} section}
+
 \item{notes}{Notes that should be added at the end}
 
 \item{add.lines}{Rows to add in object statistics part}
@@ -93,16 +96,29 @@ the table on Rstudio viewer. Ignored if \code{type} = \emph{latex}
 This function is designed to produce \code{latex} tables with
 stripped objects (see \link{strip}). It follows
 \code{stargazer} standards but proposes a
-simplified framework. Customization is limiteds}
+simplified framework. Customization is limited}
 
 \item{...}{Additional arguments that should be passed. See, for instance,
 \link{liststats}}
 }
 \value{
-A character vector.
+A character vector. The table is printed in the viewer
+if \code{type} is \emph{html} and \code{visualize} is \code{TRUE}.
 }
 \description{
 Produce latex tables from stripped objects to reduce memory needs
+}
+\details{
+The statistics that are accepted are, for the moment:
+\itemize{
+\item{\emph{"n"}: }{Number of observations}
+\item{\emph{"ll"}: }{Log likelihood}
+\item{\emph{"lln"}}{Log likelihood by observation}
+\item{\emph{"bic"}: }{Bayesian Information Criterion}
+\item{\emph{"link"}: }{Distribution used for count and selection models}
+\item{\emph{"alpha"}: }{Dispersion parameter for negative binomial models}
+\item{\emph{"sigma"}: }{Estimated standard deviation. See \link[stats]{sigma}}
+}
 }
 \examples{
 \dontrun{data("bioChemists", package = "pscl")

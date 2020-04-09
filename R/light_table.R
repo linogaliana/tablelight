@@ -24,6 +24,8 @@
 #'  will apply
 #'  to the following three columns (i.e., columns
 #'  number four, five and six).
+#' @param stats.list A character vector that specifies which model statistics should
+#'  be kept in the regression table output. See `details` section
 #' @param column.labels Label for columns
 #' @param covariate.labels A character vector of labels for
 #'  columns in regression tables.
@@ -50,9 +52,22 @@
 #' This function is designed to produce `latex` tables with
 #'  stripped objects (see \link{strip}). It follows
 #'  `stargazer` standards but proposes a
-#'  simplified framework. Customization is limiteds
+#'  simplified framework. Customization is limited
 #'
-#' @return A character vector.
+#' @return A character vector. The table is printed in the viewer
+#'  if `type` is *html* and `visualize` is `TRUE`.
+#'
+#' @details The statistics that are accepted are, for the moment:
+#' \itemize{
+#'  \item{*"n"*: }{Number of observations}
+#'  \item{*"ll"*: }{Log likelihood}
+#'  \item{*"lln"*}{Log likelihood by observation}
+#'  \item{*"bic"*: }{Bayesian Information Criterion}
+#'  \item{*"link"*: }{Distribution used for count and selection models}
+#'  \item{*"alpha"*: }{Dispersion parameter for negative binomial models}
+#'  \item{*"sigma"*: }{Estimated standard deviation. See \link[stats]{sigma}}
+#' }
+#'
 #'
 #' @examples \dontrun{data("bioChemists", package = "pscl")
 #'
