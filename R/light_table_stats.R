@@ -109,7 +109,7 @@ light_table_stats_html <- function(object, ncols_models, stats.var.separate,
 
       statsdf2 <- sprintf(paste0(sprintf('<td colspan="%s">', ncols_models),
                                  "%s","</td>"), statsdf[,2])
-      statsdf <- cbind(sprintf('<tr><td style="text-align:left">%s/td>', statsdf[,1]),
+      statsdf <- cbind(sprintf('<tr><td style="text-align:left">%s</td>', statsdf[,1]),
                        statsdf2, "</tr>")
 
     } else{
