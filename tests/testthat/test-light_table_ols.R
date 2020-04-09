@@ -12,13 +12,15 @@ latex_table <- tablelight::light_table(ols,
                                        title = "My table title",
                                        label = "My table label",
                                        dep.var.labels = "My depvar",
-                                       column.labels = "My label column")
+                                       column.labels = "My label column",
+                                       stats.list = c("n","ll","lln","bic"))
 
 html_table <- tablelight::light_table(ols,
                                       type = "html",
                                       title = "My table title",
                                       dep.var.labels = "My depvar",
-                                      column.labels = "My label column")
+                                      column.labels = "My label column",
+                                      stats.list = c("n","ll","lln","bic"))
 
 
 # HEADER =========================
@@ -219,14 +221,16 @@ latex_table <- tablelight::light_table(list(ols, ols, ols),
                                        label = "My table label",
                                        dep.var.labels = c("My depvar1", "My depvar2"),
                                        dep.var.separate = c(2,1),
-                                       column.labels = c("Label1","Label2"))
+                                       column.labels = c("Label1","Label2"),
+                                       stats.list = c("n","ll","lln","bic"))
 
 html_table <- tablelight::light_table(list(ols, ols, ols),
                                       type = "html",
                                       title = "My table title",
                                       dep.var.labels = c("My depvar1", "My depvar2","toomanyvar"),
                                       dep.var.separate = c(2,1),
-                                      column.labels = c("Label1","Label2"))
+                                      column.labels = c("Label1","Label2"),
+                                      stats.list = c("n","ll","lln","bic"))
 
 
 # HEADER
@@ -424,7 +428,8 @@ fm_zip <- tablelight::strip(pscl::zeroinfl(art ~ . | ., data = bioChemists,
 
 latex_table <- light_table(list(fm_zip, fm_zip), modeltype = c("selection","outcome"),
                            dep.var.labels = c("Selection","Outcome"),
-                           stats.var.separate = 2L)
+                           stats.var.separate = 2L,
+                           stats.list = c("n","ll","lln","bic","alpha","link"))
 
 
 testthat::test_that("Summary statistics on two columns",{
@@ -515,8 +520,7 @@ fm_zinb <- tablelight::strip(pscl::zeroinfl(art ~ . | ., data = bioChemists,
 latex_table <- tablelight::light_table(list(fm_zip, fm_zip,
                                             fm_zinb, fm_zinb),
                                        modeltype = c("selection","outcome","selection","outcome"),
-                                       #                           dep.var.labels = c("ZIP","ZINB"),
-                                       #                           dep.var.separate = 2L,
+                                       stats.list = c("n","ll","lln","bic","alpha","link"),
                                        stats.var.separate = c(2L, 2L)
 )
 

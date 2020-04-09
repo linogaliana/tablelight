@@ -89,6 +89,7 @@ light_table <- function(object,
                         covariate.labels = NULL,
                         order_variable = NULL,
                         stats.var.separate = NULL,
+                        stats.list = c("n", "lln", "bic"),
                         notes = "notes to add",
                         add.lines = "",
                         rules_between_covariates = NULL,
@@ -197,6 +198,7 @@ light_table.default <- function(
                                    type = type,
                                    ncols_models = ncols_models,
                                    stats.var.separate = stats.var.separate,
+                                   stats.list = stats.list,
                                    ...)
 
   table_total <- c(table_total, stats_table)

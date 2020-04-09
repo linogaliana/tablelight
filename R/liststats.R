@@ -42,13 +42,13 @@ liststats.light.zeroinfl <- function(object, ...){
     stats.list <- args[['stats.list']]
   }
 
-  if (isTRUE('add_link' %in% names(args))){
+  if (isTRUE('add_link' %in% names(args)) && (isFALSE("link" %in% stats.list))){
     stats.list <- c(stats.list, "link")
   }
-  if (isTRUE('add_sigma' %in% names(args))){
+  if (isTRUE('add_sigma' %in% names(args))  && (isFALSE("sigma" %in% stats.list))){
     stats.list <- c(stats.list, "sigma")
   }
-  if (isTRUE('add_alpha' %in% names(args))){
+  if (isTRUE('add_alpha' %in% names(args)) && (isFALSE("alpha" %in% stats.list))){
     stats.list <- c(stats.list, "alpha")
   }
 
@@ -115,13 +115,13 @@ liststats.zeroinfl <- function(object, ...){
     stats.list <- args[['stats.list']]
   }
 
-  if (isTRUE('add_link' %in% names(args))){
+  if (isTRUE('add_link' %in% names(args)) && (isFALSE("link" %in% stats.list))){
     stats.list <- c(stats.list, "link")
   }
-  if (isTRUE('add_sigma' %in% names(args))){
+  if (isTRUE('add_sigma' %in% names(args))  && (isFALSE("sigma" %in% stats.list))){
     stats.list <- c(stats.list, "sigma")
   }
-  if (isTRUE('add_alpha' %in% names(args))){
+  if (isTRUE('add_alpha' %in% names(args)) && (isFALSE("alpha" %in% stats.list))){
     stats.list <- c(stats.list, "alpha")
   }
 
@@ -185,13 +185,13 @@ liststats.light.glm <- function(object, ...){
     stats.list <- args[['stats.list']]
   }
 
-  if (isTRUE('add_link' %in% names(args))){
+  if (isTRUE('add_link' %in% names(args)) && (isFALSE("link" %in% stats.list))){
     stats.list <- c(stats.list, "link")
   }
-  if (isTRUE('add_sigma' %in% names(args))){
+  if (isTRUE('add_sigma' %in% names(args))  && (isFALSE("sigma" %in% stats.list))){
     stats.list <- c(stats.list, "sigma")
   }
-  if (isTRUE('add_alpha' %in% names(args))){
+  if (isTRUE('add_alpha' %in% names(args)) && (isFALSE("alpha" %in% stats.list))){
     stats.list <- c(stats.list, "alpha")
   }
 
@@ -264,13 +264,13 @@ liststats.default <- function(object, ...){
     stats.list <- args[['stats.list']]
   }
 
-  if (isTRUE('add_link' %in% names(args))){
+  if (isTRUE('add_link' %in% names(args)) && (isFALSE("link" %in% stats.list))){
     stats.list <- c(stats.list, "link")
   }
-  if (isTRUE('add_sigma' %in% names(args))){
+  if (isTRUE('add_sigma' %in% names(args))  && (isFALSE("sigma" %in% stats.list))){
     stats.list <- c(stats.list, "sigma")
   }
-  if (isTRUE('add_alpha' %in% names(args))){
+  if (isTRUE('add_alpha' %in% names(args)) && (isFALSE("alpha" %in% stats.list))){
     stats.list <- c(stats.list, "alpha")
   }
 
@@ -372,6 +372,22 @@ liststats.default <- function(object, ...){
 liststats.light.lm <- function(object, ...){
 
   args <- list(...)
+
+  if (isFALSE("stats.list" %in% names(args))){
+    stats.list <- c("n","lln","bic")
+  } else{
+    stats.list <- args[['stats.list']]
+  }
+
+  if (isTRUE('add_link' %in% names(args)) && (isFALSE("link" %in% stats.list))){
+    stats.list <- c(stats.list, "link")
+  }
+  if (isTRUE('add_sigma' %in% names(args))  && (isFALSE("sigma" %in% stats.list))){
+    stats.list <- c(stats.list, "sigma")
+  }
+  if (isTRUE('add_alpha' %in% names(args)) && (isFALSE("alpha" %in% stats.list))){
+    stats.list <- c(stats.list, "alpha")
+  }
 
   # IF glm OBJECT USE DIFFERENT FUNCTION
   if (inherits(object, "light.glm")) return(liststats.light.glm(object, ...))

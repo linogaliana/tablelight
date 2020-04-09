@@ -1100,9 +1100,9 @@ glmnb <- gravity::fastglm.nb(Days ~ Sex/(Age + Eth*Lrn), data = quine)
 
 # 8.A. CHECK STATISTICS RETURNED ======
 
-stats_glmnb <- tablelight::liststats(glmnb)
+stats_glmnb <- tablelight::liststats(glmnb, stats.list = c("n","ll","lln","bic"))
 stats_glmnb_bis <- tablelight::liststats(glmnb_light, add_link = TRUE,
-                                         add_alpha = TRUE)
+                                         add_alpha = TRUE, stats.list = c("n","ll","lln","bic"))
 
 
 testthat::test_that(
