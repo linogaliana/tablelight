@@ -838,10 +838,10 @@ glm <- glm(
 light_glm <- tablelight::strip(glm)
 
 stats_glm <- tablelight::liststats(glm, add_link = TRUE, add_alpha = TRUE,
-                                   list.stats = c("n","ll","lln","bic"))
+                                   stats.list = c("n","ll","lln","bic"))
 stats_glm_strip <- tablelight::liststats(light_glm, add_link = TRUE,
                                          add_alpha = TRUE,
-                                         list.stats = c("n","ll","lln","bic"))
+                                         stats.list = c("n","ll","lln","bic"))
 
 
 ## 6.A. CHECK STATISTICS RETURNED ======
@@ -863,6 +863,16 @@ testthat::test_that(
     ),
     c(glm$family$family, '')
   )
+)
+
+testthat::test_that(
+  "add_link = TRUE equivalent to stats.list = 'link'",
+  testthat::expect_identical(
+      stats_glm_strip[grepl(x = as.character(stats_glm_strip$stat),
+                                         pattern = "(Count|Selection)"), ]
+    ,
+    tablelight::liststats(light_glm, stats.list = c("link"))
+    )
 )
 
 
@@ -934,9 +944,10 @@ glmnb_light <- tablelight::strip(glmnb)
 
 # 7.A. CHECK STATISTICS RETURNED ======
 
-stats_glmnb <- tablelight::liststats(glmnb)
-stats_glmnb_bis <- tablelight::liststats(glmnb, add_link = TRUE,
-                                         add_alpha = TRUE)
+stats_glmnb <- tablelight::liststats(glmnb_light, stats.list = c("n","ll","lln","bic"))
+stats_glmnb_bis <- tablelight::liststats(glmnb_light, add_link = TRUE,
+                                         add_alpha = TRUE,
+                                         stats.list = c("n","ll","lln","bic"))
 
 
 
@@ -956,6 +967,17 @@ testthat::test_that(
     c("Negative Binomial", '')
   )
 )
+
+testthat::test_that(
+  "If you add argument add_link = TRUE, count distribution added but no selection distribution",
+  testthat::expect_identical(
+    stats_glmnb_bis[grepl(x = as.character(stats_glmnb_bis$stat),
+                                       pattern = "(Count|Selection)"), ],
+    tablelight::liststats(glmnb_light, stats.list = c("link"))
+    )
+)
+
+
 
 
 testthat::test_that(
@@ -1206,7 +1228,8 @@ data("bioChemists", package = "pscl")
 
 zeroinfl_negbin <- gravity::fastzeroinfl(art ~ . | ., data = bioChemists, dist = "negbin")
 stats_bis_zeroinfl_negbin <- tablelight::liststats(zeroinfl_negbin,
-                                                   add_link =TRUE, add_alpha = TRUE)
+                                                   add_link =TRUE, add_alpha = TRUE,
+                                                   stats.list = c("n","ll","lln","bic"))
 
 
 
@@ -1247,6 +1270,30 @@ testthat::test_that(
     )
   }
 )
+
+
+
+testthat::test_that(
+  "add_link = TRUE or list.stats = 'link' are equivalent",
+  testthat::expect_identical(
+    stats_bis_zeroinfl_negbin[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
+                                                 pattern = "(Count|Selection)"), ],
+    tablelight::liststats(zeroinfl_negbin,
+                          stats.list = c("link"))
+    )
+)
+
+testthat::test_that(
+  "add_alpha = TRUE or list.stats = 'alpha' are equivalent",
+  testthat::expect_identical(
+    stats_bis_zeroinfl_negbin[grepl(x = as.character(stats_bis_zeroinfl_negbin$stat),
+                                    pattern = "alpha"), ],
+    tablelight::liststats(zeroinfl_negbin,
+                          stats.list = c("alpha"))
+  )
+)
+
+
 
 
 # B/ CHECK STATISTICS VALUES ++++++
@@ -1311,9 +1358,9 @@ testthat::test_that(
 zeroinfl_poisson <- pscl::zeroinfl(art ~ . | ., data = bioChemists)
 
 
-stats_zeroinfl_poisson <- tablelight::liststats(zeroinfl_poisson)
+stats_zeroinfl_poisson <- tablelight::liststats(zeroinfl_poisson, stats.list = c("n","ll","lln","bic"))
 stats_bis_zeroinfl_poisson <- tablelight::liststats(zeroinfl_poisson, add_link = TRUE,
-                                                    add_alpha = TRUE)
+                                                    add_alpha = TRUE, stats.list = c("n","ll","lln","bic"))
 
 
 

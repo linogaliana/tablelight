@@ -179,7 +179,7 @@ liststats.light.glm <- function(object, ...){
 
   args <- list(...)
 
-  if (isFALSE("list.stats" %in% names(args))){
+  if (isFALSE("stats.list" %in% names(args))){
     stats.list <- c("n","lln","bic")
   } else{
     stats.list <- args[['stats.list']]
