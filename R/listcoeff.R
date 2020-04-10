@@ -81,6 +81,18 @@ listcoeff.default <- function(object, ...){
   return(allcoeffs)
 }
 
+#' @rdname listcoeff
+#' @export
+listcoeff.nnet <- function(object, ...){
+
+  allcoeffs <- object$vcoefnames
+
+  allcoeffs <- gsub(pattern = "\\_", replacement = "\\\\_", allcoeffs)
+
+  return(allcoeffs)
+}
+
+
 
 #' @rdname listcoeff
 #' @export

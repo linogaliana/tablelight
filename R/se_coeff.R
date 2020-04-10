@@ -7,7 +7,8 @@
 #'
 #' @return Returns coefficient values,
 #'  standard errors, t-stat (or z-stat)
-#'  and pvalues
+#'  and pvalues in a dataframe. Exception
+#'  for `nnet::multinom` models (list)
 
 
 #' @export
@@ -132,4 +133,25 @@ secoeff.summary.oglmx  <- function(object, ...){
 #' @export
 secoeff.summary.zeroinfl  <- function(object, ...){
   return(object$coefficients)
+}
+
+
+#' @rdname secoeff
+#' @export
+secoeff.nnet  <- function(object, ...){
+
+  summarymodel <- summary(object, ...)
+
+
+  coeff_zstat <- summarymodel$coefficients/summarymodel$standard.errors
+  p <- (1 - pnorm(abs(coeff_zstat), 0, 1)) * 2
+
+  coeffs <- list(
+    "Estimate" = t(summarymodel$coefficients),
+    "Std. Error" = t(summarymodel$standard.errors),
+    "z value" =  t(coeff_zstat),
+    "Pr(>|z|)" =  t(p)
+  )
+
+  return(coeffs)
 }

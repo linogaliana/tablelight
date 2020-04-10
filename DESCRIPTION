@@ -26,6 +26,7 @@ Imports:
     Hmisc,
     stats,
     reshape2,
-    rstudioapi
+    rstudioapi,
+    nnet
 Remotes: 
     linogaliana/gravity

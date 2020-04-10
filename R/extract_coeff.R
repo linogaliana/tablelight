@@ -163,3 +163,60 @@ extract_coeff.light.zeroinfl <- function(object, ...){
 
 }
 
+
+#' @rdname extract_coeff
+#' @export
+extract_coeff.nnet <- function(object, ...){
+
+  args <- list(...)
+
+  # EXTRACT SINGLE MODALITY (DEFAULT TO FIRST ONE NOT BEING REFERENCE)
+  if (isFALSE("modality" %in% names(args))){
+    modality <- object$lab[-1]
+  } else{
+    modality <- args[['modality']]
+  }
+
+  if (length(modality)>1){
+    lapply(modality, function(m) extract_coeff_nnet(object, modality = m))
+  } else{
+    return(extract_coeff_nnet(object, modality = modality))
+  }
+
+}
+
+extract_coeff_nnet <- function(object, modality, ...){
+
+  args <- list(...)
+
+  coeff_list <- secoeff(object)
+
+  tstat_var <- "Pr(>|z|)"
+
+  coeff_list_red <- lapply(names(coeff_list), function(elem){
+    coeff_list[[elem]][,as.character(modality)]
+  })
+  names(coeff_list_red) <- names(coeff_list)
+
+  text_coeff <- paste0(format(round(coeff_list_red[['Estimate']],3),
+                              digits = 3L,
+                              nsmall = 3L, big.mark=",", scientific = FALSE),
+                       sapply(coeff_list_red[[tstat_var]], signif_stars, type = args[['type']])
+  )
+  text_coeff <- gsub(x = text_coeff, pattern = " ", replacement = "")
+
+  text_sd <- paste0("(",format(round(coeff_list_red[["Std. Error"]], 3L),
+                               digits = 3L,
+                               nsmall = 3L, big.mark=",", scientific = FALSE),
+                    ")")
+  text_sd <- gsub(x = text_sd, pattern = " ", replacement = "")
+
+  text_coeff <- data.frame("variable" = names(coeff_list_red[[1]]),
+                      "text_coeff" = text_coeff, "text_sd" = text_sd,
+                      stringsAsFactors = FALSE)
+  text_coeff[,'variable'] <- gsub("_","\\_",text_coeff[,'variable'],
+                                  fixed = TRUE)
+
+  return(text_coeff)
+}
+

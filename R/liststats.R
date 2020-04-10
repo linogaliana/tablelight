@@ -529,4 +529,9 @@ nobs.zeroinfl <- function(object, ...) return(object$n)
 nobs.negbin <- function(object, ...) return(length(object$residuals))
 
 
+#' @rdname nobs
+#' @importFrom stats nobs
+#' @export
+nobs.nnet <- function(object, ...) return(nrow(object$residuals))
+
 

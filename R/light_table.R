@@ -143,13 +143,17 @@ light_table.default <- function(
 
   if (missing(adjustbox_width)) adjustbox_width <- NULL
 
-  if (isFALSE(inherits(object, "list"))){
+  if (isFALSE(inherits(object, "list")) && isFALSE(inherits(object, "nnet"))){
     ncols_models <- 1L
+  } else if (isTRUE(inherits(object, "nnet"))){
+    ncols_models <- length(object$lab[-1])
   } else{
     ncols_models <- length(object)
   }
 
   if (identical(ncols_models, 1L)){
+    coeff_data <- extract_coeff(object, type = type)
+  } else if (isTRUE(inherits(object, "nnet"))){
     coeff_data <- extract_coeff(object, type = type)
   } else{
     coeff_data <- lapply(1:length(object),
@@ -202,7 +206,7 @@ light_table.default <- function(
   } else{
     table_total <- c(table_total,
                      sprintf("<tr><td colspan=\"%s\"style=\"border-bottom: 1px solid black\"></td></tr>", ncols_models + 1)
-                     )
+    )
   }
 
 
@@ -239,7 +243,7 @@ light_table.default <- function(
   # Get one line by <tr> ... </tr> elements
   if (identical(type, "html")){
     table_total <- strsplit(paste(table_total, collapse = ""),
-                                                              "</tr>")[[1]]
+                            "</tr>")[[1]]
     table_total[1:(length(table_total)-1)] <- paste0(table_total[1:(length(table_total)-1)],
                                                      "</tr>")
   }
