@@ -212,10 +212,10 @@ dataset<-data.frame(y,x1,x2)
 
 logit <- nnet::multinom(y ~ x1 + x2 + z, data=dataset)
 
-testthat::test_that("Default return results for first modality", {
+testthat::test_that("Default behavior: return all modalities", {
   testthat::expect_identical(
     extract_coeff(logit),
-    extract_coeff(logit, modality = "0")
+    extract_coeff(logit, modality = c("0","1","2"))
   )
 })
 

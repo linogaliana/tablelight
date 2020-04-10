@@ -172,7 +172,7 @@ extract_coeff.nnet <- function(object, ...){
 
   # EXTRACT SINGLE MODALITY (DEFAULT TO FIRST ONE NOT BEING REFERENCE)
   if (isFALSE("modality" %in% names(args))){
-    modality <- object$lab[2]
+    modality <- object$lab[-1]
   } else{
     modality <- args[['modality']]
   }
