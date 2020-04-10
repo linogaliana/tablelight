@@ -163,3 +163,36 @@ extract_coeff.light.zeroinfl <- function(object, ...){
 
 }
 
+
+
+#' @rdname extract_coeff
+#' @export
+extract_coeff.nnet <- function(object, ...){
+
+  args <- list(...)
+
+  coeff_list <- secoeff(object)
+
+  tstat_var <- "Pr(>|t|)"
+
+
+  text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3),
+                              digits = 3L,
+                              nsmall = 3L, big.mark=",", scientific = FALSE),
+                       sapply(coeff_list[,tstat_var], signif_stars, type = args[['type']])
+  )
+  text_coeff <- gsub(x = text_coeff, pattern = " ", replacement = "")
+
+  text_sd <- paste0("(",format(round(coeff_list[,'Std. error'], 3L),
+                               digits = 3L,
+                               nsmall = 3L, big.mark=",", scientific = FALSE),
+                    ")")
+  text_sd <- gsub(x = text_sd, pattern = " ", replacement = "")
+
+  text_coeff <- cbind("variable" = rownames(coeff_list),text_coeff, text_sd)
+  text_coeff[,'variable'] <- gsub("_","\\_",text_coeff[,'variable'],
+                                  fixed = TRUE)
+
+  return(text_coeff)
+}
+

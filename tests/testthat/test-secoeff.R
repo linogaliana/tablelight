@@ -96,3 +96,78 @@ testthat::expect_equal(
 #   as.numeric(tablelight:::secoeff(quine.nb1)[,'Std. Error']),
 #   as.numeric(tablelight:::secoeff(fastquine.nb1)[,'Std. Error'])
 # )
+
+
+
+# 7 - nnet::multinom --------------
+
+requireNamespace("nnet", quietly = TRUE)
+
+n<-250
+x1<-sample(c(0,1),n,replace=TRUE,prob=c(0.75,0.25))
+x2<-vector("numeric",n)
+x2[x1==0]<-sample(c(0,1),n-sum(x1==1),replace=TRUE,prob=c(2/3,1/3))
+z<-rnorm(n,0.5)
+# create latent outcome variable
+latenty<-0.5+1.5*x1-0.5*x2+0.5*z+rnorm(n,sd=exp(0.5*x1-0.5*x2))
+# observed y has four possible values: -1,0,1,2
+# threshold values are: -0.5, 0.5, 1.5.
+y<-vector("numeric",n)
+y[latenty< -0.5]<--1
+y[latenty>= -0.5 & latenty<0.5]<- 0
+y[latenty>= 0.5 & latenty<1.5]<- 1
+y[latenty>= 1.5]<- 2
+dataset<-data.frame(y,x1,x2)
+
+
+logit <- nnet::multinom(y ~ x1 + x2 + z, data=dataset)
+
+coeffs <- secoeff(logit)
+
+testthat::test_that("Return a list with 4 elements", {
+
+  testthat::expect_identical(
+    class(coeffs), "list"
+  )
+
+  testthat::expect_equal(
+    names(coeffs), c("Estimate", "Std. Error", "z value", "Pr(>|z|)")
+  )
+
+})
+
+testthat::test_that("As many rows as y modality - 1", {
+
+  testthat::expect_equal(
+    nrow(coeffs[[1]]), length(unique(dataset$y))-1
+  )
+  testthat::expect_equal(
+    nrow(coeffs[[2]]), length(unique(dataset$y))-1
+  )
+  testthat::expect_equal(
+    nrow(coeffs[[3]]), length(unique(dataset$y))-1
+  )
+  testthat::expect_equal(
+    nrow(coeffs[[4]]), length(unique(dataset$y))-1
+  )
+
+})
+
+testthat::test_that("As many columns as number variables + intercept", {
+
+  testthat::expect_equal(
+    ncol(coeffs[[1]]), 4
+  )
+  testthat::expect_equal(
+    ncol(coeffs[[2]]), 4
+  )
+  testthat::expect_equal(
+    ncol(coeffs[[3]]), 4
+  )
+  testthat::expect_equal(
+    ncol(coeffs[[4]]), 4
+  )
+
+})
+
+
