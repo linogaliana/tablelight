@@ -173,23 +173,32 @@ extract_coeff.nnet <- function(object, ...){
 
   coeff_list <- secoeff(object)
 
-  tstat_var <- "Pr(>|t|)"
+  tstat_var <- "Pr(>|z|)"
 
+  # EXTRACT SINGLE MODALITY (DEFAULT TO FIRST ONE)
+  if (isFALSE("modality" %in% names(args))) modality <- colnames(coeff_list[[1]])[1]
 
-  text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3),
+  coeff_list_red <- lapply(names(coeff_list), function(elem){
+    coeff_list[[elem]][,modality]
+  })
+  names(coeff_list_red) <- names(coeff_list)
+
+  text_coeff <- paste0(format(round(coeff_list_red[['Estimate']],3),
                               digits = 3L,
                               nsmall = 3L, big.mark=",", scientific = FALSE),
-                       sapply(coeff_list[,tstat_var], signif_stars, type = args[['type']])
+                       sapply(coeff_list_red[[tstat_var]], signif_stars, type = args[['type']])
   )
   text_coeff <- gsub(x = text_coeff, pattern = " ", replacement = "")
 
-  text_sd <- paste0("(",format(round(coeff_list[,'Std. error'], 3L),
+  text_sd <- paste0("(",format(round(coeff_list_red[["Std. Error"]], 3L),
                                digits = 3L,
                                nsmall = 3L, big.mark=",", scientific = FALSE),
                     ")")
   text_sd <- gsub(x = text_sd, pattern = " ", replacement = "")
 
-  text_coeff <- cbind("variable" = rownames(coeff_list),text_coeff, text_sd)
+  text_coeff <- data.frame("variable" = names(coeff_list_red[[1]]),
+                      "text_coeff" = text_coeff, "text_sd" = text_sd,
+                      stringsAsFactors = FALSE)
   text_coeff[,'variable'] <- gsub("_","\\_",text_coeff[,'variable'],
                                   fixed = TRUE)
 

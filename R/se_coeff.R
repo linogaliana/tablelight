@@ -147,10 +147,11 @@ secoeff.nnet  <- function(object, ...){
   p <- (1 - pnorm(abs(coeff_zstat), 0, 1)) * 2
 
   coeffs <- list(
-    "Estimate" = summarymodel$coefficients,
-    "Std. Error" = summarymodel$standard.errors,
-    "z value" =  coeff_zstat,
-    "Pr(>|z|)" =  p)
+    "Estimate" = t(summarymodel$coefficients),
+    "Std. Error" = t(summarymodel$standard.errors),
+    "z value" =  t(coeff_zstat),
+    "Pr(>|z|)" =  t(p)
+  )
 
   return(coeffs)
 }
