@@ -1875,9 +1875,6 @@ testthat::test_that("Reported sigmas are ok for oglmx", {
 
 # 12. NNET::MULTINOM OBJECTS -------------------
 
-
-# CREATE OGLMX OBJECT (FROM THE DOC)
-
 n<-250
 x1<-sample(c(0,1),n,replace=TRUE,prob=c(0.75,0.25))
 x2<-vector("numeric",n)

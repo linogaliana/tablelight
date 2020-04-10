@@ -34,7 +34,7 @@ light_table_coefficients <- function(object,
   # REORDER VARIABLES --------------------------
 
   if (is.null(order_variable)){
-    if (ncols_models>1){
+    if (isTRUE(ncols_models>1) && isFALSE(inherits(object, "nnet"))){
       order_variable <- unique(do.call(c, lapply(object, listcoeff)))
     } else{
       order_variable <- unique(listcoeff(object))
