@@ -89,7 +89,7 @@ testthat::test_that("Coefficient s.e. are consistent", {
     paste0("(",
            format(output_glm[,'Std. Error'],
                   digits = 2L, nsmall = 3L
-                  ),
+           ),
            ")")
   )
 })
@@ -190,3 +190,129 @@ testthat::test_that("Coefficient s.e. are consistent", {
   )
 })
 
+
+# NNET ====================================
+
+n<-250
+x1<-sample(c(0,1),n,replace=TRUE,prob=c(0.75,0.25))
+x2<-vector("numeric",n)
+x2[x1==0]<-sample(c(0,1),n-sum(x1==1),replace=TRUE,prob=c(2/3,1/3))
+z<-rnorm(n,0.5)
+# create latent outcome variable
+latenty<-0.5+1.5*x1-0.5*x2+0.5*z+rnorm(n,sd=exp(0.5*x1-0.5*x2))
+# observed y has four possible values: -1,0,1,2
+# threshold values are: -0.5, 0.5, 1.5.
+y<-vector("numeric",n)
+y[latenty< -0.5]<--1
+y[latenty>= -0.5 & latenty<0.5]<- 0
+y[latenty>= 0.5 & latenty<1.5]<- 1
+y[latenty>= 1.5]<- 2
+dataset<-data.frame(y,x1,x2)
+
+
+logit <- nnet::multinom(y ~ x1 + x2 + z, data=dataset)
+
+testthat::test_that("Default return results for first modality", {
+  testthat::expect_identical(
+    extract_coeff(logit),
+    extract_coeff(logit, modality = "0")
+  )
+})
+
+models_stat <- secoeff(logit)
+
+expected_coeff_modal0 <- sapply(seq_along(rownames(models_stat[[1]])), function(i){
+  paste0(
+    trimws(
+      format(round(models_stat[['Estimate']][i,"0"],3L),  nsmall = 3L,
+             digits = 2L, scientific = FALSE)
+    ),  signif_stars(models_stat[['Pr(>|z|)']][i,"0"])
+  )
+})
+expected_coeff_modal1 <- sapply(seq_along(rownames(models_stat[[1]])), function(i){
+  paste0(
+    trimws(
+      format(round(models_stat[['Estimate']][i,"1"],3L),  nsmall = 3L,
+             digits = 2L, scientific = FALSE)
+    ),  signif_stars(models_stat[['Pr(>|z|)']][i,"1"])
+  )
+})
+expected_coeff_modal2 <- sapply(seq_along(rownames(models_stat[[1]])), function(i){
+  paste0(
+    trimws(
+      format(round(models_stat[['Estimate']][i,"2"],3L),  nsmall = 3L,
+             digits = 2L, scientific = FALSE)
+    ),  signif_stars(models_stat[['Pr(>|z|)']][i,"2"])
+  )
+})
+expected_sd_modal0 <- sapply(seq_along(rownames(models_stat[[1]])), function(i){
+  paste0(
+    "(",
+    trimws(
+      format(round(models_stat[['Std. Error']][i,"0"],3L),  nsmall = 3L,
+             digits = 2L, scientific = FALSE)
+    ),
+    ")"
+  )
+})
+expected_sd_modal1 <- sapply(seq_along(rownames(models_stat[[1]])), function(i){
+  paste0(
+    "(",
+    trimws(
+      format(round(models_stat[['Std. Error']][i,"1"],3L),  nsmall = 3L,
+             digits = 2L, scientific = FALSE)
+    ),
+    ")"
+  )
+})
+expected_sd_modal2 <- sapply(seq_along(rownames(models_stat[[1]])), function(i){
+  paste0(
+    "(",
+    trimws(
+      format(round(models_stat[['Std. Error']][i,"2"],3L),  nsmall = 3L,
+             digits = 2L, scientific = FALSE)
+    ),
+    ")"
+  )
+})
+
+
+
+testthat::test_that("Coefficients are okay", {
+
+  testthat::expect_equal(
+    expected_coeff_modal0,
+    extract_coeff(logit, modality = "0")[,"text_coeff"]
+  )
+
+  testthat::expect_equal(
+    expected_coeff_modal1,
+    extract_coeff(logit, modality = "1")[,"text_coeff"]
+  )
+
+  testthat::expect_equal(
+    expected_coeff_modal2,
+    extract_coeff(logit, modality = "2")[,"text_coeff"]
+  )
+
+})
+
+
+testthat::test_that("Standard errors are okay", {
+
+  testthat::expect_equal(
+    expected_sd_modal0,
+    extract_coeff(logit, modality = "0")[,"text_sd"]
+  )
+
+  testthat::expect_equal(
+    expected_sd_modal1,
+    extract_coeff(logit, modality = "1")[,"text_sd"]
+  )
+
+  testthat::expect_equal(
+    expected_sd_modal2,
+    extract_coeff(logit, modality = "2")[,"text_sd"]
+  )
+
+})

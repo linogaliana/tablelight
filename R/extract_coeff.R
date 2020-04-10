@@ -176,10 +176,14 @@ extract_coeff.nnet <- function(object, ...){
   tstat_var <- "Pr(>|z|)"
 
   # EXTRACT SINGLE MODALITY (DEFAULT TO FIRST ONE)
-  if (isFALSE("modality" %in% names(args))) modality <- colnames(coeff_list[[1]])[1]
+  if (isFALSE("modality" %in% names(args))){
+    modality <- colnames(coeff_list[[1]])[1]
+  } else{
+    modality <- args[['modality']]
+  }
 
   coeff_list_red <- lapply(names(coeff_list), function(elem){
-    coeff_list[[elem]][,modality]
+    coeff_list[[elem]][,as.character(modality)]
   })
   names(coeff_list_red) <- names(coeff_list)
 

@@ -136,36 +136,36 @@ testthat::test_that("Return a list with 4 elements", {
 
 })
 
-testthat::test_that("As many rows as y modality - 1", {
+testthat::test_that("As many cols as y modality - 1", {
 
   testthat::expect_equal(
-    nrow(coeffs[[1]]), length(unique(dataset$y))-1
+    ncol(coeffs[[1]]), length(unique(dataset$y))-1
   )
   testthat::expect_equal(
-    nrow(coeffs[[2]]), length(unique(dataset$y))-1
+    ncol(coeffs[[2]]), length(unique(dataset$y))-1
   )
   testthat::expect_equal(
-    nrow(coeffs[[3]]), length(unique(dataset$y))-1
+    ncol(coeffs[[3]]), length(unique(dataset$y))-1
   )
   testthat::expect_equal(
-    nrow(coeffs[[4]]), length(unique(dataset$y))-1
+    ncol(coeffs[[4]]), length(unique(dataset$y))-1
   )
 
 })
 
-testthat::test_that("As many columns as number variables + intercept", {
+testthat::test_that("As many rows as number variables + intercept", {
 
   testthat::expect_equal(
-    ncol(coeffs[[1]]), 4
+    nrow(coeffs[[1]]), 4
   )
   testthat::expect_equal(
-    ncol(coeffs[[2]]), 4
+    nrow(coeffs[[2]]), 4
   )
   testthat::expect_equal(
-    ncol(coeffs[[3]]), 4
+    nrow(coeffs[[3]]), 4
   )
   testthat::expect_equal(
-    ncol(coeffs[[4]]), 4
+    nrow(coeffs[[4]]), 4
   )
 
 })
