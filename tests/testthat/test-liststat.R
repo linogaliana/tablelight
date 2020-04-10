@@ -1869,3 +1869,141 @@ testthat::test_that("Reported sigmas are ok for oglmx", {
 
 })
 
+
+
+
+
+# 12. NNET::MULTINOM OBJECTS -------------------
+
+
+# CREATE OGLMX OBJECT (FROM THE DOC)
+
+n<-250
+x1<-sample(c(0,1),n,replace=TRUE,prob=c(0.75,0.25))
+x2<-vector("numeric",n)
+x2[x1==0]<-sample(c(0,1),n-sum(x1==1),replace=TRUE,prob=c(2/3,1/3))
+z<-rnorm(n,0.5)
+# create latent outcome variable
+latenty<-0.5+1.5*x1-0.5*x2+0.5*z+rnorm(n,sd=exp(0.5*x1-0.5*x2))
+# observed y has four possible values: -1,0,1,2
+# threshold values are: -0.5, 0.5, 1.5.
+y<-vector("numeric",n)
+y[latenty< -0.5]<--1
+y[latenty>= -0.5 & latenty<0.5]<- 0
+y[latenty>= 0.5 & latenty<1.5]<- 1
+y[latenty>= 1.5]<- 2
+dataset<-data.frame(y,x1,x2)
+
+
+logit <- nnet::multinom(y ~ x1 + x2 + z, data=dataset)
+
+stats_nnet <- tablelight::liststats(logit, stats.list = c("n","ll","lln","bic"))
+stats_nnet_bis <- tablelight::liststats(logit, add_link = TRUE, stats.list = c("n","ll","lln","bic"))
+
+
+# 2.A. CHECK STATISTICS RETURNED ======
+
+testthat::test_that(
+  "Default method gives information for oglm",
+  testthat::expect_equal(
+    nrow(na.omit(stats_oglm)),
+    nrow(stats_oglm)
+  )
+)
+
+testthat::test_that(
+  "If you add argument add_link = TRUE, empty fields for count and selection distribution",
+  testthat::expect_equal(
+    tolower(
+      as.character(stats_nnet_bis[grepl(x = as.character(stats_oglm_bis$stat),
+                                        pattern = "(Count|Selection)"),'val'])
+    ),
+    c('', '')
+  )
+)
+
+testthat::test_that(
+  "add_link = TRUE equivalent to stats.list = 'link'",
+  testthat::expect_identical(
+    stats_nnet_bis[grepl(x = as.character(stats_nnet_bis$stat),
+                         pattern = "(Count|Selection)"),]
+    ,
+    tablelight::liststats(logit, stats.list = c("link"))
+  )
+)
+
+
+## 2.B. CHECK STATISTICS VALUES ======
+
+testthat::test_that(
+  "'Observations' field is OK",{
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_nnet_bis[stats_nnet_bis$stat == "Observations","val"])),
+      stats::nobs(logit)
+    )
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_nnet[stats_nnet$stat == "Observations","val"])),
+      stats::nobs(logit)
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_nnet_bis[stats_nnet_bis$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(logit)), digits = 0L, big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_nnet_bis[stats_nnet_bis$stat == "Log likelihood","val"]),
+      format(as.numeric(stats::logLik(logit)), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood (by obs.)' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_nnet_bis[stats_nnet_bis$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(logit)/stats::nobs(logit)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_nnet_bis[stats_nnet_bis$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(logit)/stats::nobs(logit)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'BIC' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_nnet_bis[stats_nnet_bis$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(logit), digits = 0L, big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_nnet_bis[stats_nnet_bis$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(logit), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
