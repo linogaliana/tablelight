@@ -164,23 +164,34 @@ extract_coeff.light.zeroinfl <- function(object, ...){
 }
 
 
-
 #' @rdname extract_coeff
 #' @export
 extract_coeff.nnet <- function(object, ...){
 
   args <- list(...)
 
-  coeff_list <- secoeff(object)
-
-  tstat_var <- "Pr(>|z|)"
-
-  # EXTRACT SINGLE MODALITY (DEFAULT TO FIRST ONE)
+  # EXTRACT SINGLE MODALITY (DEFAULT TO FIRST ONE NOT BEING REFERENCE)
   if (isFALSE("modality" %in% names(args))){
-    modality <- colnames(coeff_list[[1]])[1]
+    modality <- object$lab[2]
   } else{
     modality <- args[['modality']]
   }
+
+  if (length(modality)>1){
+    lapply(modality, function(m) extract_coeff_nnet(object, modality = m))
+  } else{
+    return(extract_coeff_nnet(object, modality = modality))
+  }
+
+}
+
+extract_coeff_nnet <- function(object, modality, ...){
+
+  args <- list(...)
+
+  coeff_list <- secoeff(object)
+
+  tstat_var <- "Pr(>|z|)"
 
   coeff_list_red <- lapply(names(coeff_list), function(elem){
     coeff_list[[elem]][,as.character(modality)]

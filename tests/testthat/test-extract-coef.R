@@ -219,6 +219,19 @@ testthat::test_that("Default return results for first modality", {
   )
 })
 
+testthat::test_that("All modalities returned if needed", {
+  testthat::expect_identical(
+    extract_coeff(logit, modality = c("0","1","2")),
+    list(
+      extract_coeff(logit, modality = c("0")),
+      extract_coeff(logit, modality = c("1")),
+      extract_coeff(logit, modality = c("2"))
+    )
+  )
+})
+
+
+
 models_stat <- secoeff(logit)
 
 expected_coeff_modal0 <- sapply(seq_along(rownames(models_stat[[1]])), function(i){
@@ -316,3 +329,5 @@ testthat::test_that("Standard errors are okay", {
   )
 
 })
+
+
