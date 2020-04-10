@@ -171,3 +171,13 @@ testthat::test_that("As many rows as number variables + intercept", {
 })
 
 
+testthat::test_that("Values returned are correct", {
+ testthat::expect_equal(
+   coeffs[["Estimate"]],
+   t(summary(logit)$coefficients)
+ )
+  testthat::expect_equal(
+    coeffs[["Std. Error"]],
+    t(summary(logit)$standard.errors)
+  )
+})
