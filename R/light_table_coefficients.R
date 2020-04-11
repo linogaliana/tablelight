@@ -18,6 +18,10 @@ light_table_coefficients <- function(object,
     coeff_body <- arrange_coeff(coeff_data, order_variable, type = type)
   } else{
     coeff_body <- lapply(coeff_data, arrange_coeff, order_variable, type = type)
+    if (!inherits(object, "nnet")){
+      lapply(seq_along(coeff_body), function(i) data.table::setnames(coeff_body[[i]], old = "value",
+                                                                     new = paste0("value",i)))
+    }
     coeff_body <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("variable","obj"), all = TRUE),
                          coeff_body)
   }
@@ -137,6 +141,6 @@ light_table_coefficients <- function(object,
     }
   }
 
-    return(body_table)
+  return(body_table)
 }
 
