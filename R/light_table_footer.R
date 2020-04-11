@@ -28,7 +28,7 @@ light_table_footer_latex <- function(ncols_models, add.lines,
     ncols_models
   )
 
-  if (add.lines != ""){
+  if (isFALSE(is.null(add.lines))){
     foot_table <- c(foot_table,
                     sprintf(
                       " \\multicolumn{%s}{p{0.9\\linewidth}}{%s} \\\\ ",
