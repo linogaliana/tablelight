@@ -33,6 +33,8 @@ light_table_stats_latex <- function(object, ncols_models, stats.var.separate, st
 
   if (isTRUE(ncols_models>1) && isFALSE(inherits(object, "nnet"))){
     statsdf <- lapply(object, liststats, stats.list = stats.list, ...)
+    lapply(seq_along(statsdf), function(i) data.table::setnames(statsdf[[i]], old = "val",
+                                                                new = paste0("val",i)))
     statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
                       statsdf)
   } else {
@@ -92,6 +94,8 @@ light_table_stats_html <- function(object, ncols_models, stats.var.separate,
 
   if (isTRUE(ncols_models>1) && isFALSE(inherits(object, "nnet"))){
     statsdf <- lapply(object, liststats, stats.list = stats.list, ...)
+    lapply(seq_along(statsdf), function(i) data.table::setnames(statsdf[[i]], old = "val",
+                                                                new = paste0("val",i)))
     statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
                       statsdf)
   } else {

@@ -18,7 +18,7 @@ light_table(
   stats.var.separate = NULL,
   stats.list = c("n", "lln", "bic"),
   notes = "notes to add",
-  add.lines = "",
+  add.lines = NULL,
   reference_level_position = NULL,
   rules_between_covariates = NULL,
   omit = NULL,

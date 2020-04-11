@@ -36,7 +36,7 @@ sigma.oglmx <- function(object, newdata = NULL, ...){
   # Expression for variance computation
   # ---------------------------------------------------
 
-  if (delta != 0){
+  if (isTRUE(length(delta)>1) || isFALSE(identical(delta,0))){
     z <- Z %*% delta
   } else{
     z <- 0

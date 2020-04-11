@@ -292,35 +292,13 @@ testthat::test_that("[html] Number of columns: number of models + 1", {
 
 requireNamespace("oglmx", quietly = TRUE)
 
-iris$y_r <- as.numeric(iris$Species)
-
-oglm <- oglmx::oglmx(
-  y_r ~ Sepal.Length ,
-  data = iris
-)
-
-testthat::expect_warning(
-  x <- tablelight::light_table(oglm,
-                               modeltype = "outcome"),
-  "attributes are not identical across measure variables"
-)
-
-
-testthat::expect_equal(
-  class(x),
-  "character"
-)
-
-testthat::expect_warning(
-  x2 <- tablelight::light_table(list(oglm, oglm),
-                                modeltype = c("outcome","outcome")),
-  "attributes are not identical across measure variables"
-)
-
-testthat::expect_equal(
-  class(x2),
-  "character"
-)
+# iris$y_r <- as.numeric(iris$Species)
+#
+# oglm <- oglmx::oglmx(
+#   y_r ~ Sepal.Length ,
+#   data = iris
+# )
+#
 
 
 
