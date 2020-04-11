@@ -8,7 +8,8 @@ light_table_coefficients <- function(object,
                                      ncols_models,
                                      type,
                                      coeff_data, order_variable,
-                                     omit, covariate.labels, rules_between_covariates
+                                     omit, covariate.labels, reference_level_position,
+                                     rules_between_covariates
 ){
 
   # ARRANGE COEFFICIENTS ORDER -------------------------
@@ -21,6 +22,22 @@ light_table_coefficients <- function(object,
                          coeff_body)
   }
   coeff_body <- na.omit(coeff_body)
+
+  # CHANGE ORDER MODELS IF reference_level_position IS NOT NULL
+  if (isFALSE(is.null(reference_level_position)) && isTRUE(inherits(object, "nnet"))){
+    coeff_body2 <- cbind(
+      coeff_body[,1:(2 + reference_level_position - 1)],
+      data.frame("v" = "", stringsAsFactors = FALSE),
+      coeff_body[,(2 + reference_level_position):ncol(coeff_body)]
+    )
+    coeff_body2[coeff_body2$obj == "text_coeff", "v"] <- "(Ref)"
+    if (type == "latex"){
+      coeff_body2[,"v"] <- paste0("&",coeff_body2[,"v"])
+    } else{
+      coeff_body2[,"v"] <- paste0("<td>", coeff_body2[,"v"], "</td>")
+    }
+    coeff_body <- coeff_body2
+  }
 
   # REMOVE UNECESSARY COEFFICIENTS -----------------------
 
@@ -98,9 +115,14 @@ light_table_coefficients <- function(object,
     n_replace <- min(length(list_variables), length(covariate.labels))
     labels_covariates <- covariate.labels[1:n_replace]
     value_covariates <- list_variables[list_variables != "(Intercept)"]
+    if (identical(type, "latex")){
+      value_covariates <- paste0("^", str_to_regex(value_covariates))
+    } else{
+      value_covariates <- str_to_regex(value_covariates)
+    }
     names(labels_covariates) <- value_covariates[1:n_replace]
     body_table <-  mgsub(
-      pattern = paste0("^", value_covariates),
+      pattern = value_covariates,
       replacement = labels_covariates,
       body_table, fixed = FALSE
     )

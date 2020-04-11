@@ -19,6 +19,7 @@ light_table(
   stats.list = c("n", "lln", "bic"),
   notes = "notes to add",
   add.lines = "",
+  reference_level_position = NULL,
   rules_between_covariates = NULL,
   omit = NULL,
   landscape = FALSE,
@@ -78,6 +79,17 @@ be kept in the regression table output. See \code{details} section}
 
 \item{add.lines}{Rows to add in object statistics part}
 
+\item{reference_level_position}{In multinomial logit, coefficients are
+relative to the reference level. A column can be added to represent
+an empty coefficient modality that is indicated as being the reference.
+If \code{NULL}, this feature is ignored. Otherwise, the column is placed at
+the position indicated by the argument
+
+This function is designed to produce \code{latex} tables with
+stripped objects (see \link{strip}). It follows
+\code{stargazer} standards but proposes a
+simplified framework. Customization is limited}
+
 \item{rules_between_covariates}{A numeric vector that specifies how
 rules should be laid out across rows of the regression table}
 
@@ -91,12 +103,7 @@ use a landscape table. Default to \code{FALSE}}
 what should be the parameter ?}
 
 \item{visualize}{Logical condition indicating whether we want to print
-the table on Rstudio viewer. Ignored if \code{type} = \emph{latex}
-
-This function is designed to produce \code{latex} tables with
-stripped objects (see \link{strip}). It follows
-\code{stargazer} standards but proposes a
-simplified framework. Customization is limited}
+the table on Rstudio viewer. Ignored if \code{type} = \emph{latex}}
 
 \item{...}{Additional arguments that should be passed. See, for instance,
 \link{liststats}}

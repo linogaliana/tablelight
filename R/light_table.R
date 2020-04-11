@@ -48,6 +48,11 @@
 #'  what should be the parameter ?
 #' @param visualize Logical condition indicating whether we want to print
 #'  the table on Rstudio viewer. Ignored if `type` = *latex*
+#' @param reference_level_position In multinomial logit, coefficients are
+#'  relative to the reference level. A column can be added to represent
+#'  an empty coefficient modality that is indicated as being the reference.
+#'  If `NULL`, this feature is ignored. Otherwise, the column is placed at
+#'  the position indicated by the argument
 #'
 #' This function is designed to produce `latex` tables with
 #'  stripped objects (see \link{strip}). It follows
@@ -107,6 +112,7 @@ light_table <- function(object,
                         stats.list = c("n", "lln", "bic"),
                         notes = "notes to add",
                         add.lines = "",
+                        reference_level_position = NULL,
                         rules_between_covariates = NULL,
                         omit = NULL,
                         landscape = FALSE,
@@ -132,6 +138,7 @@ light_table.default <- function(
   stats.list = c("n", "lln", "bic"),
   notes = "notes to add",
   add.lines = "",
+  reference_level_position = NULL,
   rules_between_covariates = NULL,
   omit = NULL,
   landscape = FALSE,
@@ -147,6 +154,7 @@ light_table.default <- function(
     ncols_models <- 1L
   } else if (isTRUE(inherits(object, "nnet"))){
     ncols_models <- length(object$lab[-1])
+    if (isFALSE(is.null(reference_level_position))) ncols_models <- ncols_models + 1
   } else{
     ncols_models <- length(object)
   }
@@ -196,6 +204,7 @@ light_table.default <- function(
     order_variable = order_variable,
     omit = omit,
     covariate.labels = covariate.labels,
+    reference_level_position = reference_level_position,
     rules_between_covariates = rules_between_covariates
   )
 
