@@ -100,9 +100,9 @@ light_table_coefficients <- function(object,
     value_covariates <- list_variables[list_variables != "(Intercept)"]
     names(labels_covariates) <- value_covariates[1:n_replace]
     body_table <-  mgsub(
-      pattern = value_covariates,
+      pattern = paste0("^", value_covariates),
       replacement = labels_covariates,
-      body_table,
+      body_table, fixed = FALSE
     )
   }
 
