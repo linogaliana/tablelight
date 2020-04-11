@@ -4,6 +4,7 @@
 #' @param ncols_models Number of columns
 #' @param coeff_data Output from \link{secoeff}
 #' @inheritParams light_table
+#' @importFrom data.table setnames
 light_table_coefficients <- function(object,
                                      ncols_models,
                                      type,

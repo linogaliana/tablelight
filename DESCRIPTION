@@ -27,6 +27,7 @@ Imports:
     stats,
     reshape2,
     rstudioapi,
-    nnet
+    nnet,
+    data.table
 Remotes: 
     linogaliana/gravity
