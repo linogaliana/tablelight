@@ -48,6 +48,11 @@
 #'  what should be the parameter ?
 #' @param visualize Logical condition indicating whether we want to print
 #'  the table on Rstudio viewer. Ignored if `type` = *latex*
+#' @param reference_level_position In multinomial logit, coefficients are
+#'  relative to the reference level. A column can be added to represent
+#'  an empty coefficient modality that is indicated as being the reference.
+#'  If `NULL`, this feature is ignored. Otherwise, the column is placed at
+#'  the position indicated by the argument
 #'
 #' This function is designed to produce `latex` tables with
 #'  stripped objects (see \link{strip}). It follows
@@ -106,7 +111,8 @@ light_table <- function(object,
                         stats.var.separate = NULL,
                         stats.list = c("n", "lln", "bic"),
                         notes = "notes to add",
-                        add.lines = "",
+                        add.lines = NULL,
+                        reference_level_position = NULL,
                         rules_between_covariates = NULL,
                         omit = NULL,
                         landscape = FALSE,
@@ -131,7 +137,8 @@ light_table.default <- function(
   stats.var.separate = NULL,
   stats.list = c("n", "lln", "bic"),
   notes = "notes to add",
-  add.lines = "",
+  add.lines = NULL,
+  reference_level_position = NULL,
   rules_between_covariates = NULL,
   omit = NULL,
   landscape = FALSE,
@@ -143,13 +150,18 @@ light_table.default <- function(
 
   if (missing(adjustbox_width)) adjustbox_width <- NULL
 
-  if (isFALSE(inherits(object, "list"))){
+  if (isFALSE(inherits(object, "list")) && isFALSE(inherits(object, "nnet"))){
     ncols_models <- 1L
+  } else if (isTRUE(inherits(object, "nnet"))){
+    ncols_models <- length(object$lab[-1])
+    if (isFALSE(is.null(reference_level_position))) ncols_models <- ncols_models + 1
   } else{
     ncols_models <- length(object)
   }
 
   if (identical(ncols_models, 1L)){
+    coeff_data <- extract_coeff(object, type = type)
+  } else if (isTRUE(inherits(object, "nnet"))){
     coeff_data <- extract_coeff(object, type = type)
   } else{
     coeff_data <- lapply(1:length(object),
@@ -192,6 +204,7 @@ light_table.default <- function(
     order_variable = order_variable,
     omit = omit,
     covariate.labels = covariate.labels,
+    reference_level_position = reference_level_position,
     rules_between_covariates = rules_between_covariates
   )
 
@@ -202,7 +215,7 @@ light_table.default <- function(
   } else{
     table_total <- c(table_total,
                      sprintf("<tr><td colspan=\"%s\"style=\"border-bottom: 1px solid black\"></td></tr>", ncols_models + 1)
-                     )
+    )
   }
 
 
@@ -239,7 +252,7 @@ light_table.default <- function(
   # Get one line by <tr> ... </tr> elements
   if (identical(type, "html")){
     table_total <- strsplit(paste(table_total, collapse = ""),
-                                                              "</tr>")[[1]]
+                            "</tr>")[[1]]
     table_total[1:(length(table_total)-1)] <- paste0(table_total[1:(length(table_total)-1)],
                                                      "</tr>")
   }

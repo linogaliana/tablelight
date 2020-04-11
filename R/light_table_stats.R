@@ -3,6 +3,8 @@ light_table_stats <- function(object, type = c("latex", "html"), ncols_models, s
 
   type <- match.arg(type)
 
+  if (inherits(object, "nnet")) stats.var.separate <- 1L #trick for nnet models
+
   if (type == "latex"){
     return(
       light_table_stats_latex(
@@ -29,13 +31,13 @@ light_table_stats_latex <- function(object, ncols_models, stats.var.separate, st
 
   # COMPUTE STATISTICS -------------------
 
-  if (ncols_models>1){
+  if (isTRUE(ncols_models>1) && isFALSE(inherits(object, "nnet"))){
     statsdf <- lapply(object, liststats, stats.list = stats.list, ...)
     lapply(seq_along(statsdf), function(i) data.table::setnames(statsdf[[i]], old = "val",
                                                                 new = paste0("val",i)))
     statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
                       statsdf)
-  } else{
+  } else {
     statsdf <- liststats(object, stats.list = stats.list, ...)
   }
 
@@ -90,13 +92,13 @@ light_table_stats_html <- function(object, ncols_models, stats.var.separate,
 
   # COMPUTE STATISTICS -------------------
 
-  if (ncols_models>1){
+  if (isTRUE(ncols_models>1) && isFALSE(inherits(object, "nnet"))){
     statsdf <- lapply(object, liststats, stats.list = stats.list, ...)
     lapply(seq_along(statsdf), function(i) data.table::setnames(statsdf[[i]], old = "val",
                                                                 new = paste0("val",i)))
     statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
                       statsdf)
-  } else{
+  } else {
     statsdf <- liststats(object, stats.list = stats.list, ...)
   }
 

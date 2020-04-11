@@ -10,6 +10,7 @@
 \alias{secoeff.summary.glm}
 \alias{secoeff.summary.oglmx}
 \alias{secoeff.summary.zeroinfl}
+\alias{secoeff.nnet}
 \title{Extract summary table for coefficients
 estimates}
 \usage{
@@ -30,6 +31,8 @@ secoeff(object, ...)
 \method{secoeff}{summary.oglmx}(object, ...)
 
 \method{secoeff}{summary.zeroinfl}(object, ...)
+
+\method{secoeff}{nnet}(object, ...)
 }
 \arguments{
 \item{object}{A regression object}
@@ -39,7 +42,8 @@ secoeff(object, ...)
 \value{
 Returns coefficient values,
 standard errors, t-stat (or z-stat)
-and pvalues
+and pvalues in a dataframe. Exception
+for \code{nnet::multinom} models (list)
 }
 \description{
 Extract summary table for coefficients

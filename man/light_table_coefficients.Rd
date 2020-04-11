@@ -12,6 +12,7 @@ light_table_coefficients(
   order_variable,
   omit,
   covariate.labels,
+  reference_level_position,
   rules_between_covariates
 )
 }
@@ -36,6 +37,17 @@ columns in regression tables.
 Their layout, in terms of the number of columns
 associated with each label, is given by the
 argument \code{column.separate}.}
+
+\item{reference_level_position}{In multinomial logit, coefficients are
+relative to the reference level. A column can be added to represent
+an empty coefficient modality that is indicated as being the reference.
+If \code{NULL}, this feature is ignored. Otherwise, the column is placed at
+the position indicated by the argument
+
+This function is designed to produce \code{latex} tables with
+stripped objects (see \link{strip}). It follows
+\code{stargazer} standards but proposes a
+simplified framework. Customization is limited}
 
 \item{rules_between_covariates}{A numeric vector that specifies how
 rules should be laid out across rows of the regression table}
