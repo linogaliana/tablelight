@@ -115,9 +115,14 @@ light_table_coefficients <- function(object,
     n_replace <- min(length(list_variables), length(covariate.labels))
     labels_covariates <- covariate.labels[1:n_replace]
     value_covariates <- list_variables[list_variables != "(Intercept)"]
+    if (identical(type, "latex")){
+      value_covariates <- paste0("^", str_to_regex(value_covariates))
+    } else{
+      value_covariates <- str_to_regex(value_covariates)
+    }
     names(labels_covariates) <- value_covariates[1:n_replace]
     body_table <-  mgsub(
-      pattern = paste0("^", value_covariates),
+      pattern = value_covariates,
       replacement = labels_covariates,
       body_table, fixed = FALSE
     )
