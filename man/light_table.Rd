@@ -4,29 +4,16 @@
 \alias{light_table}
 \title{Produce latex tables from stripped objects to reduce memory needs}
 \usage{
-light_table(
-  object,
-  type = c("latex", "html"),
-  modeltype = "outcome",
-  title = "Title",
-  label = "label",
-  dep.var.labels = "Label dep.var.labels",
-  dep.var.separate = NULL,
-  column.labels = "blab",
-  covariate.labels = NULL,
-  order_variable = NULL,
-  stats.var.separate = NULL,
-  stats.list = c("n", "lln", "bic"),
-  notes = "notes to add",
-  add.lines = NULL,
-  reference_level_position = NULL,
-  rules_between_covariates = NULL,
-  omit = NULL,
-  landscape = FALSE,
-  adjustbox_width = c(NULL, 1.1),
-  visualize = FALSE,
-  ...
-)
+light_table(object, type = c("latex", "html"), modeltype = "outcome",
+  title = "Title", label = "label",
+  dep.var.labels = "Label dep.var.labels", dep.var.separate = NULL,
+  column.labels = "blab", covariate.labels = NULL,
+  order_variable = NULL, stats.var.separate = NULL,
+  stats.list = c("n", "lln", "bic"), notes = "notes to add",
+  add.lines = NULL, reference_level_position = NULL,
+  rules_between_covariates = NULL, omit = NULL, landscape = FALSE,
+  adjustbox_width = c(NULL, 1.1), visualize = FALSE,
+  footprint = FALSE, ...)
 }
 \arguments{
 \item{object}{List of object}
@@ -83,12 +70,7 @@ be kept in the regression table output. See \code{details} section}
 relative to the reference level. A column can be added to represent
 an empty coefficient modality that is indicated as being the reference.
 If \code{NULL}, this feature is ignored. Otherwise, the column is placed at
-the position indicated by the argument
-
-This function is designed to produce \code{latex} tables with
-stripped objects (see \link{strip}). It follows
-\code{stargazer} standards but proposes a
-simplified framework. Customization is limited}
+the position indicated by the argument}
 
 \item{rules_between_covariates}{A numeric vector that specifies how
 rules should be laid out across rows of the regression table}
@@ -104,6 +86,13 @@ what should be the parameter ?}
 
 \item{visualize}{Logical condition indicating whether we want to print
 the table on Rstudio viewer. Ignored if \code{type} = \emph{latex}}
+
+\item{footprint}{Should we write the footprint at the head of the table
+
+This function is designed to produce \code{latex} tables with
+stripped objects (see \link{strip}). It follows
+\code{stargazer} standards but proposes a
+simplified framework. Customization is limited}
 
 \item{...}{Additional arguments that should be passed. See, for instance,
 \link{liststats}}
@@ -144,7 +133,7 @@ model_list <- lapply(list(fm_zip, fm_zip2,
 cat(
   tablelight::light_table(object = model_list,
                         covariate.labels = c("x1","x2")),
-  sep = "\n"
+  sep = "\\n"
 )
 }
 
