@@ -53,6 +53,7 @@
 #'  an empty coefficient modality that is indicated as being the reference.
 #'  If `NULL`, this feature is ignored. Otherwise, the column is placed at
 #'  the position indicated by the argument
+#' @param footprint Should we write the footprint at the head of the table
 #'
 #' This function is designed to produce `latex` tables with
 #'  stripped objects (see \link{strip}). It follows
@@ -118,6 +119,7 @@ light_table <- function(object,
                         landscape = FALSE,
                         adjustbox_width = c(NULL, 1.1),
                         visualize = FALSE,
+                        footprint = FALSE,
                         ...){
   UseMethod("light_table")
 }
@@ -144,6 +146,7 @@ light_table.default <- function(
   landscape = FALSE,
   adjustbox_width = c(NULL, 1.1),
   visualize = FALSE,
+  footprint = FALSE,
   ...){
 
   type <- match.arg(type)
@@ -261,6 +264,24 @@ light_table.default <- function(
   if (landscape && identical(type, "latex")) table_total <- c("\\begin{landscape}", table_total, "\\end{landscape}")
 
   if (identical(type, "html") && isTRUE(visualize)) view_html(table_total)
+
+
+  if (isTRUE(footprint)){
+    if (type == "latex"){
+      table_total <- c(paste0("% Table generated using {tablelight} package",
+                              "%Author: Lino Galiana",
+                              "%url: https://github.com/linogaliana/tablelight",
+                              paste0("%",sprintf("timestamp: %s", Sys.time()))),
+                       table_total)
+    } else{
+      table_total <- c(paste0("<!------Table generated using {tablelight} package",
+                              "Author: Lino Galiana",
+                              "url: https://github.com/linogaliana/tablelight",
+                              sprintf("timestamp: %s ---------->", Sys.time())),
+                       table_total)
+    }
+  }
+
 
   return(table_total)
 }

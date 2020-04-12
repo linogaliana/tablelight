@@ -245,3 +245,34 @@ testthat::test_that("[html] Same table except order of variables", {
     row_coef3,
     row_coef_smaller2)
 })
+
+
+# footprint ------------
+
+ols <- lm(
+  Sepal.Length ~ Sepal.Width,
+  data = iris
+)
+
+latex_table <- tablelight::light_table(ols, footprint = TRUE,
+                                      title = "My table title",
+                                      label = "My table label",
+                                      dep.var.labels = "My depvar",
+                                      column.labels = "My label column")
+
+html_table <- tablelight::light_table(ols, footprint = TRUE,
+                                       type = "html",
+                                       title = "My table title",
+                                       label = "My table label",
+                                       dep.var.labels = "My depvar",
+                                       column.labels = "My label column")
+
+
+testthat::test_that("Add footprint in header", {
+  testthat::expect_true(
+    startsWith(latex_table[1],"% Table generated using {tablelight}")
+  )
+  testthat::expect_true(
+    startsWith(html_table[1],"<!------Table generated using {tablelight}")
+  )
+})
