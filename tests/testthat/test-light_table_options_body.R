@@ -271,7 +271,7 @@ html_table <- tablelight::light_table(ols, footprint = TRUE,
 testthat::test_that("Add footprint in header", {
   testthat::expect_true(
     startsWith(latex_table[1],"% Table generated using {tablelight}")
-  ),
+  )
   testthat::expect_true(
     startsWith(html_table[1],"<!------Table generated using {tablelight}")
   )
