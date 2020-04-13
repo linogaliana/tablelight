@@ -46,3 +46,12 @@ BIC.logLik.oglmx <- function(object, ...){
 }
 
 
+
+#' @export
+BIC.logLik.zeroinfl <- function(object, ...){
+
+  return(
+    -2 * as.numeric(object) + attr(object, "df") * log(attr(object, "nobs"))
+  )
+
+}

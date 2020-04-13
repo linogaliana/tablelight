@@ -4,16 +4,30 @@
 \alias{light_table}
 \title{Produce latex tables from stripped objects to reduce memory needs}
 \usage{
-light_table(object, type = c("latex", "html"), modeltype = "outcome",
-  title = "Title", label = "label",
-  dep.var.labels = "Label dep.var.labels", dep.var.separate = NULL,
-  column.labels = "blab", covariate.labels = NULL,
-  order_variable = NULL, stats.var.separate = NULL,
-  stats.list = c("n", "lln", "bic"), notes = "notes to add",
-  add.lines = NULL, reference_level_position = NULL,
-  rules_between_covariates = NULL, omit = NULL, landscape = FALSE,
-  adjustbox_width = c(NULL, 1.1), visualize = FALSE,
-  footprint = FALSE, ...)
+light_table(
+  object,
+  type = c("latex", "html"),
+  modeltype = "outcome",
+  title = "Title",
+  label = "label",
+  dep.var.labels = "Label dep.var.labels",
+  dep.var.separate = NULL,
+  column.labels = "blab",
+  covariate.labels = NULL,
+  order_variable = NULL,
+  stats.var.separate = NULL,
+  stats.list = c("n", "lln", "bic"),
+  notes = "notes to add",
+  add.lines = NULL,
+  reference_level_position = NULL,
+  rules_between_covariates = NULL,
+  omit = NULL,
+  landscape = FALSE,
+  adjustbox_width = c(NULL, 1.1),
+  visualize = FALSE,
+  footprint = FALSE,
+  ...
+)
 }
 \arguments{
 \item{object}{List of object}
@@ -133,7 +147,7 @@ model_list <- lapply(list(fm_zip, fm_zip2,
 cat(
   tablelight::light_table(object = model_list,
                         covariate.labels = c("x1","x2")),
-  sep = "\\n"
+  sep = "\n"
 )
 }
 
