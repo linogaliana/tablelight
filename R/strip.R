@@ -39,7 +39,7 @@ strip.glm <- function(object, ...) {
   object$n <- stats::nobs(object)
   llk <- stats::logLik(object)
   object$loglikelihood <- as.numeric(llk)
-  object$bic <- as.numeric(BIC(llk))
+  object$bic <- BIC(object)
   object$link_count <- Hmisc::capitalize(as.character(summary_object$family$family))
   object$link_selection <- ""
 
