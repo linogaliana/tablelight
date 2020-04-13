@@ -39,7 +39,7 @@ strip.glm <- function(object, ...) {
   object$n <- stats::nobs(object)
   llk <- stats::logLik(object)
   object$loglikelihood <- as.numeric(llk)
-  object$bic <- BIC(object)
+  object$bic <- as.numeric(BIC(llk))
   object$link_count <- Hmisc::capitalize(as.character(summary_object$family$family))
   object$link_selection <- ""
 
@@ -280,7 +280,7 @@ strip.fastzeroinfl <- function(object, ...) {
   object$n <- stats::nobs(object)
   llk <- stats::logLik(object)
   object$loglikelihood <- as.numeric(llk)
-  object$bic <- as.numeric(BIC(llk))
+  object$bic <- BIC(object)
   object$r.squared  <- summary_object$r.squared
   object$link_count <- Hmisc::capitalize(object$dist)
   object$link_selection <- Hmisc::capitalize(object$link)
