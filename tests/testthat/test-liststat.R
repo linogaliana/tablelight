@@ -1084,10 +1084,6 @@ testthat::test_that(
 
 
 
-
-
-
-
 # 8. FAST GLM.NB --------------------
 
 requireNamespace("gravity", quietly = TRUE)
@@ -1095,7 +1091,7 @@ requireNamespace("gravity", quietly = TRUE)
 quine <- MASS::quine
 
 glmnb <- gravity::fastglm.nb(Days ~ Sex/(Age + Eth*Lrn), data = quine)
-# glmnb_light <- tablelight::strip(glmnb)
+glmnb_light <- tablelight::strip(glmnb)
 
 
 # 8.A. CHECK STATISTICS RETURNED ======
