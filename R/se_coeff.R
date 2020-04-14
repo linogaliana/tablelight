@@ -109,6 +109,7 @@ secoeff.negbin <- function(object, ...){
 }
 
 
+
 #' @rdname secoeff
 #' @export
 secoeff.summary.lm  <- function(object, ...){

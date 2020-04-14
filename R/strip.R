@@ -270,6 +270,55 @@ strip.zeroinfl <- function(object, ...){
 
 #' @rdname strip
 #' @export
+strip.fastnegbin <- function(object, ...){
+
+  if (!inherits(object, "fastnegbin")) stop("object' should be a zeroinfl object")
+
+  # summary_object <- summary(object)
+  object$bic <- BIC(object)
+
+  object$coefficients <- secoeff(object)
+
+  object$n <- stats::nobs(object)
+  llk <- stats::logLik(object)
+  object$loglikelihood <- as.numeric(llk)
+  object$r.squared  <- NULL
+  object$link_count <- "Negative Binomial"
+  object$link_selection <- ""
+
+
+
+  object$y = c()
+  object$model = c()
+  object$offset = c()
+
+  object$residuals = c()
+  object$fitted.values = c()
+  object$effects = c()
+  object$qr = c()
+  object$linear.predictors = c()
+  object$weights = c()
+  object$prior.weights = c()
+  object$data = c()
+
+
+  object$family$variance = c()
+  object$family$validmu = c()
+  object$family$simulate = c()
+  attr(object$terms,".Environment") = c()
+  attr(object$formula,".Environment") = c()
+
+
+
+  class(object) <- c(class(object),
+                     paste0("light.", class(object)))
+
+  return(object)
+}
+
+
+#' @rdname strip
+#' @export
 strip.fastzeroinfl <- function(object, ...){
 
   if (!inherits(object, "zeroinfl")) stop("object' should be a zeroinfl object")
@@ -315,6 +364,7 @@ strip.fastzeroinfl <- function(object, ...){
 
   return(object)
 }
+
 
 
 #' @rdname strip
