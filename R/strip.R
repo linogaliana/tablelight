@@ -211,13 +211,17 @@ strip.lm <- function(object, ...) {
 
 #' @rdname strip
 #' @export
-strip.zeroinfl <- function(object, ...) {
+strip.zeroinfl <- function(object, ...){
 
   if (!inherits(object, "zeroinfl")) stop("object' should be a zeroinfl object")
+  if (inherits(object, "fastzeroinfl")) return(
+    strip.fastzeroinfl(object, ...)
+  )
 
   # temporary patch for fastzeroinfl objects
   if (isTRUE(as.character(object$call[1]) %in% c("gravity::fastzeroinfl",
-                                                "fastzeroinfl"))){
+                                                "fastzeroinfl",
+                                                "gravity:::fastzeroinfl"))  || (inherits(object,"fastzeroinfl"))){
     return(strip.fastzeroinfl(object, ...))
   }
 
@@ -250,8 +254,6 @@ strip.zeroinfl <- function(object, ...) {
 
 
   object$family$variance = c()
-  #object$family$dev.resids = c()
-  #object$family$aic = c()
   object$family$validmu = c()
   object$family$simulate = c()
   attr(object$terms,".Environment") = c()
@@ -268,19 +270,18 @@ strip.zeroinfl <- function(object, ...) {
 
 #' @rdname strip
 #' @export
-strip.fastzeroinfl <- function(object, ...) {
+strip.fastzeroinfl <- function(object, ...){
 
   if (!inherits(object, "zeroinfl")) stop("object' should be a zeroinfl object")
 
-
   summary_object <- summary(object)
+  object$bic <- BIC_fastzeroinfl(object)
 
   object$coefficients <- secoeff(summary_object)
 
   object$n <- stats::nobs(object)
   llk <- stats::logLik(object)
   object$loglikelihood <- as.numeric(llk)
-  object$bic <- BIC(object)
   object$r.squared  <- summary_object$r.squared
   object$link_count <- Hmisc::capitalize(object$dist)
   object$link_selection <- Hmisc::capitalize(object$link)
@@ -302,8 +303,6 @@ strip.fastzeroinfl <- function(object, ...) {
 
 
   object$family$variance = c()
-  #object$family$dev.resids = c()
-  #object$family$aic = c()
   object$family$validmu = c()
   object$family$simulate = c()
   attr(object$terms,".Environment") = c()
@@ -311,7 +310,8 @@ strip.fastzeroinfl <- function(object, ...) {
 
 
 
-  class(object) <- c(class(object), "light.zeroinfl")
+  class(object) <- c(class(object),
+                     paste0("light.", class(object)))
 
   return(object)
 }

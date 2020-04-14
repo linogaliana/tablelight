@@ -1507,11 +1507,11 @@ testthat::test_that(
     )
     testthat::expect_equal(
       as.character(
-        stats_glmnb_bis[grepl(x = as.character(stats_glmnb_bis$stat),
+        stats_bis_zeroinfl_negbin_strip[grepl(x = as.character(stats_bis_zeroinfl_negbin_strip$stat),
                               pattern = "alpha"),'val']
       ),
       as.character(
-        format(1/glmnb$theta, digits = 3L, nsmall = 3L, big.mark = ",")
+        format(1/zeroinfl_negbin$theta, digits = 3L, nsmall = 3L, big.mark = ",")
       )
     )
   }

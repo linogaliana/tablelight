@@ -349,7 +349,7 @@ testthat::test_that("link_selection is empty", {
 data("bioChemists", package = "pscl")
 
 object <- gravity::fastzeroinfl(art ~ . | 1, data = bioChemists)
-object_light <- tablelight::strip(object)
+object_light <- strip(object)
 summary_light <- strip(summary(object))
 
 

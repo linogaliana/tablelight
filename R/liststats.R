@@ -54,7 +54,7 @@ liststats.light.zeroinfl <- function(object, ...){
 
 
   llk <- object$loglik
-  bic <- BIC(object)
+  bic <- object$bic
   link_count <- if (object$dist == "negbin") "Negative Binomial" else "Poisson"
   link_selection <- Hmisc::capitalize(object$link)
 
