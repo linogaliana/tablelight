@@ -122,6 +122,8 @@ strip.oglmx <- function(object, ...) {
 #' @export
 strip.negbin <- function(object, ...) {
 
+  if (inherits(object, "fastnegbin")) return(strip.fastnegbin(object, ...))
+
   summary_object <- summary(object)
 
   object$coefficients <- secoeff(summary_object)
