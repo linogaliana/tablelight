@@ -74,6 +74,7 @@ light_table_coefficients <- function(object,
                       all.x = TRUE)
   coeff_body <- coeff_body[order(coeff_body$order, coeff_body$obj), ]
 
+  coeff_body[coeff_body$obj != "text_coeff", "variable"] <- ""
 
   list_variables <- unique(coeff_body[,'variable'])
 
