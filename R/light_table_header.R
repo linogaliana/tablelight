@@ -62,7 +62,7 @@ light_table_header_latex <- function(ncols_models,
 
   if (!is.null(adjustbox_width)){
     table_total <- c(header,
-                     sprintf("\\begin{adjustbox}{width=%s\\linewidth}", adjustbox_width),
+                     sprintf("\\begin{adjustbox}{width=%s\\linewidth, center}", adjustbox_width),
                      tabular_header)
   } else{
     table_total <- c(header,tabular_header)
