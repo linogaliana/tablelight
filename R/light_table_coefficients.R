@@ -96,6 +96,11 @@ light_table_coefficients <- function(object,
     coeff_body$variable <- sprintf('<tr><td style="text-align:left">%s</td>', coeff_body$variable)
   }
 
+  if (!is.null(covariate.labels)){
+    coeff_body[coeff_body$variable != "(Intercept)", "variable"] <-
+      str_to_regex(coeff_body[coeff_body$variable != "(Intercept)", "variable"])
+  }
+
   body_table <- apply(coeff_body, 1, paste, collapse="")
 
   if (identical(type, "latex")){
@@ -114,25 +119,30 @@ light_table_coefficients <- function(object,
 
   if (identical(type, "latex")) body_table <- paste0(body_table, "\\\\")
 
-
   # REPLACE COVARIATES BY LABELS -------------------------
 
   if (!is.null(covariate.labels)){
     n_replace <- min(length(list_variables), length(covariate.labels))
     labels_covariates <- covariate.labels[1:n_replace]
     value_covariates <- list_variables[list_variables != "(Intercept)"]
+    value_covariates <- value_covariates[value_covariates != ""]
     if (identical(type, "latex")){
       value_covariates <- paste0("^", str_to_regex(value_covariates))
     } else{
       value_covariates <- str_to_regex(value_covariates)
     }
-    names(labels_covariates) <- value_covariates[1:n_replace]
-    body_table <-  mgsub(
+    value_covariates  <- value_covariates[value_covariates != "^"]
+    labels_covariates <- labels_covariates[labels_covariates != "^"]
+    # names(labels_covariates) <- value_covariates[1:n_replace]
+    body_table <- mgsub(
       pattern = value_covariates,
       replacement = labels_covariates,
-      body_table, fixed = FALSE
+      paste0("^", body_table), fixed = TRUE
     )
+    body_table <- gsub("^\\^", "", body_table)
   }
+
+
 
   if (!is.null(rules_between_covariates)){
     if (type == "latex"){
