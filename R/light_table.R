@@ -228,13 +228,14 @@ light_table.default <- function(
 
   # PART III: STATISTICS -----
 
-  stats_table <- light_table_stats(object = object,
-                                   type = type,
-                                   ncols_models = ncols_models,
-                                   stats.var.separate = stats.var.separate,
-                                   stats.list = stats.list,
-                                   stats.digits = stats.digits,
-                                   ...)
+  stats_table <- light_table_stats(
+    object = object,
+    type = type,
+    ncols_models = ncols_models,
+    stats.var.separate = stats.var.separate,
+    stats.list = stats.list,
+    stats.digits = stats.digits,
+    ...)
 
   table_total <- c(table_total, stats_table)
 

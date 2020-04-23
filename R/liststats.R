@@ -88,7 +88,9 @@ liststats.light.zeroinfl <- function(object, ...){
 
   alpha_value <- ""
   if (object$dist == "negbin") alpha_value <- as.character(
-    format(1/object$theta, digits = 3L, nsmall = 3L))
+    format(1/object$theta,
+           digits = stats.digits,
+           nsmall = stats.digits))
 
 
   df <- rbind(data.frame(stat = "$\\alpha$ (dispersion)",
@@ -310,8 +312,11 @@ liststats.default <- function(object, ...){
   bic <- BIC(object)
 
   if (isTRUE(as.character(object$call[1]) == "lm")){
-    rsq <- format(summary(object)$r.squared, digits = 2L, nsmall = 2L)
-    adjrsq <- format(summary(object)$adj.r.squared, digits = 2L, nsmall = 2L)
+    rsq <- format(summary(object)$r.squared, digits = stats.digits,
+                  nsmall = stats.digits)
+    adjrsq <- format(summary(object)$adj.r.squared,
+                     digits = stats.digits,
+                     nsmall = stats.digits)
   } else{
     rsq <- ""
     adjrsq <- ""
@@ -533,7 +538,9 @@ liststats.light.lm <- function(object, ...){
   if ('adj.rsq' %in% stats.list){
     df <- rbind(data.frame(stat = "Adjusted $R^2$",
                            order = -10,
-                           val = format(object$adjrsq, digits = 2L, nsmall = 2L)), df
+                           val = format(object$adjrsq,
+                                        digits = stats.digits,
+                                        nsmall = stats.digits)), df
     )
     stat_shortcode <- c("adj.rsq", stat_shortcode)
   }
@@ -542,7 +549,8 @@ liststats.light.lm <- function(object, ...){
   if ('rsq' %in% stats.list){
     df <- rbind(data.frame(stat = "$R^2$",
                            order = -10,
-                           val = format(object$rsq, digits = 2L, nsmall = 2L)), df
+                           val = format(object$rsq, digits = stats.digits,
+                                        nsmall = stats.digits)), df
     )
     stat_shortcode <- c("rsq", stat_shortcode)
   }
