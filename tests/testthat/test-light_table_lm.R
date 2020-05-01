@@ -377,7 +377,7 @@ testthat::test_that("Table header and foot are correct",{
   testthat::expect_true(sum(grepl("\\\\caption{My table title}", perl = TRUE,
                                   x = latex_table))>0)
 
-  testthat::expect_true(sum(grepl("\\\\begin{adjustbox}{width=1.1\\\\linewidth}", perl = TRUE,
+  testthat::expect_true(sum(grepl("\\\\begin{adjustbox}{width=1.1\\\\linewidth, center}", perl = TRUE,
                                   x = latex_table))>0)
 
 
