@@ -1,5 +1,5 @@
 light_table_stats <- function(object, type = c("latex", "html"), ncols_models, stats.var.separate,
-                              stats.list, ...){
+                              stats.list, stats.digits = 3L, ...){
 
   type <- match.arg(type)
 
@@ -11,6 +11,7 @@ light_table_stats <- function(object, type = c("latex", "html"), ncols_models, s
         object = object, ncols_models = ncols_models,
         stats.var.separate = stats.var.separate,
         stats.list = stats.list,
+        stats.digits = stats.digits,
         ...
       )
     )
@@ -20,6 +21,7 @@ light_table_stats <- function(object, type = c("latex", "html"), ncols_models, s
         object = object, ncols_models = ncols_models,
         stats.var.separate = stats.var.separate,
         stats.list = stats.list,
+        stats.digits = stats.digits,
         ...
       )
     )
@@ -27,18 +29,24 @@ light_table_stats <- function(object, type = c("latex", "html"), ncols_models, s
 
 }
 
-light_table_stats_latex <- function(object, ncols_models, stats.var.separate, stats.list, ...){
+light_table_stats_latex <- function(object, ncols_models, stats.var.separate, stats.list,
+                                    stats.digits = 3L,
+                                    ...){
 
   # COMPUTE STATISTICS -------------------
 
   if (isTRUE(ncols_models>1) && isFALSE(inherits(object, "nnet"))){
-    statsdf <- lapply(object, liststats, stats.list = stats.list, ...)
+    statsdf <- lapply(object, liststats, stats.list = stats.list,
+                      stats.digits = stats.digits,
+                      ...)
     lapply(seq_along(statsdf), function(i) data.table::setnames(statsdf[[i]], old = "val",
                                                                 new = paste0("val",i)))
     statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
                       statsdf)
   } else {
-    statsdf <- liststats(object, stats.list = stats.list, ...)
+    statsdf <- liststats(object, stats.list = stats.list,
+                         stats.digits = stats.digits,
+                         ...)
   }
 
   statsdf <- statsdf[order(statsdf$order),]
@@ -88,18 +96,26 @@ light_table_stats_latex <- function(object, ncols_models, stats.var.separate, st
 
 
 light_table_stats_html <- function(object, ncols_models, stats.var.separate,
-                                   stats.list, ...){
+                                   stats.list,
+                                   stats.digits = 3L,
+                                   ...){
 
   # COMPUTE STATISTICS -------------------
 
   if (isTRUE(ncols_models>1) && isFALSE(inherits(object, "nnet"))){
-    statsdf <- lapply(object, liststats, stats.list = stats.list, ...)
+
+    statsdf <- lapply(object, liststats, stats.list = stats.list,
+                      stats.digits = stats.digits,
+                      ...)
+
     lapply(seq_along(statsdf), function(i) data.table::setnames(statsdf[[i]], old = "val",
                                                                 new = paste0("val",i)))
     statsdf <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("stat","order"), all = TRUE),
                       statsdf)
   } else {
-    statsdf <- liststats(object, stats.list = stats.list, ...)
+    statsdf <- liststats(object, stats.list = stats.list,
+                         stats.digits = stats.digits,
+                         ...)
   }
 
   statsdf <- statsdf[order(statsdf$order),]

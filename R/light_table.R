@@ -26,6 +26,7 @@
 #'  number four, five and six).
 #' @param stats.list A character vector that specifies which model statistics should
 #'  be kept in the regression table output. See `details` section
+#' @param stats.digits Number of digits in relevent statistics
 #' @param column.labels Label for columns
 #' @param covariate.labels A character vector of labels for
 #'  columns in regression tables.
@@ -111,6 +112,7 @@ light_table <- function(object,
                         order_variable = NULL,
                         stats.var.separate = NULL,
                         stats.list = c("n", "lln", "bic"),
+                        stats.digits = 3L,
                         notes = "notes to add",
                         add.lines = NULL,
                         reference_level_position = NULL,
@@ -138,6 +140,7 @@ light_table.default <- function(
   order_variable = NULL,
   stats.var.separate = NULL,
   stats.list = c("n", "lln", "bic"),
+  stats.digits = 3L,
   notes = "notes to add",
   add.lines = NULL,
   reference_level_position = NULL,
@@ -225,12 +228,14 @@ light_table.default <- function(
 
   # PART III: STATISTICS -----
 
-  stats_table <- light_table_stats(object = object,
-                                   type = type,
-                                   ncols_models = ncols_models,
-                                   stats.var.separate = stats.var.separate,
-                                   stats.list = stats.list,
-                                   ...)
+  stats_table <- light_table_stats(
+    object = object,
+    type = type,
+    ncols_models = ncols_models,
+    stats.var.separate = stats.var.separate,
+    stats.list = stats.list,
+    stats.digits = stats.digits,
+    ...)
 
   table_total <- c(table_total, stats_table)
 

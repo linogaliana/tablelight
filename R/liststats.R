@@ -52,6 +52,12 @@ liststats.light.zeroinfl <- function(object, ...){
     stats.list <- c(stats.list, "alpha")
   }
 
+  if (isFALSE("stats.digits" %in% names(args))){
+    stats.digits <- 3L
+  } else{
+    stats.digits <- args[['stats.digits']]
+  }
+
 
   llk <- object$loglik
   bic <- object$bic
@@ -73,7 +79,9 @@ liststats.light.zeroinfl <- function(object, ...){
         link_selection,
         format(object$n, digits = 0,  big.mark=",", scientific = FALSE),
         format(llk, digits = 0, big.mark=",", scientific = FALSE),
-        format(llk/object$n, digits = 3L, nsmall = 3L, big.mark=",", scientific = FALSE),
+        format(round(llk/object$n, stats.digits),
+               digits = stats.digits, nsmall = stats.digits,
+               big.mark=",", scientific = FALSE),
         format(bic, digits = 0L, big.mark=",", scientific = FALSE)
       )
     )
@@ -81,7 +89,9 @@ liststats.light.zeroinfl <- function(object, ...){
 
   alpha_value <- ""
   if (object$dist == "negbin") alpha_value <- as.character(
-    format(1/object$theta, digits = 3L, nsmall = 3L))
+    format(1/object$theta,
+           digits = stats.digits,
+           nsmall = stats.digits))
 
 
   df <- rbind(data.frame(stat = "$\\alpha$ (dispersion)",
@@ -124,6 +134,11 @@ liststats.zeroinfl <- function(object, ...){
   if (isTRUE('add_alpha' %in% names(args)) && (isFALSE("alpha" %in% stats.list))){
     stats.list <- c(stats.list, "alpha")
   }
+  if (isFALSE("stats.digits" %in% names(args))){
+    stats.digits <- 3L
+  } else{
+    stats.digits <- args[['stats.digits']]
+  }
 
 
   llk <- object$loglik
@@ -146,7 +161,10 @@ liststats.zeroinfl <- function(object, ...){
         link_selection,
         format(object$n, digits = 0,  big.mark=",", scientific = FALSE),
         format(llk, digits = 0, big.mark=",", scientific = FALSE),
-        format(llk/object$n, digits = 3L, nsmall = 3L, big.mark=",", scientific = FALSE),
+        format(round(llk/object$n, stats.digits),
+               digits = stats.digits,
+               nsmall = stats.digits,
+               big.mark=",", scientific = FALSE),
         format(bic, digits = 0L, big.mark=",", scientific = FALSE)
       )
     )
@@ -154,7 +172,8 @@ liststats.zeroinfl <- function(object, ...){
 
   alpha_value <- ""
   if (object$dist == "negbin") alpha_value <- as.character(
-    format(1/object$theta, digits = 3L, nsmall = 3L))
+    format(round(1/object$theta, stats.digits),
+           digits = stats.digits, nsmall = stats.digits))
 
 
   df <- rbind(data.frame(stat = "$\\alpha$ (dispersion)",
@@ -195,6 +214,11 @@ liststats.light.glm <- function(object, ...){
     stats.list <- c(stats.list, "alpha")
   }
 
+  if (isFALSE("stats.digits" %in% names(args))){
+    stats.digits <- 3L
+  } else{
+    stats.digits <- args[['stats.digits']]
+  }
 
   llk <- as.numeric(logLik(object))
   bic <- BIC(object)
@@ -225,7 +249,10 @@ liststats.light.glm <- function(object, ...){
         link_selection,
         format(object$n, digits = 0,  big.mark=",", scientific = FALSE),
         format(llk, digits = 0, big.mark=",", scientific = FALSE),
-        format(llk/object$n, digits = 3L, nsmall = 3L, big.mark=",", scientific = FALSE),
+        format(round(llk/object$n, stats.digits),
+               digits = stats.digits,
+               nsmall = stats.digits,
+               big.mark=",", scientific = FALSE),
         format(bic, digits = 0L, big.mark=",", scientific = FALSE)
       )
     )
@@ -233,7 +260,8 @@ liststats.light.glm <- function(object, ...){
 
   if (!is.null(object$theta)){
     alpha <- as.character(
-      format(1/object$theta, digits = 3L, nsmall = 3L)
+      format(1/object$theta, digits = stats.digits,
+             nsmall = stats.digits)
     )
   } else{
     alpha <- ""
@@ -263,6 +291,11 @@ liststats.default <- function(object, ...){
   } else{
     stats.list <- args[['stats.list']]
   }
+  if (isFALSE("stats.digits" %in% names(args))){
+    stats.digits <- 3L
+  } else{
+    stats.digits <- args[['stats.digits']]
+  }
 
   if (isTRUE('add_link' %in% names(args)) && (isFALSE("link" %in% stats.list))){
     stats.list <- c(stats.list, "link")
@@ -283,8 +316,12 @@ liststats.default <- function(object, ...){
   bic <- BIC(object)
 
   if (isTRUE(as.character(object$call[1]) == "lm")){
-    rsq <- format(summary(object)$r.squared, digits = 2L, nsmall = 2L)
-    adjrsq <- format(summary(object)$adj.r.squared, digits = 2L, nsmall = 2L)
+    rsq <- format(round(summary(object)$r.squared, stats.digits),
+                  digits = stats.digits,
+                  nsmall = stats.digits)
+    adjrsq <- format(round(summary(object)$adj.r.squared, stats.digits),
+                     digits = stats.digits,
+                     nsmall = stats.digits)
   } else{
     rsq <- ""
     adjrsq <- ""
@@ -323,7 +360,10 @@ liststats.default <- function(object, ...){
   stat_val <- c(
     format(nobs(object), digits = 0,  big.mark=",", scientific = FALSE),
     format(llk, digits = 0, big.mark=",", scientific = FALSE),
-    format(llk/nobs(object), digits = 3L, nsmall = 3L, big.mark=",", scientific = FALSE),
+    format(round(llk/nobs(object), stats.digits),
+           digits = stats.digits,
+           nsmall = stats.digits,
+           big.mark=",", scientific = FALSE),
     format(bic, digits = 0L, big.mark=",", scientific = FALSE)
   )
 
@@ -401,6 +441,12 @@ liststats.light.lm <- function(object, ...){
     stats.list <- args[['stats.list']]
   }
 
+  if (isFALSE("stats.digits" %in% names(args))){
+    stats.digits <- 3L
+  } else{
+    stats.digits <- args[['stats.digits']]
+  }
+
   if (isTRUE('add_link' %in% names(args)) && (isFALSE("link" %in% stats.list))){
     stats.list <- c(stats.list, "link")
   }
@@ -453,7 +499,10 @@ liststats.light.lm <- function(object, ...){
   stat_val <- c(
     format(object$n, digits = 0,  big.mark=",", scientific = FALSE),
     format(llk, digits = 0, big.mark=",", scientific = FALSE),
-    format(llk/object$n, digits = 3L, nsmall = 3L, big.mark=",", scientific = FALSE),
+    format(round(llk/object$n, stats.digits),
+           digits = stats.digits,
+           nsmall = stats.digits,
+           big.mark=",", scientific = FALSE),
     format(bic, digits = 0L, big.mark=",", scientific = FALSE)
   )
 
@@ -496,7 +545,9 @@ liststats.light.lm <- function(object, ...){
   if ('adj.rsq' %in% stats.list){
     df <- rbind(data.frame(stat = "Adjusted $R^2$",
                            order = -10,
-                           val = format(object$adjrsq, digits = 2L, nsmall = 2L)), df
+                           val = format(object$adjrsq,
+                                        digits = stats.digits,
+                                        nsmall = stats.digits)), df
     )
     stat_shortcode <- c("adj.rsq", stat_shortcode)
   }
@@ -505,7 +556,9 @@ liststats.light.lm <- function(object, ...){
   if ('rsq' %in% stats.list){
     df <- rbind(data.frame(stat = "$R^2$",
                            order = -10,
-                           val = format(object$rsq, digits = 2L, nsmall = 2L)), df
+                           val = format(round(object$rsq, stats.digits),
+                                        digits = stats.digits,
+                                        nsmall = stats.digits)), df
     )
     stat_shortcode <- c("rsq", stat_shortcode)
   }

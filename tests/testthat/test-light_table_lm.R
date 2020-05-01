@@ -405,13 +405,13 @@ ols <- lm(
 )
 
 # 2. light objects
-latex_table <- tablelight::light_table(strip(ols),
+latex_table <- tablelight::light_table(tablelight::strip(ols),
                                        title = "My table title",
                                        label = "My table label",
                                        dep.var.labels = "My depvar",
                                        column.labels = "My label column",
                                        stats.list = c("rsq","adj.rsq"))
-html_table <- tablelight::light_table(strip(ols),
+html_table <- tablelight::light_table(tablelight::strip(ols),
                                       type = "html",
                                       title = "My table title",
                                       label = "My table label",
@@ -424,7 +424,7 @@ testthat::test_that("R2 correctly reported", {
   testthat::expect_equal(
     latex_table[grepl("^\\$R\\^2\\$", latex_table, perl = TRUE)],
     sprintf(
-      "$R^2$ & %s \\\\", format(summary(ols)$r.squared, digits = 2L, nsmall = 2L)
+      "$R^2$ & %s \\\\", format(summary(ols)$r.squared, digits = 3L, nsmall = 3L)
     )
   )
 }
@@ -434,7 +434,7 @@ testthat::test_that("Adjusted R2 correctly reported", {
   testthat::expect_equal(
     latex_table[grepl("Adjusted \\$R\\^2\\$", latex_table, perl = TRUE)],
     sprintf(
-      "Adjusted $R^2$ & %s \\\\", format(summary(ols)$adj.r.squared, digits = 2L, nsmall = 2L)
+      "Adjusted $R^2$ & %s \\\\", format(summary(ols)$adj.r.squared, digits = 3L, nsmall = 3L)
     )
   )
 })
@@ -444,7 +444,7 @@ testthat::test_that("R2 correctly reported", {
   testthat::expect_equal(
     html_table[grepl(">R<sup>2</sup>", html_table)],
     sprintf("<tr><td style=\"text-align:left\">R<sup>2</sup></td><td>%s</td></tr>",
-            format(summary(ols)$r.squared, digits = 2L, nsmall = 2L))
+            format(summary(ols)$r.squared, digits = 3L, nsmall = 3L))
   )
 }
 )
@@ -453,7 +453,10 @@ testthat::test_that("R2 correctly reported", {
   testthat::expect_equal(
     html_table[grepl("Adjusted R<sup>2</sup>", html_table)],
     sprintf("<tr><td style=\"text-align:left\">Adjusted R<sup>2</sup></td><td>%s</td></tr>",
-            format(summary(ols)$adj.r.squared, digits = 2L, nsmall = 2L))
+            format(summary(ols)$adj.r.squared, digits = 3L, nsmall = 3L))
   )
 }
 )
+
+
+
