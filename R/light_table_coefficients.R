@@ -153,6 +153,9 @@ light_table_coefficients <- function(object,
     }
   }
 
+  body_table <- gsub("\\\\\\(Intercept\\\\)","(Intercept)",
+                     body_table)
+
   return(body_table)
 }
 
