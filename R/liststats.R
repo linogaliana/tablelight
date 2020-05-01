@@ -79,7 +79,8 @@ liststats.light.zeroinfl <- function(object, ...){
         link_selection,
         format(object$n, digits = 0,  big.mark=",", scientific = FALSE),
         format(llk, digits = 0, big.mark=",", scientific = FALSE),
-        format(llk/object$n, digits = stats.digits, nsmall = stats.digits,
+        format(round(llk/object$n, stats.digits),
+               digits = stats.digits, nsmall = stats.digits,
                big.mark=",", scientific = FALSE),
         format(bic, digits = 0L, big.mark=",", scientific = FALSE)
       )
@@ -160,7 +161,8 @@ liststats.zeroinfl <- function(object, ...){
         link_selection,
         format(object$n, digits = 0,  big.mark=",", scientific = FALSE),
         format(llk, digits = 0, big.mark=",", scientific = FALSE),
-        format(llk/object$n, digits = stats.digits,
+        format(round(llk/object$n, stats.digits),
+               digits = stats.digits,
                nsmall = stats.digits,
                big.mark=",", scientific = FALSE),
         format(bic, digits = 0L, big.mark=",", scientific = FALSE)
@@ -170,7 +172,8 @@ liststats.zeroinfl <- function(object, ...){
 
   alpha_value <- ""
   if (object$dist == "negbin") alpha_value <- as.character(
-    format(1/object$theta, digits = stats.digits, nsmall = stats.digits))
+    format(round(1/object$theta, stats.digits),
+           digits = stats.digits, nsmall = stats.digits))
 
 
   df <- rbind(data.frame(stat = "$\\alpha$ (dispersion)",
@@ -246,7 +249,8 @@ liststats.light.glm <- function(object, ...){
         link_selection,
         format(object$n, digits = 0,  big.mark=",", scientific = FALSE),
         format(llk, digits = 0, big.mark=",", scientific = FALSE),
-        format(llk/object$n, digits = stats.digits,
+        format(round(llk/object$n, stats.digits),
+               digits = stats.digits,
                nsmall = stats.digits,
                big.mark=",", scientific = FALSE),
         format(bic, digits = 0L, big.mark=",", scientific = FALSE)
@@ -312,9 +316,10 @@ liststats.default <- function(object, ...){
   bic <- BIC(object)
 
   if (isTRUE(as.character(object$call[1]) == "lm")){
-    rsq <- format(summary(object)$r.squared, digits = stats.digits,
+    rsq <- format(round(summary(object)$r.squared, stats.digits),
+                  digits = stats.digits,
                   nsmall = stats.digits)
-    adjrsq <- format(summary(object)$adj.r.squared,
+    adjrsq <- format(round(summary(object)$adj.r.squared, stats.digits),
                      digits = stats.digits,
                      nsmall = stats.digits)
   } else{
@@ -355,7 +360,8 @@ liststats.default <- function(object, ...){
   stat_val <- c(
     format(nobs(object), digits = 0,  big.mark=",", scientific = FALSE),
     format(llk, digits = 0, big.mark=",", scientific = FALSE),
-    format(llk/nobs(object), digits = stats.digits,
+    format(round(llk/nobs(object), stats.digits),
+           digits = stats.digits,
            nsmall = stats.digits,
            big.mark=",", scientific = FALSE),
     format(bic, digits = 0L, big.mark=",", scientific = FALSE)
@@ -493,7 +499,8 @@ liststats.light.lm <- function(object, ...){
   stat_val <- c(
     format(object$n, digits = 0,  big.mark=",", scientific = FALSE),
     format(llk, digits = 0, big.mark=",", scientific = FALSE),
-    format(llk/object$n, digits = stats.digits,
+    format(round(llk/object$n, stats.digits),
+           digits = stats.digits,
            nsmall = stats.digits,
            big.mark=",", scientific = FALSE),
     format(bic, digits = 0L, big.mark=",", scientific = FALSE)
@@ -549,7 +556,8 @@ liststats.light.lm <- function(object, ...){
   if ('rsq' %in% stats.list){
     df <- rbind(data.frame(stat = "$R^2$",
                            order = -10,
-                           val = format(object$rsq, digits = stats.digits,
+                           val = format(round(object$rsq, stats.digits),
+                                        digits = stats.digits,
                                         nsmall = stats.digits)), df
     )
     stat_shortcode <- c("rsq", stat_shortcode)

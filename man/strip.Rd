@@ -7,6 +7,7 @@
 \alias{strip.negbin}
 \alias{strip.lm}
 \alias{strip.zeroinfl}
+\alias{strip.fastnegbin}
 \alias{strip.fastzeroinfl}
 \alias{strip.summary.glm}
 \alias{strip.summary.lm}
@@ -24,6 +25,8 @@ strip(object, ...)
 \method{strip}{lm}(object, ...)
 
 \method{strip}{zeroinfl}(object, ...)
+
+\method{strip}{fastnegbin}(object, ...)
 
 \method{strip}{fastzeroinfl}(object, ...)
 

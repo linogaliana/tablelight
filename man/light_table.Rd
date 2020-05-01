@@ -17,6 +17,7 @@ light_table(
   order_variable = NULL,
   stats.var.separate = NULL,
   stats.list = c("n", "lln", "bic"),
+  stats.digits = 3L,
   notes = "notes to add",
   add.lines = NULL,
   reference_level_position = NULL,
@@ -75,6 +76,8 @@ number four, five and six).}
 
 \item{stats.list}{A character vector that specifies which model statistics should
 be kept in the regression table output. See \code{details} section}
+
+\item{stats.digits}{Number of digits in relevent statistics}
 
 \item{notes}{Notes that should be added at the end}
 
