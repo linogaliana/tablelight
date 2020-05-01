@@ -356,6 +356,7 @@ html_table2 <- tablelight::light_table(ols,
 testthat::test_that("Same table except for the covariate names", {
   html_table1b <- gsub(pattern = "Sepal.Width", replacement = "Sepal Width", html_table1)
   html_table1b <- gsub(pattern = "Petal.Length", replacement = "Length Petal", html_table1b)
+#  html_table2 <- gsub(pattern = "\\(Intercept\\)", replacement = "(Intercept)", html_table1b)
   testthat::expect_equal(trimws(html_table1b),trimws(html_table2))
 })
 
@@ -377,7 +378,7 @@ testthat::test_that("Table header and foot are correct",{
   testthat::expect_true(sum(grepl("\\\\caption{My table title}", perl = TRUE,
                                   x = latex_table))>0)
 
-  testthat::expect_true(sum(grepl("\\\\begin{adjustbox}{width=1.1\\\\linewidth}", perl = TRUE,
+  testthat::expect_true(sum(grepl("\\\\begin{adjustbox}{width=1.1\\\\linewidth, center}", perl = TRUE,
                                   x = latex_table))>0)
 
 
