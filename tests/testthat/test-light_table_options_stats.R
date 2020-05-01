@@ -28,7 +28,7 @@ testthat::test_that(
   {
 
     testthat::expect_equal(
-      latex_table[grepl("Adjusted \\$R\\^2\\$", x = latex_table)],
+      latex_table[grepl("^\\$R\\^2\\$", x = latex_table)],
       sprintf(
         "$R^2$ & %s \\\\", format(round(summary(ols)$adj.r.squared, 2L), nsmall = 2L)
       )
