@@ -44,6 +44,9 @@ If you want to use the :package:
 library(tablelight)
 ```
 
+Here some examples of regression tables that can be produced with
+`tablelight`: ![](example.gif)
+
 ## Why do you need to strip fat from models ?
 
 It is well known that regression objects are heavy in `R` (see this
@@ -65,8 +68,8 @@ pryr::object_size(regression)
 #> 136 MB
 ```
 
-Producing a `LaTeX` table with `stargazer` requires to call `summary`
-that requires additional RAM:
+Producing a regression table with `stargazer` requires to call `summary`
+that asks more RAM:
 
 ``` r
 library(profvis)
@@ -76,15 +79,16 @@ get_required_RAM <- function(profvis_object){
   )
 }
 get_required_RAM(profvis(summary(regression)))
-#> [1] 22.88857
+#> [1] 15.259
 ```
 
 To produce a regression table, that’s a deadly combo: you need to store
 a heavy regression object in memory and need more memory to summarize it
 in order to produce the table. With voluminous data, it is easy to make
-your RAM hit the limit available. The idea behind `lighttable` is that
-you just need heavy elements once (to produce the standard error
-values). Once they have been used, heavy elements can be thrown away.
+your RAM hit the limit available. The idea behind `tablelight` is that
+you just need heavy elements once (to produce standard error values and
+some fit statistics). Once they have been used, heavy elements can be
+thrown away.
 
 Most of the pieces to lighten regression objects are described
 [there](http://www.win-vector.com/blog/2014/05/trimming-the-fat-from-glm-models-in-r/).
@@ -105,7 +109,7 @@ The `strip` method used in `tablelight` :package: is more drastic:
 
 ``` r
 pryr::object_size(tablelight::strip(regression))
-#> 7.24 kB
+#> 7.34 kB
 ```
 
 Only the elements needed to print a result table are kept. Since using
@@ -137,7 +141,7 @@ regression2 <- lm(y ~ x, df2)
 get_required_RAM(profvis(
   capture.output(stargazer::stargazer(regression1, regression2)))
 )
-#> [1] 126.4663
+#> [1] 126.4715
 ```
 
 With `tablelight`, you will :
@@ -155,12 +159,17 @@ regression2 <- tablelight::strip(lm(y ~ x, df2))
 get_required_RAM(profvis(
   capture.output(light_table(list(regression1, regression2))))
 )
-#> [1] 0.7156754
+#> [1] 0.9826584
 ```
 
 This is, approximatively,  times less memory needed.
 
-### Specificity with zero inflated models
+The package produces table very similar in appearance with `stargazer`,
+for instance:
+
+![](inst/captures/tab2.png)
+
+## Specificity with zero inflated models
 
 It is hard to put together selection and outcome equations in a
 zero-inflated model with `stargazer`. Normally, you need to chose
@@ -171,7 +180,7 @@ this is not possible with `stargazer`.
 
 This functionality has been integrated into `light_table` function. For
 instance, imagine you want to report both selection and outcome
-equations in a zero-inflated Poisson model:
+equations for a zero-inflated Poisson:
 
 ``` r
 data("bioChemists", package = "pscl")
@@ -195,14 +204,11 @@ multicolumned performance statistics rather than two times the same.
 If you want to compare zero-inflated Poisson and zero-inflated negative
 binomial models, you can use the following template:
 
-``` r
-latex_table <- tablelight::light_table(list(fm_zip, fm_zip,
-                                            fm_zinb, fm_zinb),
-                                       type = "html",
-                                       modeltype = c("selection","outcome","selection","outcome"),
-                                       dep.var.labels = c("ZIP","ZINB"),
-                                       dep.var.separate = 2L,
-                                       column.labels = rep(c("Selection","Outcome"),2L),
-                                       stats.var.separate = c(2L, 2L)
-)
-```
+![](inst/captures/tab3.png)
+
+# Regression tables for multinomial logit
+
+Another implemented feature is the possibility to put together
+modulaties of a *Y* variable in a multinomial logit
+
+![](inst/captures/tab4.png)
