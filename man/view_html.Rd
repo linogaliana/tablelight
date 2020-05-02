@@ -2,17 +2,21 @@
 % Please edit documentation in R/view_html.R
 \name{view_html}
 \alias{view_html}
-\title{Report HTML table in Rstudio viewer}
+\alias{print_html}
+\title{Report HTML table in Rstudio viewer or in a Rmarkdown document}
 \usage{
 view_html(x)
+
+print_html(x)
 }
 \arguments{
 \item{x}{HTML code}
 }
 \value{
 Returns nothing, HTML reported in
-Rstudio viewer
+Rstudio viewer (\code{view_html}) or in
+the Rmd document (\code{print_html})
 }
 \description{
-Report HTML table in Rstudio viewer
+Report HTML table in Rstudio viewer or in a Rmarkdown document
 }
