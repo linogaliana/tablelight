@@ -28,6 +28,7 @@ Imports:
     stats,
     reshape2,
     rstudioapi,
-    data.table
+    data.table,
+    htmltools
 Remotes: 
     linogaliana/gravity

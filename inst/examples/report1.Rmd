@@ -15,15 +15,6 @@ knitr::opts_chunk$set(warning = FALSE)
 library(tablelight)
 ```
 
-```{r, echo = TRUE}
-print_html <- function(x){
-  tab <- paste(x, collapse = "")
-  tf <- tempfile(fileext = ".html")
-  writeLines(tab, tf)
-  htmltools::includeHTML(tf)
-}
-```
-
 # Standard OLS regression
 
 
