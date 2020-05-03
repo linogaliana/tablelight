@@ -9,7 +9,7 @@ reorder_coef <- function(object, ncols_models,
                          coeff_body, order_variable = NULL){
 
   if (is.null(order_variable)){
-    if (isTRUE(ncols_models>1)){
+    if (isTRUE(ncols_models>1) && !inherits(object, "nnet")){
       order_variable <- unique(do.call(c, lapply(object, listcoeff)))
     } else{
       order_variable <- unique(listcoeff(object))
