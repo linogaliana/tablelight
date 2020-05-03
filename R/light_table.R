@@ -156,18 +156,13 @@ light_table.default <- function(
 
   if (missing(adjustbox_width)) adjustbox_width <- NULL
 
-  if (isFALSE(inherits(object, "list")) && isFALSE(inherits(object, "nnet"))){
+  if (isFALSE(inherits(object, "list"))){
     ncols_models <- 1L
-  } else if (isTRUE(inherits(object, "nnet"))){
-    ncols_models <- length(object$lab[-1])
-    if (isFALSE(is.null(reference_level_position))) ncols_models <- ncols_models + 1
   } else{
     ncols_models <- length(object)
   }
 
   if (identical(ncols_models, 1L)){
-    coeff_data <- extract_coeff(object, type = type)
-  } else if (isTRUE(inherits(object, "nnet"))){
     coeff_data <- extract_coeff(object, type = type)
   } else{
     coeff_data <- lapply(1:length(object),
