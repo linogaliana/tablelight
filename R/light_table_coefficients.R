@@ -19,30 +19,13 @@ light_table_coefficients <- function(object,
     coeff_body <- arrange_coeff(coeff_data, order_variable, type = type)
   } else{
     coeff_body <- lapply(coeff_data, arrange_coeff, order_variable, type = type)
-    if (!inherits(object, "nnet")){
-      lapply(seq_along(coeff_body), function(i) data.table::setnames(coeff_body[[i]], old = "value",
-                                                                     new = paste0("value",i)))
-    }
+    lapply(seq_along(coeff_body), function(i) data.table::setnames(coeff_body[[i]], old = "value",
+                                                                   new = paste0("value",i)))
     coeff_body <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("variable","obj"), all = TRUE),
                          coeff_body)
   }
   coeff_body <- na.omit(coeff_body)
 
-  # CHANGE ORDER MODELS IF reference_level_position IS NOT NULL
-  if (isFALSE(is.null(reference_level_position)) && isTRUE(inherits(object, "nnet"))){
-    coeff_body2 <- cbind(
-      coeff_body[,1:(2 + reference_level_position - 1)],
-      data.frame("v" = "", stringsAsFactors = FALSE),
-      coeff_body[,(2 + reference_level_position):ncol(coeff_body)]
-    )
-    coeff_body2[coeff_body2$obj == "text_coeff", "v"] <- "(Ref)"
-    if (type == "latex"){
-      coeff_body2[,"v"] <- paste0("&",coeff_body2[,"v"])
-    } else{
-      coeff_body2[,"v"] <- paste0("<td>", coeff_body2[,"v"], "</td>")
-    }
-    coeff_body <- coeff_body2
-  }
 
   # REMOVE UNECESSARY COEFFICIENTS -----------------------
 
@@ -56,7 +39,7 @@ light_table_coefficients <- function(object,
   # REORDER VARIABLES --------------------------
 
   if (is.null(order_variable)){
-    if (isTRUE(ncols_models>1) && isFALSE(inherits(object, "nnet"))){
+    if (isTRUE(ncols_models>1)){
       order_variable <- unique(do.call(c, lapply(object, listcoeff)))
     } else{
       order_variable <- unique(listcoeff(object))
@@ -201,7 +184,7 @@ light_table_coefficients_nnet <- function(object,
   # REORDER VARIABLES --------------------------
 
   if (is.null(order_variable)){
-      order_variable <- unique(listcoeff(object))
+    order_variable <- unique(listcoeff(object))
   }
 
 
