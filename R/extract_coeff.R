@@ -220,3 +220,34 @@ extract_coeff_nnet <- function(object, modality, ...){
   return(text_coeff)
 }
 
+
+
+apply_extract_coeff <- function(object, ncols_models,
+                                type, modeltype){
+
+  if (inherits(object, "nnet")) return(
+    extract_coeff(object, type = type)
+  )
+
+  if (identical(ncols_models, 1L)) return(
+    return(
+      extract_coeff(object, type = type)
+    )
+  )
+
+    coeff_data <- lapply(1:length(object),
+                         function(k){
+                           return(
+                             extract_coeff(
+                               object = object[[k]],
+                               modeltype = modeltype[k],
+                               type = type
+                             )
+                           )
+                         })
+
+    return(coeff_data)
+}
+
+
+
