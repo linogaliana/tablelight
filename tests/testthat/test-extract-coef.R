@@ -330,4 +330,48 @@ testthat::test_that("Standard errors are okay", {
 
 })
 
+# TEST ALSO COEFFICIENTS FOR HTML TABLES ===============
 
+expected_coeff_modal0 <- sapply(seq_along(rownames(models_stat[[1]])), function(i){
+  paste0(
+    trimws(
+      format(round(models_stat[['Estimate']][i,"0"],3L),  nsmall = 3L,
+             digits = 2L, scientific = FALSE)
+    ),  signif_stars(models_stat[['Pr(>|z|)']][i,"0"], type = "html")
+  )
+})
+expected_coeff_modal1 <- sapply(seq_along(rownames(models_stat[[1]])), function(i){
+  paste0(
+    trimws(
+      format(round(models_stat[['Estimate']][i,"1"],3L),  nsmall = 3L,
+             digits = 2L, scientific = FALSE)
+    ),  signif_stars(models_stat[['Pr(>|z|)']][i,"1"], type = "html")
+  )
+})
+expected_coeff_modal2 <- sapply(seq_along(rownames(models_stat[[1]])), function(i){
+  paste0(
+    trimws(
+      format(round(models_stat[['Estimate']][i,"2"],3L),  nsmall = 3L,
+             digits = 2L, scientific = FALSE)
+    ),  signif_stars(models_stat[['Pr(>|z|)']][i,"2"], type = "html")
+  )
+})
+
+testthat::test_that("Coefficients are okay", {
+
+  testthat::expect_equal(
+    expected_coeff_modal0,
+    extract_coeff(logit, modality = "0", type = "html")[,"text_coeff"]
+  )
+
+  testthat::expect_equal(
+    expected_coeff_modal1,
+    extract_coeff(logit, modality = "1", type = "html")[,"text_coeff"]
+  )
+
+  testthat::expect_equal(
+    expected_coeff_modal2,
+    extract_coeff(logit, modality = "2", type = "html")[,"text_coeff"]
+  )
+
+})
