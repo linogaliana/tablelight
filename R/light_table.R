@@ -363,10 +363,13 @@ light_table.nnet <- function(
 
   # PART III: STATISTICS -----
 
+  ncols_stats <- ncols_models
+  if (!is.null(reference_level_position)) ncols_stats <- ncols_stats + 1
+
   stats_table <- light_table_stats(
     object = object,
     type = type,
-    ncols_models = ncols_models,
+    ncols_models = ncols_stats,
     stats.var.separate = stats.var.separate,
     stats.list = stats.list,
     stats.digits = stats.digits,
