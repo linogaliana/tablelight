@@ -178,9 +178,9 @@ extract_coeff.nnet <- function(object, ...){
   }
 
   if (length(modality)>1){
-    lapply(modality, function(m) extract_coeff_nnet(object, modality = m))
+    lapply(modality, function(m) extract_coeff_nnet(object, modality = m, type = args[['type']]))
   } else{
-    return(extract_coeff_nnet(object, modality = modality))
+    return(extract_coeff_nnet(object, modality = modality, type = args[['type']]))
   }
 
 }
