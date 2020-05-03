@@ -24,186 +24,37 @@ light_table_coefficients <- function(object,
     coeff_body <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("variable","obj"), all = TRUE),
                          coeff_body)
   }
+
   coeff_body <- na.omit(coeff_body)
 
 
   # REMOVE UNECESSARY COEFFICIENTS -----------------------
 
-  if (!is.null(omit)){
-    coeff_body <- coeff_body[!(coeff_body[,'variable'] %in% omit),]
-  }
+  if (!is.null(omit)) coeff_body <- remove_coef(coeff_body = coeff_body,
+                                  omit = omit)
 
   coeff_body <- coeff_body[!(coeff_body[,'variable'] == "Log(theta)"),]
 
-
-  # REORDER VARIABLES --------------------------
-
-  if (is.null(order_variable)){
-    if (isTRUE(ncols_models>1)){
-      order_variable <- unique(do.call(c, lapply(object, listcoeff)))
-    } else{
-      order_variable <- unique(listcoeff(object))
-    }
-  }
-
-
-  order_data <- data.frame(
-    "variable" = order_variable,
-    order = seq_len(length(order_variable))
-  )
-
-  order_data <- na.omit(order_data)
-  coeff_body <- merge(coeff_body, order_data, by = "variable",
-                      all.x = TRUE)
-  coeff_body <- coeff_body[order(coeff_body$order, coeff_body$obj), ]
-
-  coeff_body[coeff_body$obj != "text_coeff", "variable"] <- ""
-
-  list_variables <- unique(coeff_body[,'variable'])
-
-
-  # ARRANGE STANDARD DEVIATIONS AND SIGNS ---------------------------
-
-  if (ncols_models>1){
-    rows_sd <- grep("\\(.*?\\)", coeff_body$value.x)
-  } else{
-    rows_sd <- grep("\\(.*?\\)", coeff_body$value)
-  }
-
-  coeff_body$variable[sort(c(rows_sd,rows_sd+1))] <- ""
-
-
-  coeff_body <- coeff_body[,!(names(coeff_body) %in% c("obj","order"))]
-
-  if (identical(type, "html")){
-    coeff_body$variable <- sprintf('<tr><td style="text-align:left">%s</td>', coeff_body$variable)
-  }
-
-  if (!is.null(covariate.labels)){
-    coeff_body[coeff_body$variable != "(Intercept)", "variable"] <-
-      str_to_regex(coeff_body[coeff_body$variable != "(Intercept)", "variable"])
-  }
-
-  body_table <- apply(coeff_body, 1, paste, collapse="")
-
-  if (identical(type, "latex")){
-    body_table <- gsub(pattern = "-", replacement = "$-$",
-                       body_table)
-  }
-
-  # PUT CONSTANT IN LAST POSITION ---------------------
-
-  constant_idx <- which(coeff_body[,'variable'] == "(Intercept)")
-  if (!is.null(constant_idx)){
-    rows <- seq_len(nrow(coeff_body))
-    rows <- rows[-constant_idx]
-    coeff_body <- coeff_body[c(rows, constant_idx),]
-  }
-
-  if (identical(type, "latex")) body_table <- paste0(body_table, "\\\\")
-
-  # REPLACE COVARIATES BY LABELS -------------------------
-
-  if (!is.null(covariate.labels)){
-    n_replace <- min(length(list_variables), length(covariate.labels))
-    labels_covariates <- covariate.labels[1:n_replace]
-    value_covariates <- list_variables[list_variables != "(Intercept)"]
-    value_covariates <- value_covariates[value_covariates != ""]
-    if (identical(type, "latex")){
-      value_covariates <- paste0("^", str_to_regex(value_covariates))
-    } else{
-      value_covariates <- str_to_regex(value_covariates)
-    }
-    value_covariates  <- value_covariates[value_covariates != "^"]
-    labels_covariates <- labels_covariates[labels_covariates != "^"]
-    # names(labels_covariates) <- value_covariates[1:n_replace]
-    body_table <- mgsub(
-      pattern = value_covariates,
-      replacement = labels_covariates,
-      paste0("^", body_table), fixed = TRUE
-    )
-    body_table <- gsub("^\\^", "", body_table)
-  }
-
-
-
-  if (!is.null(rules_between_covariates)){
-    if (type == "latex"){
-      body_table[rules_between_covariates*3] <- paste0(body_table[rules_between_covariates*3], " \\hline \\\\[-1.8ex] ")
-    } else{
-      body_table[rules_between_covariates*3] <- paste0(body_table[rules_between_covariates*3],
-                                                       sprintf("<tr><td colspan=\"%s\"style=\"border-bottom: 1px solid black\"></td></tr>", ncols_models+1))
-    }
-  }
-
-  body_table <- gsub("\\\\\\(Intercept\\\\)","(Intercept)",
-                     body_table)
-
-  return(body_table)
-}
-
-#' @rdname light_table_coefficients
-light_table_coefficients_nnet <- function(object,
-                                          ncols_models,
-                                          type,
-                                          coeff_data, order_variable,
-                                          omit, covariate.labels, reference_level_position,
-                                          rules_between_covariates
-){
-
   # ARRANGE COEFFICIENTS ORDER -------------------------
 
-  coeff_body <- lapply(coeff_data, arrange_coeff, order_variable, type = type)
-  coeff_body <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("variable","obj"), all = TRUE),
-                       coeff_body)
-  coeff_body <- na.omit(coeff_body)
-
-  # CHANGE ORDER MODELS IF reference_level_position IS NOT NULL
-  if (isFALSE(is.null(reference_level_position))){
-    coeff_body2 <- cbind(
-      coeff_body[,1:(2 + reference_level_position - 1)],
-      data.frame("v" = "", stringsAsFactors = FALSE),
-      coeff_body[,(2 + reference_level_position):ncol(coeff_body)]
+  if (inherits(object, "nnet")){
+    coeff_body <- reorder_nnet_reference(
+      coeff_body = coeff_body,
+      reference_level_position = reference_level_position,
+      type = type
     )
-    coeff_body2[coeff_body2$obj == "text_coeff", "v"] <- "(Ref)"
-    if (type == "latex"){
-      coeff_body2[,"v"] <- paste0("&",coeff_body2[,"v"])
-    } else{
-      coeff_body2[,"v"] <- paste0("<td>", coeff_body2[,"v"], "</td>")
-    }
-    coeff_body <- coeff_body2
   }
 
-  # REMOVE UNECESSARY COEFFICIENTS -----------------------
+  coeff_body <- reorder_coef(object = object,
+                             ncols_models = ncols_models,
+                             coeff_body = coeff_body,
+                             order_variable = order_variable)
 
-  if (!is.null(omit)){
-    coeff_body <- coeff_body[!(coeff_body[,'variable'] %in% omit),]
-  }
-
-
-  # REORDER VARIABLES --------------------------
-
-  if (is.null(order_variable)){
-    order_variable <- unique(listcoeff(object))
-  }
-
-
-  order_data <- data.frame(
-    "variable" = order_variable,
-    order = seq_len(length(order_variable))
-  )
-
-  order_data <- na.omit(order_data)
-  coeff_body <- merge(coeff_body, order_data, by = "variable",
-                      all.x = TRUE)
-  coeff_body <- coeff_body[order(coeff_body$order, coeff_body$obj), ]
-
-  coeff_body[coeff_body$obj != "text_coeff", "variable"] <- ""
 
   list_variables <- unique(coeff_body[,'variable'])
 
 
-  # ARRANGE STANDARD DEVIATIONS AND SIGNS ---------------------------
+  # ARRANGE STANDARD DEVIATIONS ---------------------------
 
   if (ncols_models>1){
     rows_sd <- grep("\\(.*?\\)", coeff_body$value.x)
@@ -213,6 +64,8 @@ light_table_coefficients_nnet <- function(object,
 
   coeff_body$variable[sort(c(rows_sd,rows_sd+1))] <- ""
 
+
+  # PREPARE CONCATENATION ----------
 
   coeff_body <- coeff_body[,!(names(coeff_body) %in% c("obj","order"))]
 
@@ -235,50 +88,34 @@ light_table_coefficients_nnet <- function(object,
   # PUT CONSTANT IN LAST POSITION ---------------------
 
   constant_idx <- which(coeff_body[,'variable'] == "(Intercept)")
-  if (!is.null(constant_idx)){
-    rows <- seq_len(nrow(coeff_body))
-    rows <- rows[-constant_idx]
-    coeff_body <- coeff_body[c(rows, constant_idx),]
-  }
+
+  coeff_body <- put_constant_end(
+    coeff_body = coeff_body,
+    constant_idx = constant_idx
+  )
 
   if (identical(type, "latex")) body_table <- paste0(body_table, "\\\\")
 
+
   # REPLACE COVARIATES BY LABELS -------------------------
+  # (if needed)
 
-  if (!is.null(covariate.labels)){
-    n_replace <- min(length(list_variables), length(covariate.labels))
-    labels_covariates <- covariate.labels[1:n_replace]
-    value_covariates <- list_variables[list_variables != "(Intercept)"]
-    value_covariates <- value_covariates[value_covariates != ""]
-    if (identical(type, "latex")){
-      value_covariates <- paste0("^", str_to_regex(value_covariates))
-    } else{
-      value_covariates <- str_to_regex(value_covariates)
-    }
-    value_covariates  <- value_covariates[value_covariates != "^"]
-    labels_covariates <- labels_covariates[labels_covariates != "^"]
-    # names(labels_covariates) <- value_covariates[1:n_replace]
-    body_table <- mgsub(
-      pattern = value_covariates,
-      replacement = labels_covariates,
-      paste0("^", body_table), fixed = TRUE
-    )
-    body_table <- gsub("^\\^", "", body_table)
-  }
-
-
-
-  if (!is.null(rules_between_covariates)){
-    if (type == "latex"){
-      body_table[rules_between_covariates*3] <- paste0(body_table[rules_between_covariates*3], " \\hline \\\\[-1.8ex] ")
-    } else{
-      body_table[rules_between_covariates*3] <- paste0(body_table[rules_between_covariates*3],
-                                                       sprintf("<tr><td colspan=\"%s\"style=\"border-bottom: 1px solid black\"></td></tr>", ncols_models+1))
-    }
-  }
+  body_table <- label_variables(
+    body_table = body_table,
+    list_variables = list_variables,
+    covariate.labels = covariate.labels,
+    type = type)
 
   body_table <- gsub("\\\\\\(Intercept\\\\)","(Intercept)",
                      body_table)
+
+  # ADD RULES IF NEEDED -------------------------
+
+  body_table <- add_rules(
+    body_table = body_table,
+    rules_between_covariates = rules_between_covariates,
+    type = type
+  )
 
   return(body_table)
 }

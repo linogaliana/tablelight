@@ -2,22 +2,9 @@
 % Please edit documentation in R/light_table_coefficients.R
 \name{light_table_coefficients}
 \alias{light_table_coefficients}
-\alias{light_table_coefficients_nnet}
 \title{Prepare coefficients part of the latex table}
 \usage{
 light_table_coefficients(
-  object,
-  ncols_models,
-  type,
-  coeff_data,
-  order_variable,
-  omit,
-  covariate.labels,
-  reference_level_position,
-  rules_between_covariates
-)
-
-light_table_coefficients_nnet(
   object,
   ncols_models,
   type,

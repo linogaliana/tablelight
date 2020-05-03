@@ -337,7 +337,7 @@ light_table.nnet <- function(
 
   # PART II : BODY -------
 
-  body_table <- light_table_coefficients_nnet(
+  body_table <- light_table_coefficients(
     object = object,
     ncols_models = ncols_models,
     type = type,
