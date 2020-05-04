@@ -53,11 +53,22 @@ light_table_footer_latex <- function(ncols_models, add.lines,
 
 light_table_footer_html <- function(ncols_models, add.lines){
 
+  if (is.null(add.lines)){
+    text_add <- ""
+  } else{
+    text_add <- sprintf(
+      paste0('<tr><td colspan="%s">',
+      '</td></tr><tr><td style="text-align:left">%s</td><td></td><td></td></tr>'),
+      ncols_models + 1, add.lines
+    )
+  }
+
   return(
     c(
       sprintf('<tr><td colspan="%s" style="border-bottom: 1px solid black"></td></tr>', ncols_models+1),
       paste0(sprintf('<tr><td style="text-align:left"><em>Note:</em></td><td colspan="%s" style="text-align:right">', ncols_models),
              '<sup>*</sup>p<0.1; <sup>**</sup>p<0.05; <sup>***</sup>p<0.01</td></tr>',
+             text_add,
              "</table>")
     )
   )

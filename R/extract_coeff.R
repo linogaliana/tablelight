@@ -22,21 +22,18 @@ extract_coeff.default <- function(object, ...){
 
   coeff_list <- secoeff(object)
 
-  if (as.character(object$call[1]) == "lm"){
-    se_var <- 'Std. Error'
-  } else{
-    if (as.character(object$call[1]) == "glm"){
-      se_var <- 'Std. Error'
-    } else{
-      se_var <- 'Std. error'
-    }
-  }
-
-  if (inherits(object, "glm")){
-    tstat_var <- "Pr(>|z|)"
-  }  else{
-    tstat_var <- "Pr(>|t|)"
-  }
+  # if (as.character(object$call[1]) %in% c("lm","glm")){
+  #   se_var <- 'Std. Error'
+  # } else{
+  #   se_var <- 'Std. error'
+  # }
+  #
+  # if (inherits(object, "glm")){
+  #   tstat_var <- "Pr(>|z|)"
+  # }  else{
+  #   tstat_var <- "Pr(>|t|)"
+  se_var <- colnames(coeff_list)[2]
+  tstat_var <- colnames(coeff_list)[3]
 
   text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3L), digits = 3L,
                               nsmall = 3L, big.mark=",", scientific = FALSE),
@@ -212,8 +209,8 @@ extract_coeff_nnet <- function(object, modality, ...){
   text_sd <- gsub(x = text_sd, pattern = " ", replacement = "")
 
   text_coeff <- data.frame("variable" = names(coeff_list_red[[1]]),
-                      "text_coeff" = text_coeff, "text_sd" = text_sd,
-                      stringsAsFactors = FALSE)
+                           "text_coeff" = text_coeff, "text_sd" = text_sd,
+                           stringsAsFactors = FALSE)
   text_coeff[,'variable'] <- gsub("_","\\_",text_coeff[,'variable'],
                                   fixed = TRUE)
 
@@ -235,18 +232,18 @@ apply_extract_coeff <- function(object, ncols_models,
     )
   )
 
-    coeff_data <- lapply(1:length(object),
-                         function(k){
-                           return(
-                             extract_coeff(
-                               object = object[[k]],
-                               modeltype = modeltype[k],
-                               type = type
-                             )
+  coeff_data <- lapply(1:length(object),
+                       function(k){
+                         return(
+                           extract_coeff(
+                             object = object[[k]],
+                             modeltype = modeltype[k],
+                             type = type
                            )
-                         })
+                         )
+                       })
 
-    return(coeff_data)
+  return(coeff_data)
 }
 
 
