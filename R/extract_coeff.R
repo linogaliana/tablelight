@@ -22,18 +22,19 @@ extract_coeff.default <- function(object, ...){
 
   coeff_list <- secoeff(object)
 
-  # if (as.character(object$call[1]) %in% c("lm","glm")){
-  #   se_var <- 'Std. Error'
-  # } else{
-  #   se_var <- 'Std. error'
-  # }
-  #
-  # if (inherits(object, "glm")){
-  #   tstat_var <- "Pr(>|z|)"
-  # }  else{
-  #   tstat_var <- "Pr(>|t|)"
-  se_var <- colnames(coeff_list)[2]
-  tstat_var <- colnames(coeff_list)[3]
+  if (as.character(object$call[1]) %in% c("lm","glm")){
+    se_var <- 'Std. Error'
+  } else{
+    se_var <- 'Std. error'
+  }
+
+  if (!inherits(object, "glm") || (
+    inherits(object, "glm") & (as.character(object$call[1]) == "glm")
+  )){
+    tstat_var <- "Pr(>|t|)"
+  }  else{
+    tstat_var <- "Pr(>|z|)"
+  }
 
   text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3L), digits = 3L,
                               nsmall = 3L, big.mark=",", scientific = FALSE),
