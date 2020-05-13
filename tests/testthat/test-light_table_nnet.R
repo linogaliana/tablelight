@@ -87,8 +87,9 @@ testthat::test_that("Log-likelihood, Log-likelihood by obs and BIC over 3 column
 })
 
 
-# With reference_level_position
+# With reference_level_position -----------------
 
+# ref level position not in last position ======
 
 latex_table <- light_table(
   logit, type = "latex", stats.list = c("n","ll","lln","bic","link"),
@@ -183,3 +184,102 @@ testthat::test_that("Same table except for reference column", {
   )
 
 })
+
+
+
+# reference position in last position ===========
+
+
+latex_table2 <- light_table(
+  logit, type = "latex", stats.list = c("n","ll","lln","bic","link"),
+  reference_level_position = 4L
+)
+
+
+testthat::test_that("Count and Selection distributions: empty over 4 columns", {
+
+  testthat::expect_equal(
+    sum(
+      grepl("Count distribution & \\\\multicolumn\\{4\\}\\{c\\}\\{\\} \\\\\\\\",
+            latex_table2,
+            perl = TRUE)
+    ),
+    1L
+  )
+
+  testthat::expect_equal(
+    sum(
+      grepl("Selection distribution & \\\\multicolumn\\{4\\}\\{c\\}\\{\\} \\\\\\\\",
+            latex_table2,
+            perl = TRUE)
+    ),
+    1L
+  )
+
+
+})
+
+
+testthat::test_that("Log-likelihood, Log-likelihood by obs and BIC over 4 columns", {
+
+  testthat::expect_equal(
+    sum(
+      grepl(
+        sprintf("Log likelihood & \\\\multicolumn\\{4\\}\\{c\\}\\{\\$-\\$%s\\} \\\\\\\\",
+                abs(as.numeric(round(logLik(logit))))),
+        latex_table2)
+    ),
+    1L
+  )
+
+  testthat::expect_equal(
+    sum(
+      grepl(
+        sprintf("Log likelihood \\(by obs\\.\\) & \\\\multicolumn\\{4\\}\\{c\\}\\{\\$-\\$%s\\} \\\\\\\\",
+                format(
+                  abs(as.numeric(logLik(logit)))/nrow(logit$residuals),
+                  digits = 3L, nsmall = 3L)
+        ),
+        latex_table2)
+    ),
+    1L
+  )
+
+  testthat::expect_equal(
+    sum(
+      grepl(
+        sprintf("Bayesian information criterion & \\\\multicolumn\\{4\\}\\{c\\}\\{%s\\} \\\\\\\\",
+                round(BIC(logit))),
+        latex_table2)
+    ),
+    1L
+  )
+
+
+})
+
+
+# latex_table_noref <- light_table(
+#   logit, type = "latex",
+#   stats.list = c("n","ll","lln","bic","link")
+# )
+#
+# body_part_noref <- latex_table_noref[grep("(Intercept)", latex_table_noref):(grep("^z", latex_table_noref) + 2)]
+# body_part_ref <- latex_table2[grep("(Intercept)", latex_table_noref):(grep("^z", latex_table_noref) + 2)]
+#
+#
+# body_part_noref <- stringr::str_split(body_part_noref, "&", simplify = TRUE)
+# body_part_ref   <- stringr::str_split(body_part_ref, "&", simplify = TRUE)
+#
+#
+# testthat::test_that("Same table except for reference column", {
+#
+#   testthat::expect_equal(
+#     cbind(
+#       trimws(body_part_noref),
+#       trimws(rep(c("(Ref)\\\\ ", " ", " "), 4L))
+#     ),
+#     trimws(body_part_ref)
+#   )
+#
+# })

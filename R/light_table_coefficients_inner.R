@@ -100,11 +100,18 @@ reorder_nnet_reference <- function(coeff_body, reference_level_position = NULL,
 
   if (is.null(reference_level_position)) return(coeff_body)
 
-  coeff_body2 <- cbind(
-    coeff_body[,1:(2 + reference_level_position - 1)],
-    data.frame("v" = "", stringsAsFactors = FALSE),
-    coeff_body[,(2 + reference_level_position):ncol(coeff_body)]
-  )
+  if (reference_level_position > (ncol(coeff_body)-2)){
+    coeff_body2 <- cbind(
+      coeff_body,
+      data.frame("v" = "", stringsAsFactors = FALSE)
+    )
+  } else{
+    coeff_body2 <- cbind(
+      coeff_body[,1:(2 + reference_level_position - 1)],
+      data.frame("v" = "", stringsAsFactors = FALSE),
+      coeff_body[,(2 + reference_level_position):ncol(coeff_body)]
+    )
+  }
 
   coeff_body2[coeff_body2$obj == "text_coeff", "v"] <- "(Ref)"
 
