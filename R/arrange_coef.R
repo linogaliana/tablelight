@@ -73,3 +73,35 @@ arrange_coeff <- function(text_coeff, order_variable = NULL, type = c("latex","h
   return(body_table)
 }
 
+
+
+apply_arrange_coef <- function(object, coeff_data, coeff_body,
+                               order_variable, type){
+
+  combine_coef <- function(coeff_data, order_variable, type){
+
+    coeff_body <- lapply(coeff_data, arrange_coeff, order_variable, type = type)
+    lapply(seq_along(coeff_body), function(i) data.table::setnames(coeff_body[[i]], old = "value",
+                                                                   new = paste0("value",i)))
+    coeff_body <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("variable","obj"), all = TRUE),
+                         coeff_body)
+
+  }
+
+  if (inherits(object[[1]], "nnet")){
+
+    coeff_body <- lapply(coeff_data, function(d){
+      lapply(d, combine_coef, order_variable, type = type)
+    })
+
+  } else{
+    return(combine_coef(coeff_data, order_variable, type))
+  }
+
+  # Other cases (only one model)
+  return(
+    coeff_body <- arrange_coeff(coeff_data, order_variable, type = type)
+  )
+
+
+}

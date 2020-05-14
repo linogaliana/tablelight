@@ -283,3 +283,12 @@ testthat::test_that("Log-likelihood, Log-likelihood by obs and BIC over 4 column
 #   )
 #
 # })
+
+
+# TWO TABLES NNET MODELS -------------------
+
+
+logit2 <- nnet::multinom(y ~ x1 + x2 + z + I(z^2), data=dataset)
+
+object <- list(logit,logit2)
+
