@@ -156,18 +156,8 @@ light_table.default <- function(
 
   if (missing(adjustbox_width)) adjustbox_width <- NULL
 
-  if (inherits(object, "nnet")){
-    ncols_models <- length(object$lab[-1])
-  } else{
-    if (isFALSE(inherits(object, "list"))){
-      ncols_models <- 1L
-    } else{
-      ncols_models <- length(object)
-    }
-  }
-
-
-
+  # DETERMINE NUMBER OF COLUMNS
+  ncols_models <- ncolsmodels(object)
 
   coeff_data <- apply_extract_coeff(object = object,
                                     ncols_models = ncols_models,

@@ -18,6 +18,11 @@ light_table_coefficients <- function(object,
   if (ncols_models==1){
     coeff_body <- arrange_coeff(coeff_data, order_variable, type = type)
   } else{
+    if (inherits(object[[1]], "nnet")){
+      coeff_body <- lapply(coeff_data, function(d){
+        lapply(d, arrange_coeff, order_variable, type = type)
+      })
+    }
     coeff_body <- lapply(coeff_data, arrange_coeff, order_variable, type = type)
     lapply(seq_along(coeff_body), function(i) data.table::setnames(coeff_body[[i]], old = "value",
                                                                    new = paste0("value",i)))
