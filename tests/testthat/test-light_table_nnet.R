@@ -292,3 +292,16 @@ logit2 <- nnet::multinom(y ~ x1 + x2 + z + I(z^2), data=dataset)
 
 object <- list(logit,logit2)
 
+latex_table <- light_table(
+  list(logit, logit2), type = "latex", stats.list = c("n","ll","lln","bic","link")
+)
+
+latex_table <- light_table(
+  list(logit, logit2), type = "latex", stats.list = c("n","ll","lln","bic","link"),
+  reference_level_position = 3L
+)
+
+latex_table <- light_table(
+  list(logit, logit2), type = "latex", stats.list = c("n","ll","lln","bic","link"),
+  reference_level_position = c(3L, 4L)
+)
