@@ -213,6 +213,10 @@ extract_coeff_nnet <- function(object, modality, ...){
   text_coeff[,'variable'] <- gsub("_","\\_",text_coeff[,'variable'],
                                   fixed = TRUE)
 
+  rownames(text_coeff) <- NULL
+
+  data.table::setDT(text_coeff)
+
   return(text_coeff)
 }
 

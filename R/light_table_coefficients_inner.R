@@ -95,31 +95,4 @@ add_rules <- function(body_table, rules_between_covariates,
 }
 
 
-reorder_nnet_reference <- function(coeff_body, reference_level_position = NULL,
-                                   type){
 
-  if (is.null(reference_level_position)) return(coeff_body)
-
-  if (reference_level_position > (ncol(coeff_body)-2)){
-    coeff_body2 <- cbind(
-      coeff_body,
-      data.frame("v" = "", stringsAsFactors = FALSE)
-    )
-  } else{
-    coeff_body2 <- cbind(
-      coeff_body[,1:(2 + reference_level_position - 1)],
-      data.frame("v" = "", stringsAsFactors = FALSE),
-      coeff_body[,(2 + reference_level_position):ncol(coeff_body)]
-    )
-  }
-
-  coeff_body2[coeff_body2$obj == "text_coeff", "v"] <- "(Ref)"
-
-  if (identical(type, "latex")){
-    coeff_body2[,"v"] <- paste0("&",coeff_body2[,"v"])
-  } else{
-    coeff_body2[,"v"] <- paste0("<td>", coeff_body2[,"v"], "</td>")
-  }
-
-  return(coeff_body2)
-}

@@ -208,7 +208,10 @@ light_table.default <- function(
   # PART III: STATISTICS -----
 
   ncols_stats <- ncols_models
-  if (!is.null(reference_level_position)) ncols_stats <- ncols_stats + 1
+  if (!is.null(reference_level_position)){
+    if (inherits(object, "nnet")) ncols_stats <- ncols_stats + 1
+    if (inherits(object[[1]], "nnet")) ncols_stats <- ncols_stats + length(ncols_stats)
+  }
 
   stats_table <- light_table_stats(
     object = object,

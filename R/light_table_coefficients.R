@@ -15,12 +15,13 @@ light_table_coefficients <- function(object,
 
   # ARRANGE COEFFICIENTS ORDER -------------------------
 
-  coeff_body <- apply_arrange_coef(object, coeff_data = coeff_data,
+  coeff_body <- apply_arrange_coef(object = object, coeff_data = coeff_data,
                                    coeff_body = coeff_body,
                                    order_variable = order_variable,
-                                   type = type)
+                                   type = type,
+                                   reference_level_position = reference_level_position)
 
-  coeff_body <- na.omit(coeff_body)
+  coeff_body[is.na(coeff_body)] <- " & "
 
 
   # REMOVE UNECESSARY COEFFICIENTS -----------------------
