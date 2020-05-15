@@ -6,7 +6,13 @@
 \alias{reorder_nnet_reference.list}
 \title{Reorder columns for nnet models}
 \usage{
-reorder_nnet_reference(coeff_body, reference_level_position = NULL, type, ...)
+reorder_nnet_reference(
+  object,
+  coeff_body,
+  reference_level_position = NULL,
+  type,
+  ...
+)
 
 \method{reorder_nnet_reference}{nnet}(
   object,
@@ -25,7 +31,9 @@ reorder_nnet_reference(coeff_body, reference_level_position = NULL, type, ...)
 )
 }
 \arguments{
-\item{coeff_body}{Coefficients body, output from \link{arrange_coef}}
+\item{object}{List of object}
+
+\item{coeff_body}{Coefficient body part of the regression table}
 
 \item{reference_level_position}{In multinomial logit, coefficients are
 relative to the reference level. A column can be added to represent
@@ -37,8 +45,6 @@ the position indicated by the argument}
 \emph{latex} and \emph{html}}
 
 \item{...}{Additional parameters, currently ignored}
-
-\item{object}{List of object}
 }
 \value{
 Initial object (latex or html code for coefficients

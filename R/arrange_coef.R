@@ -74,19 +74,20 @@ arrange_coeff <- function(text_coeff, order_variable = NULL, type = c("latex","h
 }
 
 
+combine_coef <- function(d, order_variable, type){
 
-apply_arrange_coef <- function(object, coeff_data, coeff_body,
+  coeff_body <- lapply(d, arrange_coeff, order_variable, type = type)
+  lapply(seq_along(coeff_body), function(i) data.table::setnames(coeff_body[[i]], old = "value",
+                                                                 new = paste0("value",i)))
+  coeff_body <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("variable","obj"), all = TRUE),
+                       coeff_body)
+  return(coeff_body)
+}
+
+
+apply_arrange_coef <- function(object, coeff_data,
                                order_variable, type, reference_level_position = NULL){
 
-  combine_coef <- function(d, order_variable, type){
-
-    coeff_body <- lapply(d, arrange_coeff, order_variable, type = type)
-    lapply(seq_along(coeff_body), function(i) data.table::setnames(coeff_body[[i]], old = "value",
-                                                                   new = paste0("value",i)))
-    coeff_body <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("variable","obj"), all = TRUE),
-                         coeff_body)
-
-  }
 
   if (inherits(object[[1]], "nnet")){
 
@@ -114,14 +115,15 @@ apply_arrange_coef <- function(object, coeff_data, coeff_body,
       coeff_body
     )
 
-  } else{
+  } else if (inherits(object, "list")){
     return(combine_coef(d = coeff_data, order_variable, type))
+  } else{
+    # Other cases (only one model)
+    return(
+      arrange_coeff(coeff_data, order_variable, type = type)
+    )
   }
 
-  # Other cases (only one model)
-  return(
-    arrange_coeff(coeff_data, order_variable, type = type)
-  )
 
 
 }

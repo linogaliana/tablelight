@@ -16,7 +16,6 @@ light_table_coefficients <- function(object,
   # ARRANGE COEFFICIENTS ORDER -------------------------
 
   coeff_body <- apply_arrange_coef(object = object, coeff_data = coeff_data,
-                                   coeff_body = coeff_body,
                                    order_variable = order_variable,
                                    type = type,
                                    reference_level_position = reference_level_position)
@@ -74,12 +73,6 @@ light_table_coefficients <- function(object,
       str_to_regex(coeff_body[coeff_body$variable != "(Intercept)", "variable"])
   }
 
-  body_table <- apply(coeff_body, 1, paste, collapse="")
-
-  if (identical(type, "latex")){
-    body_table <- gsub(pattern = "-", replacement = "$-$",
-                       body_table)
-  }
 
   # PUT CONSTANT IN LAST POSITION ---------------------
 
@@ -90,8 +83,19 @@ light_table_coefficients <- function(object,
     constant_idx = constant_idx
   )
 
-  if (identical(type, "latex")) body_table <- paste0(body_table, "\\\\")
+  if (identical(type, "latex")) coeff_body$value <- paste0(coeff_body$value,
+                                                     "\\\\")
 
+
+  # CONCATENATE -------------------
+
+  rownames(coeff_body) <- NULL
+  body_table <- apply(coeff_body, 1, paste, collapse="")
+
+  if (identical(type, "latex")){
+    body_table <- gsub(pattern = "-", replacement = "$-$",
+                       body_table)
+  }
 
   # REPLACE COVARIATES BY LABELS -------------------------
   # (if needed)

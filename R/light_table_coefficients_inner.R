@@ -38,8 +38,9 @@ put_constant_end <- function(coeff_body, constant_idx){
   if (is.null(constant_idx)) return(coeff_body)
 
   rows <- seq_len(nrow(coeff_body))
-  rows <- rows[-constant_idx]
-  coeff_body <- coeff_body[c(rows, constant_idx),]
+  rows_constant <- seq(constant_idx, constant_idx + 2)
+  rows <- rows[-rows_constant]
+  coeff_body <- coeff_body[c(rows, rows_constant),]
 }
 
 
