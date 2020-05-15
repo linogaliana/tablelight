@@ -1,8 +1,17 @@
+#' Reorder columns for nnet models
+#'
+#' @param coeff_body Coefficient body part of the regression table
+#' @inheritParams light_table
+#' @param ... Additional parameters, currently ignored
+#'
+#' @return Initial object (latex or html code for coefficients
+#'   reporting) with the reference level at desired column
 #' @export
-reorder_nnet_reference <- function(coeff_body, reference_level_position = NULL,
+reorder_nnet_reference <- function(object, coeff_body, reference_level_position = NULL,
                                    type, ...){
   UseMethod("reorder_nnet_reference")
 }
+
 
 reorder_nnet_reference.default <- function(object, coeff_body, reference_level_position = NULL,
                                            type, ...){
@@ -12,7 +21,7 @@ reorder_nnet_reference.default <- function(object, coeff_body, reference_level_p
 #' @rdname reorder_nnet_reference
 #' @export
 reorder_nnet_reference.nnet <- function(object, coeff_body, reference_level_position = NULL,
-                                        type){
+                                        type, ...){
 
   if (is.null(reference_level_position)) return(coeff_body)
 
@@ -44,7 +53,7 @@ reorder_nnet_reference.nnet <- function(object, coeff_body, reference_level_posi
 #' @rdname reorder_nnet_reference
 #' @export
 reorder_nnet_reference.list <- function(object, coeff_body, reference_level_position = NULL,
-                                        type,...){
+                                        type, ...){
 
 
   if (isFALSE(inherits(object[[1]], "nnet"))) return(coeff_body)

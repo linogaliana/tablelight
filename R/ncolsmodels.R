@@ -1,4 +1,7 @@
 #' A method to infer the number of columns for the regression table
+#' @param object Regression object or list of regression objects
+#' @return Number of columns necessary that will be used
+#'  for the regression table
 #' @export
 ncolsmodels <- function(object){
   UseMethod("ncolsmodels")

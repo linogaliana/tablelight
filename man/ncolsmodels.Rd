@@ -15,6 +15,13 @@ ncolsmodels(object)
 
 \method{ncolsmodels}{list}(object)
 }
+\arguments{
+\item{object}{Regression object or list of regression objects}
+}
+\value{
+Number of columns necessary that will be used
+for the regression table
+}
 \description{
 A method to infer the number of columns for the regression table
 }
