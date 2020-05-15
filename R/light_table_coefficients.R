@@ -15,17 +15,12 @@ light_table_coefficients <- function(object,
 
   # ARRANGE COEFFICIENTS ORDER -------------------------
 
-  if (ncols_models==1){
-    coeff_body <- arrange_coeff(coeff_data, order_variable, type = type)
-  } else{
-    coeff_body <- lapply(coeff_data, arrange_coeff, order_variable, type = type)
-    lapply(seq_along(coeff_body), function(i) data.table::setnames(coeff_body[[i]], old = "value",
-                                                                   new = paste0("value",i)))
-    coeff_body <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, by = c("variable","obj"), all = TRUE),
-                         coeff_body)
-  }
+  coeff_body <- apply_arrange_coef(object = object, coeff_data = coeff_data,
+                                   order_variable = order_variable,
+                                   type = type,
+                                   reference_level_position = reference_level_position)
 
-  coeff_body <- na.omit(coeff_body)
+  coeff_body[is.na(coeff_body)] <- " & "
 
 
   # REMOVE UNECESSARY COEFFICIENTS -----------------------
@@ -78,12 +73,6 @@ light_table_coefficients <- function(object,
       str_to_regex(coeff_body[coeff_body$variable != "(Intercept)", "variable"])
   }
 
-  body_table <- apply(coeff_body, 1, paste, collapse="")
-
-  if (identical(type, "latex")){
-    body_table <- gsub(pattern = "-", replacement = "$-$",
-                       body_table)
-  }
 
   # PUT CONSTANT IN LAST POSITION ---------------------
 
@@ -94,8 +83,19 @@ light_table_coefficients <- function(object,
     constant_idx = constant_idx
   )
 
-  if (identical(type, "latex")) body_table <- paste0(body_table, "\\\\")
+  if (identical(type, "latex")) coeff_body$value <- paste0(coeff_body$value,
+                                                     "\\\\")
 
+
+  # CONCATENATE -------------------
+
+  rownames(coeff_body) <- NULL
+  body_table <- apply(coeff_body, 1, paste, collapse="")
+
+  if (identical(type, "latex")){
+    body_table <- gsub(pattern = "-", replacement = "$-$",
+                       body_table)
+  }
 
   # REPLACE COVARIATES BY LABELS -------------------------
   # (if needed)
@@ -112,6 +112,7 @@ light_table_coefficients <- function(object,
   # ADD RULES IF NEEDED -------------------------
 
   body_table <- add_rules(
+    ncols_models = ncols_models,
     body_table = body_table,
     rules_between_covariates = rules_between_covariates,
     type = type
