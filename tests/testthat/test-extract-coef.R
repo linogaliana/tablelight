@@ -295,17 +295,19 @@ testthat::test_that("Coefficients are okay", {
 
   testthat::expect_equal(
     expected_coeff_modal0,
-    extract_coeff(logit, modality = "0")[,"text_coeff"]
+    extract_coeff(logit, modality = "0")[["text_coeff"]]
   )
+  #for nnet the output is a data.table to avoid problem when merging
+  # several models together
 
   testthat::expect_equal(
     expected_coeff_modal1,
-    extract_coeff(logit, modality = "1")[,"text_coeff"]
+    extract_coeff(logit, modality = "1")[["text_coeff"]]
   )
 
   testthat::expect_equal(
     expected_coeff_modal2,
-    extract_coeff(logit, modality = "2")[,"text_coeff"]
+    extract_coeff(logit, modality = "2")[["text_coeff"]]
   )
 
 })
@@ -315,17 +317,17 @@ testthat::test_that("Standard errors are okay", {
 
   testthat::expect_equal(
     expected_sd_modal0,
-    extract_coeff(logit, modality = "0")[,"text_sd"]
+    extract_coeff(logit, modality = "0")[["text_sd"]]
   )
 
   testthat::expect_equal(
     expected_sd_modal1,
-    extract_coeff(logit, modality = "1")[,"text_sd"]
+    extract_coeff(logit, modality = "1")[["text_sd"]]
   )
 
   testthat::expect_equal(
     expected_sd_modal2,
-    extract_coeff(logit, modality = "2")[,"text_sd"]
+    extract_coeff(logit, modality = "2")[["text_sd"]]
   )
 
 })
@@ -361,17 +363,17 @@ testthat::test_that("Coefficients are okay", {
 
   testthat::expect_equal(
     expected_coeff_modal0,
-    extract_coeff(logit, modality = "0", type = "html")[,"text_coeff"]
+    extract_coeff(logit, modality = "0", type = "html")[["text_coeff"]]
   )
 
   testthat::expect_equal(
     expected_coeff_modal1,
-    extract_coeff(logit, modality = "1", type = "html")[,"text_coeff"]
+    extract_coeff(logit, modality = "1", type = "html")[["text_coeff"]]
   )
 
   testthat::expect_equal(
     expected_coeff_modal2,
-    extract_coeff(logit, modality = "2", type = "html")[,"text_coeff"]
+    extract_coeff(logit, modality = "2", type = "html")[["text_coeff"]]
   )
 
 })
