@@ -186,7 +186,8 @@ light_table.default <- function(
     dep.var.labels = dep.var.labels,
     dep.var.separate = dep.var.separate,
     column.labels = column.labels,
-    adjustbox_width = adjustbox_width)
+    adjustbox_width = adjustbox_width,
+    reference_level_position = reference_level_position)
 
 
   # PART II : BODY -------
