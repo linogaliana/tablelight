@@ -25,8 +25,12 @@ light_table_coefficients <- function(object,
                          coeff_body)
   }
 
-  coeff_body <- na.omit(coeff_body)
-
+#  coeff_body <- na.omit(coeff_body)
+  if (type == "latex"){
+    coeff_body[is.na(coeff_body)] <- ""
+  } else{
+    coeff_body[is.na(coeff_body)] <- "<td></td>"
+  }
 
   # REMOVE UNECESSARY COEFFICIENTS -----------------------
 
