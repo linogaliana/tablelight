@@ -8,3 +8,4 @@
 ^\.gitlab-ci-innov\.yml$
 ^\.travis\.yml$
 ^codecov\.yml$
+^example\.gif$
