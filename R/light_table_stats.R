@@ -163,6 +163,7 @@ light_table_stats_html <- function(object, ncols_models, stats.var.separate,
 
   statsdf <- gsub("\\$\\\\alpha\\$", "&alpha;", statsdf, perl = TRUE)
   statsdf <- gsub("\\$R\\^2\\$", "R<sup>2</sup>", statsdf, perl = TRUE)
+  statsdf <- gsub("\\$\\\\widehat\\{\\\\sigma\\}\\$", "&sigma;", statsdf, perl = TRUE)
 
   return(statsdf)
 }

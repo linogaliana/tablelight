@@ -401,7 +401,10 @@ liststats.default <- function(object, ...){
     est_sigma <- mean(sigma(object))
     df <- rbind(data.frame(stat = "$\\widehat{\\sigma}$",
                            order = -1,
-                           val = est_sigma), df
+                           val = format(est_sigma,
+                                        digits = stats.digits,
+                                        nsmall = stats.digits,
+                           )), df
     )
     stat_shortcode <- c("sigma", stat_shortcode)
   }
