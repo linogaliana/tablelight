@@ -100,7 +100,8 @@ extract_coeff.oglmx <- function(object, ...){
   text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3),
                               digits = 3L,
                               nsmall = 3L, big.mark=",", scientific = FALSE),
-                       sapply(coeff_list[,tstat_var], signif_stars, type = args[['type']])
+                       sapply(coeff_list[,tstat_var], signif_stars,
+                              type = args[['type']])
   )
   text_coeff <- gsub(x = text_coeff, pattern = " ", replacement = "")
 
@@ -113,6 +114,9 @@ extract_coeff.oglmx <- function(object, ...){
   text_coeff <- cbind("variable" = rownames(coeff_list),text_coeff, text_sd)
   text_coeff[,'variable'] <- gsub("_","\\_",text_coeff[,'variable'],
                                   fixed = TRUE)
+
+  # remove sigma from coefficients
+  text_coeff <- text_coeff[!is.na(text_coeff[,'variable']),]
 
   return(text_coeff)
 }
