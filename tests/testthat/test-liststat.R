@@ -1504,7 +1504,7 @@ testthat::test_that(
     testthat::expect_equal(
       as.character(
         stats_bis_zeroinfl_negbin_strip[grepl(x = as.character(stats_bis_zeroinfl_negbin_strip$stat),
-                              pattern = "alpha"),'val']
+                                              pattern = "alpha"),'val']
       ),
       as.character(
         format(1/zeroinfl_negbin$theta, digits = 3L, nsmall = 3L, big.mark = ",")
@@ -1859,13 +1859,39 @@ testthat::test_that("Reported sigmas are ok for oglmx", {
 
   testthat::expect_equal(
     as.character(tablelight::liststats(oglm, stats.list = c("sigma"))[,c("val")]),
-    "1"
+    "1.000"
   )
 
 
 })
 
+oglm2 <- oglmx::oglmx(y ~ x1 + x2 + z, data=dataset,
+                      link="probit",
+                      constantMEAN=FALSE,
+                      constantSD=FALSE,threshparam=NULL)
 
+# Homosckeastic model with estimated variance
+testthat::test_that("Reported sigmas are ok for oglmx", {
+
+  testthat::expect_equal(
+    as.character(tablelight::liststats(oglm, stats.list = c("sigma"))[,c("stat")]),
+    "$\\widehat{\\sigma}$"
+  )
+
+  est_sigma <- oglm2$coefficients
+  # testthat::expect_equal(
+  #   as.character(tablelight::liststats(oglm2, stats.list = c("sigma"))[,c("val")]),
+  #   as.character(
+  #     format(
+  #       est_sigma[is.na(names(est_sigma))],
+  #       digits = 3L,
+  #       nsmall = 3L
+  #       )
+  #   )
+  # )
+
+
+})
 
 
 
