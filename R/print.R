@@ -1,2 +1,5 @@
 #' @export
-print.tablelight <- function(x) view_html(x)
+print.tablelight <- function(x){
+  view_html(x)
+  # return(x)
+}

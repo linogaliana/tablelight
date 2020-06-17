@@ -266,9 +266,6 @@ light_table.default <- function(
 
   if (landscape && identical(type, "latex")) table_total <- c("\\begin{landscape}", table_total, "\\end{landscape}")
 
-  if (identical(type, "html") && isTRUE(visualize)) table_total
-
-
   if (isTRUE(footprint)){
     if (type == "latex"){
       table_total <- c(paste0("% Table generated using {tablelight} package",
@@ -285,6 +282,9 @@ light_table.default <- function(
     }
   }
 
+  if (identical(type, "html") && isTRUE(visualize)){
+    table_total
+  }
 
   return(table_total)
 }
