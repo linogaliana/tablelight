@@ -6,6 +6,7 @@
 \alias{extract_coeff.light.glm}
 \alias{extract_coeff.oglmx}
 \alias{extract_coeff.light.zeroinfl}
+\alias{extract_coeff.fastzeroinfl}
 \alias{extract_coeff.nnet}
 \title{Methods to extract coefficients and
 related information from statistical
@@ -20,6 +21,8 @@ extract_coeff(object, ...)
 \method{extract_coeff}{oglmx}(object, ...)
 
 \method{extract_coeff}{light.zeroinfl}(object, ...)
+
+\method{extract_coeff}{fastzeroinfl}(object, ...)
 
 \method{extract_coeff}{nnet}(object, ...)
 }
