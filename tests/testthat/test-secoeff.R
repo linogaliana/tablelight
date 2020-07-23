@@ -46,7 +46,7 @@ testthat::expect_equal(
 )
 
 
-# 4. secoeff.light.zeroinfl
+# 4. secoeff.light.zeroinfl ------------
 
 data("bioChemists", package = "pscl")
 
@@ -61,6 +61,23 @@ testthat::expect_equal(
 testthat::expect_equal(
   secoeff(zeroinfl_negbin_strip, modeltype = "selection"),
   secoeff(zeroinfl_negbin)$zero
+)
+
+
+# 5. secoeff.fastzeroinfl
+
+# Twist to use functions with gravity installed
+class(zeroinfl_negbin) <- c("fastzeroinfl", class(zeroinfl_negbin))
+
+
+testthat::expect_equal(
+  secoeff(zeroinfl_negbin, modeltype = "count"),
+  summary(zeroinfl_negbin)$coefficients$count
+)
+
+testthat::expect_equal(
+  secoeff(zeroinfl_negbin, modeltype = "selection"),
+  summary(zeroinfl_negbin)$coefficients$zero
 )
 
 
