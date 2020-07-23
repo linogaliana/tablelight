@@ -39,6 +39,27 @@ secoeff.default  <- function(object, ...){
 
 #' @rdname secoeff
 #' @export
+secoeff.fastzeroinfl  <- function(object, ...){
+  
+  args <- list(...)
+  if (is.null(args[['modeltype']])) args[['modeltype']] <- 'outcome'
+    
+  if (args[['modeltype']] %in% c("count","outcome")){
+    return(
+      summary(object, ...)$coefficients$count
+    )
+  } else{
+    return(
+      summary(object, ...)$coefficients$zero
+    )
+  }
+  
+}
+
+
+
+#' @rdname secoeff
+#' @export
 secoeff.oglmx <- function(object, ...){
 
   return(summary(object, ...)$estimate)
