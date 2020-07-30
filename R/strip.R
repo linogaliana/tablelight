@@ -361,8 +361,8 @@ strip.fastzeroinfl <- function(object, ...){
 
 
 
-  class(object) <- c(class(object),
-                     paste0("light.", class(object)))
+  class(object) <- c(paste0("light.", class(object)),
+                     class(object))
 
   return(object)
 }
