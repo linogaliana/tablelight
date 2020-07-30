@@ -12,8 +12,8 @@ object_light <- strip(object)
 
 testthat::test_that("New class light.", {
   testthat::expect_equal(class(object_light),
-                         c(paste0("light.", class(object),
-                                  class(object)))
+                         c(paste0("light.", class(object)),
+                                  class(object))
   )
 })
 
@@ -157,8 +157,8 @@ object_light <- strip(object)
 
 testthat::test_that("New class light.", {
   testthat::expect_equal(class(object_light),
-                         c(paste0("light.", class(object),
-                                  class(object))))
+                         c(paste0("light.", class(object)),
+                                  class(object)))
 })
 
 

@@ -158,7 +158,7 @@ strip.negbin <- function(object, ...) {
   attr(object$formula,".Environment") = c()
 
 
-  class(object) <- c(class(object), paste0("light.", class(object)))
+  class(object) <- c(paste0("light.", class(object)), class(object))
 
   return(object)
 }
