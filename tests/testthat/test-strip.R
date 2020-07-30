@@ -12,7 +12,8 @@ object_light <- strip(object)
 
 testthat::test_that("New class light.", {
   testthat::expect_equal(class(object_light),
-                         c(class(object), paste0("light.", class(object)))
+                         c(paste0("light.", class(object),
+                                  class(object)))
   )
 })
 
@@ -93,7 +94,8 @@ summary_light <- strip(summary(object))
 
 testthat::test_that("New class light.", {
   testthat::expect_equal(class(object_light),
-                         c(class(object), "light.glm"))
+                         c("light.glm",
+                           class(object)))
 })
 
 testthat::test_that('stripped summary is just summary without dev.res', {
@@ -155,7 +157,8 @@ object_light <- strip(object)
 
 testthat::test_that("New class light.", {
   testthat::expect_equal(class(object_light),
-                         c(class(object), paste0("light.", class(object))))
+                         c(paste0("light.", class(object),
+                                  class(object))))
 })
 
 
@@ -228,7 +231,8 @@ summary_light <- summary(object)
 
 testthat::test_that("New class light.", {
   testthat::expect_equal(class(object_light),
-                         c(class(object), paste0("light.", class(object))))
+                         c(paste0("light.", class(object),
+                                  class(object))))
 })
 
 
@@ -288,7 +292,8 @@ summary_light <- strip(summary(object))
 
 testthat::test_that("New class light.", {
   testthat::expect_equal(class(object_light),
-                         c(class(object), paste0("light.", class(object))))
+                         c(paste0("light.", class(object),
+                                  class(object))))
 })
 
 
@@ -355,7 +360,8 @@ summary_light <- strip(summary(object))
 
 testthat::test_that("New class light.", {
   testthat::expect_equal(class(object_light),
-                         c(class(object), paste0("light.", class(object))))
+                         c(paste0("light.", class(object),
+                                  class(object))))
 })
 
 
