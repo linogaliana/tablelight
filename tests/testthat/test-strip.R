@@ -231,8 +231,8 @@ summary_light <- summary(object)
 
 testthat::test_that("New class light.", {
   testthat::expect_equal(class(object_light),
-                         c(paste0("light.", class(object),
-                                  class(object))))
+                         c(paste0("light.", class(object)),
+                                  class(object)))
 })
 
 
@@ -292,8 +292,8 @@ summary_light <- strip(summary(object))
 
 testthat::test_that("New class light.", {
   testthat::expect_equal(class(object_light),
-                         c(paste0("light.", class(object),
-                                  class(object))))
+                         c(paste0("light.", class(object)),
+                                  class(object)))
 })
 
 
@@ -360,8 +360,8 @@ summary_light <- strip(summary(object))
 
 testthat::test_that("New class light.", {
   testthat::expect_equal(class(object_light),
-                         c(paste0("light.", class(object),
-                                  class(object))))
+                         c(paste0("light.", class(object)),
+                                  class(object)))
 })
 
 
