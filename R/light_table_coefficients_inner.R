@@ -83,15 +83,24 @@ add_rules <- function(body_table, rules_between_covariates,
   if (is.null(rules_between_covariates)) return(body_table)
 
   if (type == "latex"){
-    return(
-      body_table[rules_between_covariates*3] <- paste0(body_table[rules_between_covariates*3], " \\hline \\\\[-1.8ex] ")
-    )
+    linelang <- " \\hline \\\\[-1.8ex] "
+  } else{
+    linelang <- sprintf("<tr><td colspan=\"%s\"style=\"border-bottom: 1px solid black\"></td></tr>",
+                        ncols_models+1)
   }
 
+  body_table2 <- lapply(1:length(body_table), function(i){
+    if (i %in% (rules_between_covariates*3 + 1)){
+      return(paste0(linelang, body_table[i]))
+    } else{
+      return(body_table[i])
+    }
+  })
+
   return(
-    body_table[rules_between_covariates*3] <- paste0(body_table[rules_between_covariates*3],
-                                                     sprintf("<tr><td colspan=\"%s\"style=\"border-bottom: 1px solid black\"></td></tr>", ncols_models+1))
+    as.character(do.call(rbind, body_table2))
   )
+
 }
 
 
