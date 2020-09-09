@@ -31,3 +31,9 @@ logLik.light.glm <- function(object, ...){
   )
 }
 
+
+#' @export
+logLik.fastLm <- stats:::logLik.lm
+
+#' @export
+nobs.fastLm <- stats:::nobs.lm
