@@ -334,7 +334,7 @@ liststats.default <- function(object, ...){
       # Sometimes, link is given with parenthesis
       link_count <- gsub("\\s*\\([^\\)]+\\)", "",
                          Hmisc::capitalize(object$family$family))
-    } else if (as.character(object$call[1]) == "lm"){
+    } else if (as.character(object$call[1]) %in% c("lm","fastLm","fastLm.formula")){
       link_count <- "Gaussian"
     } else {
       link_count <- ""
@@ -475,7 +475,7 @@ liststats.light.lm <- function(object, ...){
       # Sometimes, link is given with parenthesis
       link_count <- gsub("\\s*\\([^\\)]+\\)", "",
                          Hmisc::capitalize(object$family$family))
-    } else if (as.character(object$call[1]) == "lm"){
+    } else if (as.character(object$call[1]) %in% c("lm",'fastLm','fastLm.formula')){
       link_count <- "Gaussian"
     } else {
       link_count <- ""
