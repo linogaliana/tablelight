@@ -100,9 +100,19 @@ extract_coeff.fastLm <- function(object, ...){
   args <- list(...)
 
   coeff_list <- secoeff(object)
-  se_var <- 'Std. Error'
 
+  # For RcppEigen models
+  se_var <- 'Std. Error'
+  # Correction for RcppArmadillo models
+  if (isFALSE(se_var %in% colnames(coeff_list))){
+    se_var <- 'StdErr'
+  }
+
+  # For RcppEigen models
   tstat_var <- "Pr(>|t|)"
+  if (isFALSE(tstat_var %in% colnames(coeff_list))){
+    tstat_var <- 'p.value'
+  }
 
   text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3L), digits = 3L,
                               nsmall = 3L, big.mark=",", scientific = FALSE),
