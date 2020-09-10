@@ -7,6 +7,7 @@
 \alias{liststats.light.glm}
 \alias{liststats.default}
 \alias{liststats.light.lm}
+\alias{liststats.fastLm}
 \title{A small method to extract statistics names relevent
 to econometric models}
 \usage{
@@ -21,6 +22,8 @@ liststats(object, ...)
 \method{liststats}{default}(object, ...)
 
 \method{liststats}{light.lm}(object, ...)
+
+\method{liststats}{fastLm}(object, ...)
 }
 \arguments{
 \item{object}{An object}
