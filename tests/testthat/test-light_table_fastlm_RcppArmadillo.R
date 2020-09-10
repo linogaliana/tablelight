@@ -3,7 +3,7 @@ testthat::context("[OLS] light_table produces the expected table")
 
 # SINGLE OLS MODEL (RCPPEIGEN) ----------------------------
 
-ols <- RcppEigen::fastLm(
+ols <- RcppArmadillo::fastLm(
   Sepal.Length ~ Sepal.Width,
   data = iris
 )
@@ -110,7 +110,7 @@ testthat::test_that("Body (coefficients) correct [latex]",{
     "Sepal.Width"
   )
 
-  sd <- summary(ols)$coefficients[,"Pr(>|t|)"]
+  sd <- summary(ols)$coefficients[,"p.value"]
 
   # Coefficient s.e. are ok [intercept]
   testthat::expect_equal(
@@ -141,7 +141,7 @@ testthat::test_that("Body (coefficients) correct [latex]",{
 })
 
 
-testthat::test_that("Body (coefficients) correct [latex]",{
+testthat::test_that("Body (coefficients) correct [html]",{
 
   coeff_part <- html_table[
     grepl(paste(c("(Intercept)", "Sepal.Width"), collapse = "|"), html_table)
@@ -173,8 +173,8 @@ testthat::test_that("Body (coefficients) correct [latex]",{
     2L
   )
 
-  sd <- summary(ols)$coefficients[,"Std. Error"]
-  pvalues <- summary(ols)$coefficients[,"Pr(>|t|)"]
+  sd <- summary(ols)$coefficients[,"StdErr"]
+  pvalues <- summary(ols)$coefficients[,"p.value"]
 
   # Coefficients are ok
   testthat::expect_equal(
@@ -211,7 +211,7 @@ testthat::test_that("Body (coefficients) correct [latex]",{
 
 
 
-ols <- RcppEigen::fastLm(
+ols <- RcppArmadillo::fastLm(
   Sepal.Length ~ Sepal.Width,
   data = iris
 )

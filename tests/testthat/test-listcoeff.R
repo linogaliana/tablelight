@@ -300,7 +300,7 @@ testthat::test_that(
 
 
 
-# 9. FASTLM ------------------------
+# 9. FASTLM (RCPPEIGEN) ------------------------
 
 ols <- RcppEigen::fastLm(
   Sepal.Length ~ Sepal.Width,
@@ -334,6 +334,46 @@ testthat::test_that(
     "Sepal.Width"
   )
 )
+
+
+
+
+# 10. FASTLM (RCPPARMADILLO) ------------------------
+
+ols <- RcppArmadillo::fastLm(
+  Sepal.Length ~ Sepal.Width,
+  data = iris
+)
+
+
+
+testthat::test_that(
+  "Coefficient names returned consistent with formula",
+  testthat::expect_equal(
+    tablelight::listcoeff(
+      lm(
+        Sepal.Length ~ Sepal.Width,
+        data = iris
+      )
+    ),
+    c("(Intercept)", "Sepal.Width")
+  )
+)
+
+testthat::test_that(
+  "[OLS] Coefficient names returned consistent with formula",
+  testthat::expect_equal(
+    tablelight::listcoeff(
+      lm(
+        Sepal.Length ~ 0 + Sepal.Width,
+        data = iris
+      )
+    ),
+    "Sepal.Width"
+  )
+)
+
+
 
 
 
