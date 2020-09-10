@@ -111,7 +111,7 @@ extract_coeff.fastLm <- function(object, ...){
   # For RcppEigen models
   tstat_var <- "Pr(>|t|)"
   if (isFALSE(tstat_var %in% colnames(coeff_list))){
-    tstat_var <- 't.value'
+    tstat_var <- 'p.value'
   }
 
   text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3L), digits = 3L,
