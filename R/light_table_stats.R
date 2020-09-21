@@ -14,6 +14,7 @@ light_table_stats <- function(object, type = c("latex", "html"), ncols_models, s
         stats.var.separate = stats.var.separate,
         stats.list = stats.list,
         stats.digits = stats.digits,
+        stats.add = stats.add,
         ...
       )
     )
@@ -24,6 +25,7 @@ light_table_stats <- function(object, type = c("latex", "html"), ncols_models, s
         stats.var.separate = stats.var.separate,
         stats.list = stats.list,
         stats.digits = stats.digits,
+        stats.add = stats.add,
         ...
       )
     )
@@ -91,8 +93,9 @@ light_table_stats_latex <- function(object, ncols_models, stats.var.separate, st
 
   # IF stats.add, concatenate with other stats
   if (!is.null(stats.add)){
-    stats.add <- c(statsdf, stats.add)
+    statsdf <- addendum_stats(statsdf, stats.add, type = "latex")
   }
+
 
   stats_table <- paste0(statsdf, " \\\\")
 
@@ -173,7 +176,7 @@ light_table_stats_html <- function(object, ncols_models, stats.var.separate,
 
   # IF stats.add, concatenate with other stats
   if (!is.null(stats.add)){
-    stats.add <- c(statsdf, stats.add)
+    statsdf <- addendum_stats(statsdf, stats.add, type = "html")
   }
 
 
@@ -183,3 +186,6 @@ light_table_stats_html <- function(object, ncols_models, stats.var.separate,
 
   return(statsdf)
 }
+
+
+
