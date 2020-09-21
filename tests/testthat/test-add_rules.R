@@ -24,3 +24,15 @@ testthat::expect_equal(
   ),
   vect)
 )
+
+
+testthat::test_that("ncols_models ignored in latex tables", {
+  testthat::expect_equal(
+    add_rules(body_table = vect,
+              rules_between_covariates = NULL,
+              type = "latex", ncols_models = 2L),
+    add_rules(body_table = vect,
+              rules_between_covariates = NULL,
+              type = "latex", ncols_models = 10L),
+  )
+})
