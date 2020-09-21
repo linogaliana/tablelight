@@ -78,7 +78,7 @@ label_variables <- function(body_table,
 
 
 add_rules <- function(body_table, rules_between_covariates,
-                      type){
+                      type, ncols_models){
 
   if (is.null(rules_between_covariates)) return(body_table)
 
