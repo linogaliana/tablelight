@@ -146,7 +146,7 @@ light_table.default <- function(
   stats.var.separate = NULL,
   stats.list = c("n", "lln", "bic"),
   stats.digits = 3L,
-  stats.add = stats.add,
+  stats.add = NULL,
   notes = "notes to add",
   add.lines = NULL,
   reference_level_position = NULL,
