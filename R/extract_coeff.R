@@ -53,45 +53,6 @@ extract_coeff.default <- function(object, ...){
   return(text_coeff)
 }
 
-#' @rdname extract_coeff
-#' @export
-extract_coeff.default <- function(object, ...){
-
-  args <- list(...)
-
-  coeff_list <- secoeff(object)
-
-  if (as.character(object$call[1]) %in% c("lm","glm")){
-    se_var <- 'Std. Error'
-  } else{
-    se_var <- 'Std. error'
-  }
-
-  if (inherits(object, "glm")){
-    tstat_var <- "Pr(>|z|)"
-  }  else{
-    tstat_var <- "Pr(>|t|)"
-  }
-
-  text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3L), digits = 3L,
-                              nsmall = 3L, big.mark=",", scientific = FALSE),
-                       sapply(coeff_list[,tstat_var], signif_stars, type = args[['type']])
-  )
-  text_coeff <- gsub(x = text_coeff, pattern = " ", replacement = "")
-
-  text_sd <- paste0("(",format(round(coeff_list[,se_var], 3L),
-                               digits = 3L,
-                               nsmall = 3L, big.mark=",", scientific = FALSE),
-                    ")")
-  text_sd <- gsub(x = text_sd, pattern = " ", replacement = "")
-
-  text_coeff <- cbind("variable" = rownames(coeff_list),text_coeff, text_sd)
-  text_coeff[,'variable'] <- gsub("_","\\_",text_coeff[,'variable'],
-                                  fixed = TRUE)
-
-  return(text_coeff)
-}
-
 
 #' @rdname extract_coeff
 #' @export
@@ -215,6 +176,9 @@ extract_coeff.light.zeroinfl <- function(object, ...){
 
   coeff_list <- secoeff.light.zeroinfl(object, modeltype = args[['modeltype']],...)
 
+  # selection: coeffs = - coeffs zeros
+  if (isTRUE(args[['modeltype']] == 'selection')) coeff_list[,'Estimate'] <- -coeff_list[,'Estimate']
+
   namescol <- colnames(coeff_list)
   coeff_list <- data.frame(coeff_list)
   colnames(coeff_list) <- namescol
@@ -257,6 +221,8 @@ extract_coeff.fastzeroinfl <- function(object, ...){
 
   coeff_list <- secoeff(object, modeltype = args[['modeltype']],...)
 
+  # selection: coeffs = - coeffs zeros
+  if (isTRUE(args[['modeltype']] == 'selection')) coeff_list[,'Estimate'] <- -coeff_list[,'Estimate']
 
   namescol <- colnames(coeff_list)
   coeff_list <- data.frame(coeff_list)
