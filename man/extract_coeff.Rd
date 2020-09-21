@@ -17,8 +17,6 @@ extract_coeff(object, ...)
 
 \method{extract_coeff}{default}(object, ...)
 
-\method{extract_coeff}{default}(object, ...)
-
 \method{extract_coeff}{fastLm}(object, ...)
 
 \method{extract_coeff}{light.glm}(object, ...)

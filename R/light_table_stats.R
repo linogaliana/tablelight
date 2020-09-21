@@ -1,5 +1,7 @@
 light_table_stats <- function(object, type = c("latex", "html"), ncols_models, stats.var.separate,
-                              stats.list, stats.digits = 3L, ...){
+                              stats.list, stats.digits = 3L,
+                              stats.add = NULL,
+                              ...){
 
   type <- match.arg(type)
 
@@ -31,6 +33,7 @@ light_table_stats <- function(object, type = c("latex", "html"), ncols_models, s
 
 light_table_stats_latex <- function(object, ncols_models, stats.var.separate, stats.list,
                                     stats.digits = 3L,
+                                    stats.add = NULL,
                                     ...){
 
   # COMPUTE STATISTICS -------------------
@@ -85,6 +88,12 @@ light_table_stats_latex <- function(object, ncols_models, stats.var.separate, st
 
 
   statsdf <- apply(statsdf, 1, paste, collapse = " & ")
+
+  # IF stats.add, concatenate with other stats
+  if (!is.null(stats.add)){
+    stats.add <- c(statsdf, stats.add)
+  }
+
   stats_table <- paste0(statsdf, " \\\\")
 
   stats_table <- gsub(pattern = "-", replacement = "$-$",
@@ -98,6 +107,7 @@ light_table_stats_latex <- function(object, ncols_models, stats.var.separate, st
 light_table_stats_html <- function(object, ncols_models, stats.var.separate,
                                    stats.list,
                                    stats.digits = 3L,
+                                   stats.add = NULL,
                                    ...){
 
   # COMPUTE STATISTICS -------------------
@@ -160,6 +170,12 @@ light_table_stats_html <- function(object, ncols_models, stats.var.separate,
 
 
   statsdf <- apply(statsdf, 1, paste, collapse = "")
+
+  # IF stats.add, concatenate with other stats
+  if (!is.null(stats.add)){
+    stats.add <- c(statsdf, stats.add)
+  }
+
 
   statsdf <- gsub("\\$\\\\alpha\\$", "&alpha;", statsdf, perl = TRUE)
   statsdf <- gsub("\\$R\\^2\\$", "R<sup>2</sup>", statsdf, perl = TRUE)

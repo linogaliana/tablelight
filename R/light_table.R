@@ -113,6 +113,7 @@ light_table <- function(object,
                         stats.var.separate = NULL,
                         stats.list = c("n", "lln", "bic"),
                         stats.digits = 3L,
+                        stats.add = NULL,
                         notes = "notes to add",
                         add.lines = NULL,
                         reference_level_position = NULL,
@@ -227,6 +228,7 @@ light_table.default <- function(
     stats.var.separate = stats.var.separate,
     stats.list = stats.list,
     stats.digits = stats.digits,
+    stats.add = stats.add,
     ...)
 
   table_total <- c(table_total, stats_table)
