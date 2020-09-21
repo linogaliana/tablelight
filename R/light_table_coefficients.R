@@ -118,7 +118,8 @@ light_table_coefficients <- function(object,
   body_table <- add_rules(
     body_table = body_table,
     rules_between_covariates = rules_between_covariates,
-    type = type
+    type = type,
+    ncols_models = ncols_models
   )
 
   return(body_table)

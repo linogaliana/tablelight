@@ -334,7 +334,7 @@ liststats.default <- function(object, ...){
       # Sometimes, link is given with parenthesis
       link_count <- gsub("\\s*\\([^\\)]+\\)", "",
                          Hmisc::capitalize(object$family$family))
-    } else if (as.character(object$call[1]) == "lm"){
+    } else if (as.character(object$call[1]) %in% c("lm","fastLm","fastLm.formula")){
       link_count <- "Gaussian"
     } else {
       link_count <- ""
@@ -401,7 +401,10 @@ liststats.default <- function(object, ...){
     est_sigma <- mean(sigma(object))
     df <- rbind(data.frame(stat = "$\\widehat{\\sigma}$",
                            order = -1,
-                           val = est_sigma), df
+                           val = format(est_sigma,
+                                        digits = stats.digits,
+                                        nsmall = stats.digits,
+                           )), df
     )
     stat_shortcode <- c("sigma", stat_shortcode)
   }
@@ -472,7 +475,7 @@ liststats.light.lm <- function(object, ...){
       # Sometimes, link is given with parenthesis
       link_count <- gsub("\\s*\\([^\\)]+\\)", "",
                          Hmisc::capitalize(object$family$family))
-    } else if (as.character(object$call[1]) == "lm"){
+    } else if (as.character(object$call[1]) %in% c("lm",'fastLm','fastLm.formula')){
       link_count <- "Gaussian"
     } else {
       link_count <- ""
@@ -570,6 +573,150 @@ liststats.light.lm <- function(object, ...){
 
   return(df)
 }
+
+
+#' @rdname liststats
+#' @export
+liststats.fastLm <- function(object, ...){
+
+  args <- list(...)
+
+  if (isFALSE("stats.list" %in% names(args))){
+    stats.list <- c("n","lln","bic")
+  } else{
+    stats.list <- args[['stats.list']]
+  }
+  if (isFALSE("stats.digits" %in% names(args))){
+    stats.digits <- 3L
+  } else{
+    stats.digits <- args[['stats.digits']]
+  }
+
+  if (isTRUE('add_link' %in% names(args)) && (isFALSE("link" %in% stats.list))){
+    stats.list <- c(stats.list, "link")
+  }
+  if (isTRUE('add_sigma' %in% names(args))  && (isFALSE("sigma" %in% stats.list))){
+    stats.list <- c(stats.list, "sigma")
+  }
+  if (isTRUE('add_alpha' %in% names(args)) && (isFALSE("alpha" %in% stats.list))){
+    stats.list <- c(stats.list, "alpha")
+  }
+
+
+  llk <- as.numeric(logLik(object))
+
+  if (inherits(llk, "logLik")){
+    # RcppEigen
+    bic <- BIC(object)
+  } else{
+    # RcppArmadillo
+    bic <- BIC_fastLm(object)
+  }
+
+
+  rsq <- format(round(summary(object)$r.squared, stats.digits),
+                digits = stats.digits,
+                nsmall = stats.digits)
+  adjrsq <- format(round(summary(object)$adj.r.squared, stats.digits),
+                   digits = stats.digits,
+                   nsmall = stats.digits)
+
+  if (isTRUE('link' %in% stats.list)){
+
+    link_count <- "Gaussian"
+    link_selection <- ""
+
+    link_labels <- c(
+      "Count distribution",
+      "Selection distribution"
+    )
+
+
+  }
+
+
+  stat_labels <- c(
+    "Observations",
+    "Log likelihood",
+    "Log likelihood (by obs.)",
+    "Bayesian information criterion"
+  )
+
+  stat_val <- c(
+    format(nobs(object), digits = 0,  big.mark=",", scientific = FALSE),
+    format(llk, digits = 0, big.mark=",", scientific = FALSE),
+    format(round(llk/nobs(object), stats.digits),
+           digits = stats.digits,
+           nsmall = stats.digits,
+           big.mark=",", scientific = FALSE),
+    format(bic, digits = 0L, big.mark=",", scientific = FALSE)
+  )
+
+  stat_shortcode <- c(
+    "n", "ll", "lln", "bic"
+  )
+
+
+  if (isTRUE('link' %in% stats.list)){
+    stat_labels <- c(link_labels,
+                     stat_labels)
+    stat_val <- c(link_count, link_selection, stat_val)
+    stat_shortcode <- c("link", "link", stat_shortcode)
+  }
+
+
+  df <- data.frame(
+    stat = stat_labels,
+    order = seq_len(length(stat_labels)),
+    val = stat_val
+  )
+
+
+  if (isTRUE('alpha' %in% stats.list)){
+
+    df <- rbind(data.frame(stat = "$\\alpha$ (dispersion)",
+                           order = 0,
+                           val = extract_alpha(object)), df
+    )
+    stat_shortcode <- c("alpha", stat_shortcode)
+
+  }
+
+  if (isTRUE('sigma' %in% stats.list)){
+    est_sigma <- mean(sigma(object))
+    df <- rbind(data.frame(stat = "$\\widehat{\\sigma}$",
+                           order = -1,
+                           val = format(est_sigma,
+                                        digits = stats.digits,
+                                        nsmall = stats.digits,
+                           )), df
+    )
+    stat_shortcode <- c("sigma", stat_shortcode)
+  }
+
+
+  if (isTRUE('adj.rsq' %in% stats.list)){
+    df <- rbind(data.frame(stat = "Adjusted $R^2$", order = -5, val = adjrsq),
+                df)
+    stat_shortcode <- c("adj.rsq", stat_shortcode)
+  }
+
+  if (isTRUE('rsq' %in% stats.list)){
+    df <- rbind(data.frame(stat = "$R^2$", order = -10, val = rsq),
+                df)
+    stat_shortcode <- c("rsq", stat_shortcode)
+  }
+
+
+  df <- cbind(df, 'shortcode' = stat_shortcode)
+  df <- df[as.character(df$shortcode) %in% stats.list, ]
+
+  df$shortcode <- NULL
+
+  return(df)
+}
+
+
 
 #' @rdname nobs
 #' @importFrom stats nobs

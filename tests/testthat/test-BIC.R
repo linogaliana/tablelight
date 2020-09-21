@@ -11,3 +11,13 @@ testthat::expect_equal(
   BIC(zeroinfl_negbin_strip)
 )
 
+# FASTLM (RCPPARMADILLO) -------------
+
+x <- RcppArmadillo::fastLm(data = iris, Sepal.Width ~ Sepal.Length)
+x2 <- lm(data = iris, Sepal.Width ~ Sepal.Length)
+
+
+testthat::expect_equal(
+  BIC_fastLm(x),
+  BIC(x2)
+)

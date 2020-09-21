@@ -101,5 +101,7 @@ Z <- Z[, -Zint, drop = FALSE]
 # })
 
 
+# sigma method for fastLm objects ------------------
 
+# test-sigma_fastLm.R script
 

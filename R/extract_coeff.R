@@ -25,8 +25,8 @@ extract_coeff.default <- function(object, ...){
   if (as.character(object$call[1]) %in% c("lm","glm")){
     se_var <- 'Std. Error'
   } else{
-      se_var <- 'Std. error'
-    }
+    se_var <- 'Std. error'
+  }
 
   if (inherits(object, "glm")){
     tstat_var <- "Pr(>|z|)"
@@ -52,6 +52,48 @@ extract_coeff.default <- function(object, ...){
 
   return(text_coeff)
 }
+
+
+#' @rdname extract_coeff
+#' @export
+extract_coeff.fastLm <- function(object, ...){
+
+  args <- list(...)
+
+  coeff_list <- secoeff(object)
+
+  # For RcppEigen models
+  se_var <- 'Std. Error'
+  # Correction for RcppArmadillo models
+  if (isFALSE(se_var %in% colnames(coeff_list))){
+    se_var <- 'StdErr'
+  }
+
+  # For RcppEigen models
+  tstat_var <- "Pr(>|t|)"
+  if (isFALSE(tstat_var %in% colnames(coeff_list))){
+    tstat_var <- 'p.value'
+  }
+
+  text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3L), digits = 3L,
+                              nsmall = 3L, big.mark=",", scientific = FALSE),
+                       sapply(coeff_list[,tstat_var], signif_stars, type = args[['type']])
+  )
+  text_coeff <- gsub(x = text_coeff, pattern = " ", replacement = "")
+
+  text_sd <- paste0("(",format(round(coeff_list[,se_var], 3L),
+                               digits = 3L,
+                               nsmall = 3L, big.mark=",", scientific = FALSE),
+                    ")")
+  text_sd <- gsub(x = text_sd, pattern = " ", replacement = "")
+
+  text_coeff <- cbind("variable" = rownames(coeff_list),text_coeff, text_sd)
+  text_coeff[,'variable'] <- gsub("_","\\_",text_coeff[,'variable'],
+                                  fixed = TRUE)
+
+  return(text_coeff)
+}
+
 
 #' @rdname extract_coeff
 #' @export
@@ -100,7 +142,8 @@ extract_coeff.oglmx <- function(object, ...){
   text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3),
                               digits = 3L,
                               nsmall = 3L, big.mark=",", scientific = FALSE),
-                       sapply(coeff_list[,tstat_var], signif_stars, type = args[['type']])
+                       sapply(coeff_list[,tstat_var], signif_stars,
+                              type = args[['type']])
   )
   text_coeff <- gsub(x = text_coeff, pattern = " ", replacement = "")
 
@@ -113,6 +156,9 @@ extract_coeff.oglmx <- function(object, ...){
   text_coeff <- cbind("variable" = rownames(coeff_list),text_coeff, text_sd)
   text_coeff[,'variable'] <- gsub("_","\\_",text_coeff[,'variable'],
                                   fixed = TRUE)
+
+  # remove sigma from coefficients
+  text_coeff <- text_coeff[!is.na(text_coeff[,'variable']),]
 
   return(text_coeff)
 }
@@ -129,6 +175,9 @@ extract_coeff.light.zeroinfl <- function(object, ...){
   }
 
   coeff_list <- secoeff.light.zeroinfl(object, modeltype = args[['modeltype']],...)
+
+  # selection: coeffs = - coeffs zeros
+  if (isTRUE(args[['modeltype']] == 'selection')) coeff_list[,'Estimate'] <- -coeff_list[,'Estimate']
 
   namescol <- colnames(coeff_list)
   coeff_list <- data.frame(coeff_list)
@@ -159,6 +208,48 @@ extract_coeff.light.zeroinfl <- function(object, ...){
 
 }
 
+#' @rdname extract_coeff
+#' @export
+extract_coeff.fastzeroinfl <- function(object, ...){
+
+  args <- list(...)
+
+  if (!("modeltype" %in% names(args))){
+    message("'modeltype' argument missing, assuming 'outcome'")
+    args[['modeltype']] <- 'outcome'
+  }
+
+  coeff_list <- secoeff(object, modeltype = args[['modeltype']],...)
+
+  # selection: coeffs = - coeffs zeros
+  if (isTRUE(args[['modeltype']] == 'selection')) coeff_list[,'Estimate'] <- -coeff_list[,'Estimate']
+
+  namescol <- colnames(coeff_list)
+  coeff_list <- data.frame(coeff_list)
+  colnames(coeff_list) <- namescol
+
+  tstat_var <- "Pr(>|z|)"
+  sd_var <- "Std. Error"
+
+
+  text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3L), digits = 3L,
+                              nsmall = 3L, big.mark=",", scientific = FALSE),
+                       sapply(coeff_list[,tstat_var], signif_stars, type = args[['type']])
+  )
+  text_coeff <- gsub(x = text_coeff, pattern = " ", replacement = "")
+
+  text_sd <- paste0("(",format(round(coeff_list[,sd_var], 3L),
+                               digits = 3L,
+                               nsmall = 3L, big.mark=",", scientific = FALSE),
+                    ")")
+  text_sd <- gsub(x = text_sd, pattern = " ", replacement = "")
+
+  text_coeff <- cbind("variable" = rownames(coeff_list),text_coeff, text_sd)
+  text_coeff[,'variable'] <- gsub("_","\\_",text_coeff[,'variable'],
+                                  fixed = TRUE)
+
+  return(text_coeff)
+}
 
 #' @rdname extract_coeff
 #' @export
@@ -208,8 +299,8 @@ extract_coeff_nnet <- function(object, modality, ...){
   text_sd <- gsub(x = text_sd, pattern = " ", replacement = "")
 
   text_coeff <- data.frame("variable" = names(coeff_list_red[[1]]),
-                      "text_coeff" = text_coeff, "text_sd" = text_sd,
-                      stringsAsFactors = FALSE)
+                           "text_coeff" = text_coeff, "text_sd" = text_sd,
+                           stringsAsFactors = FALSE)
   text_coeff[,'variable'] <- gsub("_","\\_",text_coeff[,'variable'],
                                   fixed = TRUE)
 
@@ -231,18 +322,18 @@ apply_extract_coeff <- function(object, ncols_models,
     )
   )
 
-    coeff_data <- lapply(1:length(object),
-                         function(k){
-                           return(
-                             extract_coeff(
-                               object = object[[k]],
-                               modeltype = modeltype[k],
-                               type = type
-                             )
+  coeff_data <- lapply(1:length(object),
+                       function(k){
+                         return(
+                           extract_coeff(
+                             object = object[[k]],
+                             modeltype = modeltype[k],
+                             type = type
                            )
-                         })
+                         )
+                       })
 
-    return(coeff_data)
+  return(coeff_data)
 }
 
 

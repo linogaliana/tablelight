@@ -27,6 +27,10 @@
 #' @param stats.list A character vector that specifies which model statistics should
 #'  be kept in the regression table output. See `details` section
 #' @param stats.digits Number of digits in relevent statistics
+#' @param stats.add User-defined additional statistics.
+#'  See [#69](https://github.com/linogaliana/tablelight/pull/69).
+#'  For the moment, only possible to provide a string, e.g.
+#'  `c("Stat1 & Yes & No", "Details & Full & Small")`
 #' @param column.labels Label for columns
 #' @param covariate.labels A character vector of labels for
 #'  columns in regression tables.
@@ -113,6 +117,7 @@ light_table <- function(object,
                         stats.var.separate = NULL,
                         stats.list = c("n", "lln", "bic"),
                         stats.digits = 3L,
+                        stats.add = NULL,
                         notes = "notes to add",
                         add.lines = NULL,
                         reference_level_position = NULL,
@@ -141,6 +146,7 @@ light_table.default <- function(
   stats.var.separate = NULL,
   stats.list = c("n", "lln", "bic"),
   stats.digits = 3L,
+  stats.add = NULL,
   notes = "notes to add",
   add.lines = NULL,
   reference_level_position = NULL,
@@ -227,6 +233,7 @@ light_table.default <- function(
     stats.var.separate = stats.var.separate,
     stats.list = stats.list,
     stats.digits = stats.digits,
+    stats.add = stats.add,
     ...)
 
   table_total <- c(table_total, stats_table)

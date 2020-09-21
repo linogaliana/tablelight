@@ -459,3 +459,47 @@ testthat::test_that("loglikelihood (by obs) consistent with models",{
 
 })
 
+
+
+
+
+# stats.add argument --------
+
+ols <- lm(Sepal.Width ~ Sepal.Length, data = iris)
+
+tab_latex <- tablelight::light_table(list(ols,ols),
+                                     stats.add = c("Stat1 & Yes & No",
+                                                   "Details & Full & Small"))
+
+
+tab_html <- tablelight::light_table(list(ols,ols),
+                                    stats.add = c("Stat1</td><td>Yes</td><td>No</td>",
+                                                  "Details</td><td>Full</td><td>Small</td>"),
+                                    type = "html")
+
+
+testthat::test_that("Adds statistics in latex after usual summary stats", {
+  end_stats <- which(
+    grepl(x = tab_latex,
+          pattern = "Bayesian information criterion")
+  )
+  testthat::expect_equal(
+    paste0(c("Stat1 & Yes & No",
+             "Details & Full & Small"), " \\\\"),
+    tab_latex[(end_stats + 1):(end_stats + 2)]
+  )
+})
+
+
+testthat::test_that("Adds statistics in HTML after usual summary stats", {
+  end_stats <- which(
+    grepl(x = tab_html,
+          pattern = "Bayesian information criterion")
+  )
+  testthat::expect_equal(
+    paste0('<tr><td style=\"text-align:left\">',
+    c("Stat1</td><td>Yes</td><td>No</td>",
+             "Details</td><td>Full</td><td>Small</td>"), "</td></tr>"),
+    tab_html[(end_stats + 1):(end_stats + 2)]
+  )
+})

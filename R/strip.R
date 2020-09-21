@@ -66,7 +66,7 @@ strip.glm <- function(object, ...) {
   attr(object$formula,".Environment") = c()
 
 
-  class(object) <- c(class(object), "light.glm")
+  class(object) <- c("light.glm", class(object))
 
   return(object)
 }
@@ -112,7 +112,7 @@ strip.oglmx <- function(object, ...) {
   attr(object$formula,".Environment") = c()
 
 
-  class(object) <- c(class(object), "light.oglmx")
+  class(object) <- c("light.oglmx", class(object))
 
   return(object)
 }
@@ -158,7 +158,7 @@ strip.negbin <- function(object, ...) {
   attr(object$formula,".Environment") = c()
 
 
-  class(object) <- c(class(object), paste0("light.", class(object)))
+  class(object) <- c(paste0("light.", class(object)), class(object))
 
   return(object)
 }
@@ -205,7 +205,7 @@ strip.lm <- function(object, ...) {
   attr(object$formula,".Environment") = c()
 
 
-  class(object) <- c(class(object), "light.lm")
+  class(object) <- c("light.lm", class(object))
 
   return(object)
 }
@@ -263,7 +263,7 @@ strip.zeroinfl <- function(object, ...){
 
 
 
-  class(object) <- c(class(object), "light.zeroinfl")
+  class(object) <- c("light.zeroinfl", class(object))
 
   return(object)
 }
@@ -361,8 +361,8 @@ strip.fastzeroinfl <- function(object, ...){
 
 
 
-  class(object) <- c(class(object),
-                     paste0("light.", class(object)))
+  class(object) <- c(paste0("light.", class(object)),
+                     class(object))
 
   return(object)
 }
@@ -408,7 +408,7 @@ strip.summary.zeroinfl <- function(object, ...){
   object$residuals <- NULL
   object$fitted.values <- NULL
   #object$model <- NULL
-  class(object) <- c(class(object), "light.summary.zeroinfl")
+  class(object) <- c("light.summary.zeroinfl", class(object))
 
   return(object)
 }

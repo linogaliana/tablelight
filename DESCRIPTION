@@ -18,7 +18,9 @@ Suggests:
     gravity,
     stringr,
     covr,
-    qdap
+    qdap,
+    RcppEigen,
+    RcppArmadillo
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

@@ -3,6 +3,7 @@
 \name{secoeff}
 \alias{secoeff}
 \alias{secoeff.default}
+\alias{secoeff.fastzeroinfl}
 \alias{secoeff.oglmx}
 \alias{secoeff.light.zeroinfl}
 \alias{secoeff.negbin}
@@ -17,6 +18,8 @@ estimates}
 secoeff(object, ...)
 
 \method{secoeff}{default}(object, ...)
+
+\method{secoeff}{fastzeroinfl}(object, ...)
 
 \method{secoeff}{oglmx}(object, ...)
 

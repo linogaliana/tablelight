@@ -1,4 +1,4 @@
-  #' Bayesian information criterion implementation for stripped objects
+#' Bayesian information criterion implementation for stripped objects
 #'
 #' @param object A fitted model object for which there exists a logLik
 #'  method to extract the corresponding log-likelihood, or
@@ -64,5 +64,19 @@ BIC_fastzeroinfl <- function(object, ...){
   return(
     -2*object$loglik + k*log(object$n)
   )
+
+}
+
+BIC_fastLm <- function(object, ...){
+
+  llk <- logLik(object, ...)
+
+  rank <- length(object$coefficients)
+  N <- length(object$residuals)
+
+  nobs <- N
+  df <- rank + 1
+
+  -2 * as.numeric(llk) + df * log(nobs)
 
 }

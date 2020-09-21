@@ -1504,7 +1504,7 @@ testthat::test_that(
     testthat::expect_equal(
       as.character(
         stats_bis_zeroinfl_negbin_strip[grepl(x = as.character(stats_bis_zeroinfl_negbin_strip$stat),
-                              pattern = "alpha"),'val']
+                                              pattern = "alpha"),'val']
       ),
       as.character(
         format(1/zeroinfl_negbin$theta, digits = 3L, nsmall = 3L, big.mark = ",")
@@ -1859,13 +1859,39 @@ testthat::test_that("Reported sigmas are ok for oglmx", {
 
   testthat::expect_equal(
     as.character(tablelight::liststats(oglm, stats.list = c("sigma"))[,c("val")]),
-    "1"
+    "1.000"
   )
 
 
 })
 
+oglm2 <- oglmx::oglmx(y ~ x1 + x2 + z, data=dataset,
+                      link="probit",
+                      constantMEAN=FALSE,
+                      constantSD=FALSE,threshparam=NULL)
 
+# Homosckeastic model with estimated variance
+testthat::test_that("Reported sigmas are ok for oglmx", {
+
+  testthat::expect_equal(
+    as.character(tablelight::liststats(oglm, stats.list = c("sigma"))[,c("stat")]),
+    "$\\widehat{\\sigma}$"
+  )
+
+  est_sigma <- oglm2$coefficients
+  # testthat::expect_equal(
+  #   as.character(tablelight::liststats(oglm2, stats.list = c("sigma"))[,c("val")]),
+  #   as.character(
+  #     format(
+  #       est_sigma[is.na(names(est_sigma))],
+  #       digits = 3L,
+  #       nsmall = 3L
+  #       )
+  #   )
+  # )
+
+
+})
 
 
 
@@ -2000,3 +2026,279 @@ testthat::test_that(
   }
 
 )
+
+
+
+
+# 13. FASTLM (RCPPEIGEN) ------------------------
+
+ols <- RcppEigen::fastLm(
+  Sepal.Length ~ Sepal.Width,
+  data = iris
+)
+
+stats_ols <- tablelight:::liststats(ols)
+stats_ols_bis <- tablelight::liststats(ols, add_link = TRUE)
+
+## 1.A. CHECK STATISTICS RETURNED ======
+
+testthat::test_that(
+  "Default method gives information for OLS",
+  testthat::expect_equal(
+    nrow(na.omit(stats_ols)),
+    nrow(stats_ols)
+  )
+)
+
+testthat::test_that(
+  "Count distribution is 'Gaussian' for OLS",
+  testthat::expect_equal(
+    as.character(stats_ols_bis[stats_ols_bis$stat == "Count distribution",'val']),
+    'Gaussian'
+  )
+)
+
+
+testthat::test_that(
+  "If you add argument add_link = TRUE, you have new lines not filled in OLS case",
+  testthat::expect_equal(
+    as.character(stats_ols_bis[stats_ols_bis$val == "",'stat']),
+    'Selection distribution'
+  )
+)
+
+testthat::test_that(
+  "add_link = TRUE equivalent to link in stats.list",
+  testthat::expect_identical(
+    stats_ols_bis,
+    tablelight::liststats(ols, stats.list = c("n","lln","bic","link"))
+  )
+)
+
+
+
+testthat::test_that(
+  "add_link = TRUE does not modify other rows",
+  testthat::expect_equal(
+    stats_ols_bis[!(stats_ols_bis$stat %in% c("Count distribution","Selection distribution")),
+                  c('stat','val')],
+    stats_ols[, c('stat','val')],
+    check.attributes = FALSE
+  )
+)
+
+
+## 1.B. CHECK STATISTICS VALUES ======
+
+testthat::test_that(
+  "'Observations' field is OK",{
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_ols_bis[stats_ols_bis$stat == "Observations","val"])),
+      stats::nobs(ols)
+    )
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_ols[stats_ols$stat == "Observations","val"])),
+      stats::nobs(ols)
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood' field is OK (when asked)",{
+
+    # Not by default
+    testthat::expect_equal(
+      sum(stats_ols_bis$stat == "Log likelihood"), 0L
+    )
+
+
+    testthat::expect_equal(
+      as.character(tablelight::liststats(ols, stats.list = "ll")[,"val"]),
+      format(as.numeric(stats::logLik(ols)), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood (by obs.)' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_ols_bis[stats_ols_bis$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(ols)/stats::nobs(ols)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_ols[stats_ols$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(ols)/stats::nobs(ols)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'BIC' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_ols_bis[stats_ols_bis$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(ols), digits = 0L, big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_ols[stats_ols$stat == "Bayesian information criterion","val"]),
+      format(stats::BIC(ols), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+
+
+
+# 14. FASTLM (RCPPARMADILLO) ------------------------
+
+ols <- RcppArmadillo::fastLm(
+  Sepal.Length ~ Sepal.Width,
+  data = iris
+)
+
+stats_ols <- tablelight:::liststats(ols)
+stats_ols_bis <- tablelight::liststats(ols, add_link = TRUE)
+
+## 1.A. CHECK STATISTICS RETURNED ======
+
+testthat::test_that(
+  "Default method gives information for OLS",
+  testthat::expect_equal(
+    nrow(na.omit(stats_ols)),
+    nrow(stats_ols)
+  )
+)
+
+testthat::test_that(
+  "Count distribution is 'Gaussian' for OLS",
+  testthat::expect_equal(
+    as.character(stats_ols_bis[stats_ols_bis$stat == "Count distribution",'val']),
+    'Gaussian'
+  )
+)
+
+
+testthat::test_that(
+  "If you add argument add_link = TRUE, you have new lines not filled in OLS case",
+  testthat::expect_equal(
+    as.character(stats_ols_bis[stats_ols_bis$val == "",'stat']),
+    'Selection distribution'
+  )
+)
+
+testthat::test_that(
+  "add_link = TRUE equivalent to link in stats.list",
+  testthat::expect_identical(
+    stats_ols_bis,
+    tablelight::liststats(ols, stats.list = c("n","lln","bic","link"))
+  )
+)
+
+
+
+testthat::test_that(
+  "add_link = TRUE does not modify other rows",
+  testthat::expect_equal(
+    stats_ols_bis[!(stats_ols_bis$stat %in% c("Count distribution","Selection distribution")),
+                  c('stat','val')],
+    stats_ols[, c('stat','val')],
+    check.attributes = FALSE
+  )
+)
+
+
+## 1.B. CHECK STATISTICS VALUES ======
+
+testthat::test_that(
+  "'Observations' field is OK",{
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_ols_bis[stats_ols_bis$stat == "Observations","val"])),
+      stats::nobs(ols)
+    )
+
+    testthat::expect_equal(
+      as.numeric(as.character(stats_ols[stats_ols$stat == "Observations","val"])),
+      stats::nobs(ols)
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood' field is OK (when asked)",{
+
+    # Not by default
+    testthat::expect_equal(
+      sum(stats_ols_bis$stat == "Log likelihood"), 0L
+    )
+
+
+    testthat::expect_equal(
+      as.character(tablelight::liststats(ols, stats.list = "ll")[,"val"]),
+      format(as.numeric(stats::logLik(ols)), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'Log likelihood (by obs.)' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_ols_bis[stats_ols_bis$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(ols)/stats::nobs(ols)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_ols[stats_ols$stat == "Log likelihood (by obs.)","val"]),
+      format(as.numeric(stats::logLik(ols)/stats::nobs(ols)), digits = 3L, nsmall = 3L,
+             big.mark = ",")
+    )
+
+  }
+
+)
+
+
+testthat::test_that(
+  "'BIC' field is OK",{
+
+    testthat::expect_equal(
+      as.character(stats_ols_bis[stats_ols_bis$stat == "Bayesian information criterion","val"]),
+      format(BIC_fastLm(ols), digits = 0L, big.mark = ",")
+    )
+
+    testthat::expect_equal(
+      as.character(stats_ols[stats_ols$stat == "Bayesian information criterion","val"]),
+      format(BIC_fastLm(ols), digits = 0L, big.mark = ",")
+    )
+
+  }
+
+)
+

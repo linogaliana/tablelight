@@ -2,9 +2,17 @@
 
 language: R
 cache: packages
+sudo: required
 
 r_packages:
   - covr
 
+apt_packages:
+  - r-cran-rjava
+
+before_install:
+  - sudo $(which R) CMD javareconf
+
 after_success:
   - Rscript -e 'library(covr); codecov()'
+
