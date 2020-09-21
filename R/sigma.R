@@ -90,3 +90,16 @@ variance_model <- function(object, newdata = NULL,
   return(Z)
 }
 
+#' @rdname sigma
+#' @export
+sigma.fastLm <- function(object, use.fallback = TRUE, ...){
+
+  deviance <- sum(object$residuals^2)
+  sigma <- sqrt(
+    deviance/(nobs(object, use.fallback = use.fallback) -
+                 sum(!is.na(coef(object)))
+              )
+  )
+
+  return(sigma)
+}
