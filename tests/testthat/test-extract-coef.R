@@ -250,7 +250,8 @@ testthat::test_that("When modeltype = 'missing', outcome is used", {
 )
 
 ZINB_outcome <- tablelight::extract_coeff(zeroinfl_negbin, modeltype = "outcome")
-ZINB_zero <- tablelight::extract_coeff(zeroinfl_negbin, modeltype = "selection")
+ZINB_zero <- tablelight::extract_coeff(zeroinfl_negbin, modeltype = "zeros")
+ZINB_selection <- tablelight::extract_coeff(zeroinfl_negbin, modeltype = "selection")
 
 output_glm <- summary(zeroinfl_negbin)$coefficients
 
@@ -288,7 +289,7 @@ testthat::test_that("Coefficient s.e. are consistent", {
 })
 
 
-# SELECTION MODEL =============
+# ZEROS MODEL =============
 
 testthat::test_that("Coefficient names are consistent (theta not in parameter section)", {
   testthat::expect_equal(
@@ -314,9 +315,44 @@ testthat::test_that("Coefficient values are consistent", {
 
 testthat::test_that("Coefficient s.e. are consistent", {
   testthat::expect_equal(
-    ZINB_outcome[,'text_sd'],
+    ZINB_zero[,'text_sd'],
     paste0("(",
-           format(round(output_glm$count[,'Std. Error'], 3L),
+           format(round(output_glm$zero[,'Std. Error'], 3L),
+                  digits = 2L, nsmall = 3L
+           ),
+           ")")
+  )
+})
+
+# SELECTION MODEL =============
+
+testthat::test_that("Coefficient names are consistent (theta not in parameter section)", {
+  testthat::expect_equal(
+    ZINB_selection[,'variable'][ZINB_selection[,'variable'] != "Log(theta)"],
+    names(zeroinfl_negbin$coefficients$zero)
+  )
+})
+
+
+expected_coeff <- sapply(seq_len(nrow(output_glm$zero)), function(i){
+  paste0(format(round(-output_glm$zero[i, 'Estimate'],3L),  nsmall = 3L,
+                digits = 2L, scientific = FALSE),
+         signif_stars(output_glm$zero[i,'Pr(>|z|)']))
+})
+
+testthat::test_that("Coefficient values are consistent", {
+  testthat::expect_equal(
+    ZINB_selection[,'text_coeff'][ZINB_selection[,'variable'] != "Log(theta)"],
+    expected_coeff
+  )
+})
+
+
+testthat::test_that("Coefficient s.e. are consistent", {
+  testthat::expect_equal(
+    ZINB_selection[,'text_sd'],
+    paste0("(",
+           format(round(output_glm$zero[,'Std. Error'], 3L),
                   digits = 2L, nsmall = 3L
            ),
            ")")
