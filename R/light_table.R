@@ -27,6 +27,10 @@
 #' @param stats.list A character vector that specifies which model statistics should
 #'  be kept in the regression table output. See `details` section
 #' @param stats.digits Number of digits in relevent statistics
+#' @param stats.add User-defined additional statistics.
+#'  See [#69](https://github.com/linogaliana/tablelight/pull/69).
+#'  For the moment, only possible to provide a string, e.g.
+#'  `c("Stat1 & Yes & No", "Details & Full & Small")`
 #' @param column.labels Label for columns
 #' @param covariate.labels A character vector of labels for
 #'  columns in regression tables.

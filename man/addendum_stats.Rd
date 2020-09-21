@@ -9,6 +9,14 @@ addendum_stats(text, addendum, type = "latex")
 
 \method{addendum_stats}{default}(text, addendum, type = "latex")
 }
+\arguments{
+\item{text}{Text in statistics part of the table}
+
+\item{addendum}{Text that should be added}
+
+\item{type}{Reporting output used. Accepted values are
+\emph{latex} and \emph{html}}
+}
 \description{
 An internal method to add some text to summary statistics part
 }

@@ -1,4 +1,8 @@
 #' An internal method to add some text to summary statistics part
+#'
+#' @param text Text in statistics part of the table
+#' @param addendum Text that should be added
+#' @inheritParams light_table
 #' @export
 addendum_stats <- function(text, addendum, type = "latex"){
   UseMethod("addendum_stats")

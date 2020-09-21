@@ -80,6 +80,11 @@ be kept in the regression table output. See \code{details} section}
 
 \item{stats.digits}{Number of digits in relevent statistics}
 
+\item{stats.add}{User-defined additional statistics.
+See \href{https://github.com/linogaliana/tablelight/pull/69}{#69}.
+For the moment, only possible to provide a string, e.g.
+\code{c("Stat1 & Yes & No", "Details & Full & Small")}}
+
 \item{notes}{Notes that should be added at the end}
 
 \item{add.lines}{Rows to add in object statistics part}
