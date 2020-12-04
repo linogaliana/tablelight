@@ -34,6 +34,8 @@ summary_ <- function(data, xvar,
 
   if (weight_var == "tempvar") data[, c(weight_var) := NULL]
 
+  if (!is.null(by_var)) summ <- summ[order(get(by_var))]
+
   return(summ)
 
 }
