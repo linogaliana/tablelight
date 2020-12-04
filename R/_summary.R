@@ -1,29 +1,35 @@
-_summarize_data <- function(x, weights = NULL, ...){
+#' @param x Numeric Vector to be summarized
+summarize_data_ <- function(x, weights = NULL, digits = 3L, ...){
+
   return(
-    list('Min.' = round(min(x, ...)),
-         '1st Qu.' = round(Hmisc::wtd.quantile(x, weights = weights, probs = 0.25, ...)),
-         'Median' = round(Hmisc::wtd.quantile(x, weights = weights, probs = 0.5, ...)),
-         'Mean' = round(Hmisc::wtd.mean(x, weights = weights, ...)),
-         '3rd Qu.' = round(Hmisc::wtd.quantile(x, weights = weights, probs = 0.75, ...)),
-         'Max' = round(max(x, ...))
+    list('Min.' = format(min(x, ...), digits = digits, big.mark = ","),
+         '1st Qu.' = format(as.numeric(Hmisc::wtd.quantile(x, weights = weights, probs = 0.25, ...)), digits = digits, big.mark = ","),
+         'Median' = format(as.numeric(Hmisc::wtd.quantile(x, weights = weights, probs = 0.5, ...)), digits = digits, big.mark = ","),
+         'Mean' = format(as.numeric(Hmisc::wtd.mean(x, weights = weights, ...)), digits = digits, big.mark = ","),
+         '3rd Qu.' = format(as.numeric(Hmisc::wtd.quantile(x, weights = weights, probs = 0.75, ...)), digits = digits, big.mark = ","),
+         'Max' = format(max(x, ...), digits = digits, big.mark = ",")
     )
   )
 }
 
 
-_summary <- function(data, x,
-                     pond = NULL,
+summary_ <- function(data, xvar,
+                     weight_var = NULL,
                      ...){
 
   data.table::setDT(data)
 
-  if (is.null(pond)){
-    pond <- "tempvar"
-    data[, c(pond) := 1L]
+  if (is.null(weight_var)){
+    weight_var <- "tempvar"
+    data[, c(weight_var) := 1L]
   }
 
-  if (pond == "tempvar") data[, c(pond) := NULL]
+  summ <- data[,summarize_data_(x = get(xvar), weights = get(weight_var), ...)]
 
-  return(data)
+  if (weight_var == "tempvar") data[, c(weight_var) := NULL]
+
+  return(summ)
 
 }
+
+
