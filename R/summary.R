@@ -27,7 +27,7 @@ summary_ <- function(data, xvar,
     data[, c(weight_var) := 1L]
   }
 
-  if (is.na(by_var)) by_var <- NULL
+  if (is.null(by_var) || is.na(by_var)) by_var <- NULL
 
   summ <- data[,summarize_data_(x = get(xvar), weights = get(weight_var), ...),
                by = by_var]
