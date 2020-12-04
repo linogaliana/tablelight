@@ -15,16 +15,22 @@ summarize_data_ <- function(x, weights = NULL, digits = 3L, ...){
 
 summary_ <- function(data, xvar,
                      weight_var = NULL,
+                     by_var = NULL,
                      ...){
 
   data.table::setDT(data)
 
-  if (is.null(weight_var)){
+  if (is.null(xvar) || is.na(xvar)) stop("A variable name should be provided")
+
+  if (is.null(weight_var) || is.na(weight_var)){
     weight_var <- "tempvar"
     data[, c(weight_var) := 1L]
   }
 
-  summ <- data[,summarize_data_(x = get(xvar), weights = get(weight_var), ...)]
+  if (is.na(by_var)) by_var <- NULL
+
+  summ <- data[,summarize_data_(x = get(xvar), weights = get(weight_var), ...),
+               by = by_var]
 
   if (weight_var == "tempvar") data[, c(weight_var) := NULL]
 
