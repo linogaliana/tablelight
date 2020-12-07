@@ -9,6 +9,7 @@
 \alias{extract_coeff.light.zeroinfl}
 \alias{extract_coeff.fastzeroinfl}
 \alias{extract_coeff.nnet}
+\alias{extract_coeff.mindist}
 \title{Methods to extract coefficients and
 related information from statistical
 models}
@@ -28,6 +29,8 @@ extract_coeff(object, ...)
 \method{extract_coeff}{fastzeroinfl}(object, ...)
 
 \method{extract_coeff}{nnet}(object, ...)
+
+\method{extract_coeff}{mindist}(object, ...)
 }
 \arguments{
 \item{object}{Regression objects}

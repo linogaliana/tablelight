@@ -3,6 +3,7 @@
 \name{listcoeff}
 \alias{listcoeff}
 \alias{listcoeff.light.zeroinfl}
+\alias{listcoeff.mindist}
 \alias{listcoeff.zeroinfl}
 \alias{listcoeff.light.glm}
 \alias{listcoeff.default}
@@ -14,6 +15,8 @@ econometric models}
 listcoeff(object, ...)
 
 \method{listcoeff}{light.zeroinfl}(object, ...)
+
+\method{listcoeff}{mindist}(object, ...)
 
 \method{listcoeff}{zeroinfl}(object, ...)
 

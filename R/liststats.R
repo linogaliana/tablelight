@@ -279,6 +279,24 @@ liststats.light.glm <- function(object, ...){
   return(df)
 }
 
+#' @export
+liststats.mindist <- function(object, ...){
+  
+  if (!inherits(object, "mindist")) stop("Object is not mindist")
+  
+  message("mindist models: only number of moments currently available")
+  
+  args <- list(...)
+  
+  df <- data.frame(
+    stat = c(
+      "Number of moments"),
+    order = seq_len(1L),
+    val = nrow(object$estimates$jacobian)
+  )
+  
+}
+
 
 #' @rdname liststats
 #' @export
