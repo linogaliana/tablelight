@@ -11,6 +11,7 @@ summarize_data_ <- function(x, weights = NULL, digits = 3L,
       "median" = as.numeric(Hmisc::wtd.quantile(x, weights = weights, probs = 0.5, ...)),
       "mean" = as.numeric(Hmisc::wtd.mean(x, weights = weights, ...)),
       "3Q" = as.numeric(Hmisc::wtd.quantile(x, weights = weights, probs = 0.75, ...)),
+      "P90" = as.numeric(Hmisc::wtd.quantile(x, weights = weights, probs = 0.9, ...)),
       "max" = max(x, ...)
     )
   }
@@ -24,8 +25,8 @@ summarize_data_ <- function(x, weights = NULL, digits = 3L,
   )
 
   names(l) <- data.table::data.table(
-    nam = c('Min.', '1st Qu.', 'Median','Mean' ,'3rd Qu.', 'Max'),
-    val = c("min","1Q","median","mean","3Q","max")
+    nam = c('Min.', '1st Qu.', 'Median','Mean' ,'3rd Qu.',"P90", 'Max'),
+    val = c("min","1Q","median","mean","3Q","P90","max")
   )[get('val') %in% stats][['nam']]
 
   return(
@@ -39,7 +40,7 @@ summarize_data_ <- function(x, weights = NULL, digits = 3L,
 summary_ <- function(data, xvar,
                      weight_var = NULL,
                      by_var = NULL,
-                     stats = c("min","1Q","median","mean","3Q","max"),
+                     stats = c("min","1Q","median","mean","3Q", "max"),
                      ...){
 
   data.table::setDT(data)
