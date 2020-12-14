@@ -1,21 +1,45 @@
 #' @param x Numeric Vector to be summarized
-summarize_data_ <- function(x, weights = NULL, digits = 3L, ...){
+summarize_data_ <- function(x, weights = NULL, digits = 3L,
+                            stats = c("min","1Q","median","mean","3Q","max"),
+                            ...){
+
+  summarize_vector <- function(x, weights = NULL, type = "mean", ...){
+    switch(
+      type,
+      "min" = min(x, ...),
+      "1Q" = as.numeric(Hmisc::wtd.quantile(x, weights = weights, probs = 0.25, ...)),
+      "median" = as.numeric(Hmisc::wtd.quantile(x, weights = weights, probs = 0.5, ...)),
+      "mean" = as.numeric(Hmisc::wtd.mean(x, weights = weights, ...)),
+      "3Q" = as.numeric(Hmisc::wtd.quantile(x, weights = weights, probs = 0.75, ...)),
+      "max" = max(x, ...)
+    )
+  }
+
+  l <- lapply(stats, function(st){
+    format(summarize_vector(x = x,
+                     weights = weights,
+                     type = st,
+                     ...
+    ), digits = digits, big.mark = ",")}
+  )
+
+  names(l) <- data.table::data.table(
+    nam = c('Min.', '1st Qu.', 'Median','Mean' ,'3rd Qu.', 'Max'),
+    val = c("min","1Q","median","mean","3Q","max")
+  )[get('val') %in% stats][['nam']]
 
   return(
-    list('Min.' = format(min(x, ...), digits = digits, big.mark = ","),
-         '1st Qu.' = format(as.numeric(Hmisc::wtd.quantile(x, weights = weights, probs = 0.25, ...)), digits = digits, big.mark = ","),
-         'Median' = format(as.numeric(Hmisc::wtd.quantile(x, weights = weights, probs = 0.5, ...)), digits = digits, big.mark = ","),
-         'Mean' = format(as.numeric(Hmisc::wtd.mean(x, weights = weights, ...)), digits = digits, big.mark = ","),
-         '3rd Qu.' = format(as.numeric(Hmisc::wtd.quantile(x, weights = weights, probs = 0.75, ...)), digits = digits, big.mark = ","),
-         'Max' = format(max(x, ...), digits = digits, big.mark = ",")
-    )
+    l
   )
 }
+
+
 
 
 summary_ <- function(data, xvar,
                      weight_var = NULL,
                      by_var = NULL,
+                     stats = c("min","1Q","median","mean","3Q","max"),
                      ...){
 
   data.table::setDT(data)
@@ -29,7 +53,10 @@ summary_ <- function(data, xvar,
 
   if (is.null(by_var) || is.na(by_var)) by_var <- NULL
 
-  summ <- data[,summarize_data_(x = get(xvar), weights = get(weight_var), ...),
+  summ <- data[,summarize_data_(x = get(xvar),
+                                weights = get(weight_var),
+                                stats = stats,
+                                ...),
                by = by_var]
 
   if (weight_var == "tempvar") data[, c(weight_var) := NULL]
