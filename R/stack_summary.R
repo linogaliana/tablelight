@@ -1,7 +1,7 @@
 stack_summary <- function(object, x_vars, type = c("latex","html", "md", "dataframe"), weight_vars = NULL, by = NULL,
                           caption = "", label = "",
                           multirow_labels = NULL, add_rules = FALSE, add.lines = NULL,
-                          stats = c("min","1Q","median","mean","3Q","max"),
+                          stats = c("min","1Q","median","mean","3Q","max","N"),
                           ...){
 
   type <- match.arg(type)
