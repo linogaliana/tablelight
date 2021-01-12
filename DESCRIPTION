@@ -13,6 +13,7 @@ Suggests:
     testthat (>= 2.1.0),
     MASS,
     oglmx,
+    mindist,
     pscl,
     nnet,
     gravity,
@@ -33,4 +34,5 @@ Imports:
     data.table,
     htmltools
 Remotes: 
-    linogaliana/gravity
+    linogaliana/gravity,
+    linogaliana/mindist
