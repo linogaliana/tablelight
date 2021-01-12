@@ -28,6 +28,23 @@ listcoeff.light.zeroinfl <- function(object, ...){
   return(allcoeffs)
 }
 
+
+#' @rdname listcoeff
+#' @export
+listcoeff.mindist <- function(object, ...){
+  
+  if (!inherits(object, "mindist")) stop("Object is not mindist")
+  
+  allcoeffs <- object$estimates$theta_hat
+  
+  allcoeffs <- names(allcoeffs)
+  allcoeffs <- unique(allcoeffs)
+  
+  allcoeffs <- gsub(pattern = "\\_", replacement = "\\\\_", allcoeffs)
+  
+  return(allcoeffs)
+}
+
 #' @rdname listcoeff
 #' @export
 listcoeff.zeroinfl <- function(object, ...){

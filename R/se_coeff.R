@@ -130,6 +130,32 @@ secoeff.negbin <- function(object, ...){
 }
 
 
+#' @rdname secoeff
+#' @export
+secoeff.mindist <- function(object, ...){
+  
+  # When a summary.mindist method will be available, this will be simplified
+  coeffs <- data.frame(
+    "Estimate" = as.numeric(object$estimates$theta_hat),
+    "Std. Error" = as.numeric(object$estimates$se_theta_hat),
+    "z value" =  abs(as.numeric(object$estimates$theta_hat)/as.numeric(object$estimates$se_theta_hat)),
+    "Pr(>|z|)" = pnorm(
+      - abs(
+        abs(as.numeric(object$estimates$theta_hat)/as.numeric(object$estimates$se_theta_hat))
+      )
+    )
+  )
+  
+  colnames(coeffs) <- c("Estimate",
+                        "Std. Error",
+                        "z value",
+                        "Pr(>|z|)")
+  
+  return(coeffs)
+  
+  
+}
+
 
 #' @rdname secoeff
 #' @export

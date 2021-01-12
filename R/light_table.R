@@ -157,33 +157,35 @@ light_table.default <- function(
   visualize = FALSE,
   footprint = FALSE,
   ...){
-
+  
   type <- match.arg(type)
-
+  
   if (missing(adjustbox_width)) adjustbox_width <- NULL
-
+  
   if (inherits(object, "nnet")){
     ncols_models <- length(object$lab[-1])
-  } else{
+  } else if (inherits(object, "mindist")){
+    ncols_models <- 1L
+  } else {
     if (isFALSE(inherits(object, "list"))){
       ncols_models <- 1L
     } else{
       ncols_models <- length(object)
     }
   }
-
-
-
-
+  
+  
+  
+  
   coeff_data <- apply_extract_coeff(object = object,
                                     ncols_models = ncols_models,
                                     type = type,
                                     modeltype = modeltype)
-
-
+  
+  
   # PART I : HEAD -------
-
-
+  
+  
   table_total <- light_table_header(
     ncols_models,
     type = type,
@@ -193,10 +195,10 @@ light_table.default <- function(
     dep.var.separate = dep.var.separate,
     column.labels = column.labels,
     adjustbox_width = adjustbox_width)
-
-
+  
+  
   # PART II : BODY -------
-
+  
   body_table <- light_table_coefficients(
     object = object,
     ncols_models = ncols_models,
@@ -208,9 +210,9 @@ light_table.default <- function(
     reference_level_position = reference_level_position,
     rules_between_covariates = rules_between_covariates
   )
-
+  
   table_total <- c(table_total, body_table)
-
+  
   if (identical(type, "latex")){
     table_total <- c(table_total, "\\hline \\hline \\\\[-1.8ex] ")
   } else{
@@ -218,14 +220,14 @@ light_table.default <- function(
                      sprintf("<tr><td colspan=\"%s\"style=\"border-bottom: 1px solid black\"></td></tr>", ncols_models + 1)
     )
   }
-
-
-
+  
+  
+  
   # PART III: STATISTICS -----
-
+  
   ncols_stats <- ncols_models
   if (!is.null(reference_level_position)) ncols_stats <- ncols_stats + 1
-
+  
   stats_table <- light_table_stats(
     object = object,
     type = type,
@@ -235,27 +237,27 @@ light_table.default <- function(
     stats.digits = stats.digits,
     stats.add = stats.add,
     ...)
-
+  
   table_total <- c(table_total, stats_table)
-
+  
   if (identical(type, "latex")) table_total <- c(table_total,
                                                  "\\hline ",
                                                  "\\hline \\\\[-1.8ex] ")
-
-
+  
+  
   # PART IV: FOOTER -----
-
+  
   foot_table <- light_table_footer(
     ncols_models = ncols_models,
     type = type,
     add.lines = add.lines,
     adjustbox_width = adjustbox_width)
-
+  
   table_total <- c(table_total, foot_table)
-
-
+  
+  
   # ARRANGE OUTPUT ------
-
+  
   # Get one line by <tr> ... </tr> elements
   if (identical(type, "html")){
     table_total <- strsplit(paste(table_total, collapse = ""),
@@ -263,13 +265,13 @@ light_table.default <- function(
     table_total[1:(length(table_total)-1)] <- paste0(table_total[1:(length(table_total)-1)],
                                                      "</tr>")
   }
-
-
+  
+  
   if (landscape && identical(type, "latex")) table_total <- c("\\begin{landscape}", table_total, "\\end{landscape}")
-
+  
   if (identical(type, "html") && isTRUE(visualize)) view_html(table_total)
-
-
+  
+  
   if (isTRUE(footprint)){
     if (type == "latex"){
       table_total <- c(paste0("% Table generated using {tablelight} package",
@@ -285,8 +287,8 @@ light_table.default <- function(
                        table_total)
     }
   }
-
-
+  
+  
   return(table_total)
 }
 

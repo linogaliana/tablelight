@@ -272,6 +272,38 @@ extract_coeff.nnet <- function(object, ...){
 
 }
 
+#' @rdname extract_coeff
+#' @export
+extract_coeff.mindist <- function(object, ...){
+  
+  args <- list(...)
+  
+  coeff_list <- secoeff(object, ...)
+  
+  tstat_var <- "Pr(>|z|)"
+  sd_var <- "Std. Error"
+  
+  
+  text_coeff <- paste0(format(round(coeff_list[,'Estimate'],3L), digits = 3L,
+                              nsmall = 3L, big.mark=",", scientific = FALSE),
+                       sapply(coeff_list[,tstat_var], signif_stars, type = args[['type']])
+  )
+  text_coeff <- gsub(x = text_coeff, pattern = " ", replacement = "")
+  
+  text_sd <- paste0("(",format(round(coeff_list[,sd_var], 3L),
+                               digits = 3L,
+                               nsmall = 3L, big.mark=",", scientific = FALSE),
+                    ")")
+  text_sd <- gsub(x = text_sd, pattern = " ", replacement = "")
+  
+  text_coeff <- cbind("variable" = names(object$estimates$theta_hat),text_coeff, text_sd)
+  text_coeff[,'variable'] <- gsub("_","\\_",text_coeff[,'variable'],
+                                  fixed = TRUE)
+  
+  return(text_coeff)
+}
+
+
 extract_coeff_nnet <- function(object, modality, ...){
 
   args <- list(...)

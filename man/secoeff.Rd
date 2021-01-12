@@ -7,6 +7,7 @@
 \alias{secoeff.oglmx}
 \alias{secoeff.light.zeroinfl}
 \alias{secoeff.negbin}
+\alias{secoeff.mindist}
 \alias{secoeff.summary.lm}
 \alias{secoeff.summary.glm}
 \alias{secoeff.summary.oglmx}
@@ -26,6 +27,8 @@ secoeff(object, ...)
 \method{secoeff}{light.zeroinfl}(object, ...)
 
 \method{secoeff}{negbin}(object, ...)
+
+\method{secoeff}{mindist}(object, ...)
 
 \method{secoeff}{summary.lm}(object, ...)
 
