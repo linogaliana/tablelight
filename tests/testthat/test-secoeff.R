@@ -189,12 +189,67 @@ testthat::test_that("As many rows as number variables + intercept", {
 
 
 testthat::test_that("Values returned are correct", {
- testthat::expect_equal(
-   coeffs[["Estimate"]],
-   t(summary(logit)$coefficients)
- )
+  testthat::expect_equal(
+    coeffs[["Estimate"]],
+    t(summary(logit)$coefficients)
+  )
   testthat::expect_equal(
     coeffs[["Std. Error"]],
     t(summary(logit)$standard.errors)
   )
 })
+
+
+# 8: mindist -----
+
+requireNamespace("mindist", quietly = TRUE)
+
+n <- 1000L
+ncol <- 3
+
+mu <- 2
+sd <- 2
+
+x <- replicate(ncol, rnorm(n))
+
+df <- data.frame(x1 = x[,1], x2 = x[,2],
+                 x3 = x[,3])
+
+df$y <- exp(1 + 2*df$x1) + rnorm(n)
+
+
+# FORMALISM REQUIRED FOR OUR FUNCTIONS
+moment_poisson <- function(theta, ...){
+  return(
+    data.table::data.table(
+      'y' = df$y,
+      'y_hat' = as.numeric(cbind(1L, df$x1) %*% theta),
+      'epsilon' = as.numeric(df$x1*(df$y - exp(cbind(1L, df$x1) %*% theta)))
+    )
+  )
+}
+
+
+msm1 <- mindist::estimation_theta(theta_0 = c("const" = 0.1, "beta1" = 0),
+                                  prediction_function = moment_poisson,
+                                  approach = "two_step")
+
+
+testthat::test_that("We consistently get information from mindist model", {
+
+  testthat::expect_equal(
+    secoeff(msm1)[,'Estimate'],
+    as.numeric(msm1$estimates$theta_hat)
+  )
+  testthat::expect_equal(
+    secoeff(msm1)[,'Std. Error'],
+    as.numeric(msm1$estimates$se_theta_hat)
+  )
+  testthat::expect_equal(
+    secoeff(msm1)[,'z value'],
+    as.numeric(abs(msm1$estimates$theta_hat/msm1$estimates$se_theta_hat))
+  )
+})
+
+
+
