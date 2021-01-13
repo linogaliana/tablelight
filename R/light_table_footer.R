@@ -1,14 +1,17 @@
 light_table_footer <- function(ncols_models, type = c("latex","html"),
                                add.lines,
+                               tabletype = c("regression","summary"),
                                adjustbox_width){
 
   type <- match.arg(type)
+  tabletype <- match.arg(tabletype)
 
   if (type == "latex"){
     return(
       light_table_footer_latex(ncols_models = ncols_models,
                                add.lines = add.lines,
-                               adjustbox_width = adjustbox_width)
+                               adjustbox_width = adjustbox_width,
+                               tabletype = tabletype)
     )
   } else{
     return(
@@ -21,11 +24,17 @@ light_table_footer <- function(ncols_models, type = c("latex","html"),
 }
 
 light_table_footer_latex <- function(ncols_models, add.lines,
-                               adjustbox_width){
+                               adjustbox_width, tabletype = c("regression","summary")){
+
+  tabletype <- match.arg(tabletype)
+
+  footnote <- ifelse(tabletype == "regression",
+                     sprintf("\\multicolumn{%s}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01}", ncols_models),
+                     "")
 
   foot_table <- sprintf(
-    "\\textit{Note:}  & \\multicolumn{%s}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\\\ ",
-    ncols_models
+    "\\textit{Note:}  & %s \\\\ ",
+    footnote
   )
 
   if (isFALSE(is.null(add.lines))){
