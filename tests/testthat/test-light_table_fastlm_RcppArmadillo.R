@@ -3,6 +3,7 @@ testthat::context("[OLS] light_table produces the expected table")
 
 # SINGLE OLS MODEL (RCPPEIGEN) ----------------------------
 
+
 ols <- RcppArmadillo::fastLm(
   Sepal.Length ~ Sepal.Width,
   data = iris
