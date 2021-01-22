@@ -8,29 +8,29 @@
 \alias{extract_coeff.oglmx}
 \alias{extract_coeff.light.zeroinfl}
 \alias{extract_coeff.fastzeroinfl}
-\alias{extract_coeff.nnet}
 \alias{extract_coeff.mindist}
+\alias{extract_coeff.nnet}
 \title{Methods to extract coefficients and
 related information from statistical
 models}
 \usage{
-extract_coeff(object, ...)
+extract_coeff(object, digits = max(3L, getOption("digits") - 3L), ...)
 
-\method{extract_coeff}{default}(object, ...)
+\method{extract_coeff}{default}(object, digits = max(3L, getOption("digits") - 3L), ...)
 
-\method{extract_coeff}{fastLm}(object, ...)
+\method{extract_coeff}{fastLm}(object, digits = max(3L, getOption("digits") - 3L), ...)
 
-\method{extract_coeff}{light.glm}(object, ...)
+\method{extract_coeff}{light.glm}(object, digits = max(3L, getOption("digits") - 3L), ...)
 
-\method{extract_coeff}{oglmx}(object, ...)
+\method{extract_coeff}{oglmx}(object, digits = max(3L, getOption("digits") - 3L), ...)
 
-\method{extract_coeff}{light.zeroinfl}(object, ...)
+\method{extract_coeff}{light.zeroinfl}(object, digits = max(3L, getOption("digits") - 3L), ...)
 
-\method{extract_coeff}{fastzeroinfl}(object, ...)
+\method{extract_coeff}{fastzeroinfl}(object, digits = max(3L, getOption("digits") - 3L), ...)
 
-\method{extract_coeff}{nnet}(object, ...)
+\method{extract_coeff}{mindist}(object, digits = max(3L, getOption("digits") - 3L), ...)
 
-\method{extract_coeff}{mindist}(object, ...)
+\method{extract_coeff}{nnet}(object, digits = max(3L, getOption("digits") - 3L), ...)
 }
 \arguments{
 \item{object}{Regression objects}
