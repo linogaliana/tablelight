@@ -16,7 +16,7 @@ testthat::test_that(
   "summary_",{
     testthat::expect_equal(
       as.numeric(summary_(data = df, xvar = "x", digits = 0L)),
-      as.numeric(round(summary(df$x)))
+      as.numeric(round(c(summary(df$x),length(df$x))))
     )
   }
 )

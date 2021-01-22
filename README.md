@@ -11,6 +11,8 @@ status](https://travis-ci.org/linogaliana/tablelight.svg?branch=master)](https:/
 coverage](https://codecov.io/gh/linogaliana/tablelight/branch/master/graph/badge.svg)](https://codecov.io/gh/linogaliana/tablelight?branch=master)
 [![pipeline
 status](https://gitlab.com/linogaliana/texlight/badges/master/pipeline.svg)](https://gitlab.com/linogaliana/texlight/-/commits/master)
+[![R build
+status](https://github.com/linogaliana/tablelight/workflows/R-CMD-check/badge.svg)](https://github.com/linogaliana/tablelight/actions)
 <!-- badges: end -->
 
 The goal of `tablelight` is to propose functions to generate regression
@@ -22,9 +24,9 @@ The basic idea is to `strip` regression objects from unnecessary fat and
 use the lightened object to produce a regression table. The package
 contains two sets of functions:
 
-  - `strip` function: a set of methods to remove heavier elements from a
+-   `strip` function: a set of methods to remove heavier elements from a
     regression objects ;
-  - `light_table` function: a function to produce `LaTeX` tables (`HTML`
+-   `light_table` function: a function to produce `LaTeX` tables (`HTML`
     tables in a future version).
 
 The package is organized around a set of methods to extract information
@@ -79,7 +81,7 @@ get_required_RAM <- function(profvis_object){
   )
 }
 get_required_RAM(profvis(summary(regression)))
-#> [1] 15.259
+#> [1] 30.65924
 ```
 
 To produce a regression table, that’s a deadly combo: you need to store
@@ -141,7 +143,7 @@ regression2 <- lm(y ~ x, df2)
 get_required_RAM(profvis(
   capture.output(stargazer::stargazer(regression1, regression2)))
 )
-#> [1] 126.4715
+#> [1] 0
 ```
 
 With `tablelight`, you will :
@@ -150,8 +152,6 @@ With `tablelight`, you will :
 2.  Use `light_table` to produce the output. Models should be provided
     as a list:
 
-<!-- end list -->
-
 ``` r
 regression1 <- tablelight::strip(lm(y ~ x, df))
 regression2 <- tablelight::strip(lm(y ~ x, df2))
@@ -159,10 +159,10 @@ regression2 <- tablelight::strip(lm(y ~ x, df2))
 get_required_RAM(profvis(
   capture.output(light_table(list(regression1, regression2))))
 )
-#> [1] 0.9826584
+#> [1] 0
 ```
 
-This is, approximatively,  times less memory needed.
+This is, approximatively, NaN times less memory needed.
 
 The package produces table very similar in appearance with `stargazer`,
 for instance:
