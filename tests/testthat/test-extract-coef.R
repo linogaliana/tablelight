@@ -10,7 +10,7 @@ glm <- glm(
   data = iris,
   family = poisson()
 )
-stats_glm <- tablelight::extract_coeff(glm)
+stats_glm <- tablelight::extract_coeff(glm, digits = 3L)
 
 testthat::test_that("Coefficient names are consistent", {
   testthat::expect_equal(
@@ -58,7 +58,7 @@ glm <- glm(
 
 light_glm <- tablelight::strip(glm)
 
-stats_glm <- tablelight::extract_coeff(light_glm)
+stats_glm <- tablelight::extract_coeff(light_glm, digits = 3L)
 
 testthat::test_that("Coefficient names are consistent", {
   testthat::expect_equal(
@@ -116,9 +116,9 @@ testthat::test_that("When modeltype = 'missing', outcome is used", {
 }
 )
 
-ZINB_outcome <- tablelight::extract_coeff(zeroinfl_negbin_strip, modeltype = "outcome")
-ZINB_zero <- tablelight::extract_coeff(zeroinfl_negbin_strip, modeltype = "zeros")
-ZINB_selection <- tablelight::extract_coeff(zeroinfl_negbin_strip, modeltype = "selection")
+ZINB_outcome <- tablelight::extract_coeff(zeroinfl_negbin_strip, modeltype = "outcome", digits = 3L)
+ZINB_zero <- tablelight::extract_coeff(zeroinfl_negbin_strip, modeltype = "zeros", digits = 3L)
+ZINB_selection <- tablelight::extract_coeff(zeroinfl_negbin_strip, modeltype = "selection", digits = 3L)
 
 output_glm <- summary(zeroinfl_negbin)$coefficients
 
@@ -249,9 +249,9 @@ testthat::test_that("When modeltype = 'missing', outcome is used", {
 }
 )
 
-ZINB_outcome <- tablelight::extract_coeff(zeroinfl_negbin, modeltype = "outcome")
-ZINB_zero <- tablelight::extract_coeff(zeroinfl_negbin, modeltype = "zeros")
-ZINB_selection <- tablelight::extract_coeff(zeroinfl_negbin, modeltype = "selection")
+ZINB_outcome <- tablelight::extract_coeff(zeroinfl_negbin, modeltype = "outcome", digits = 3L)
+ZINB_zero <- tablelight::extract_coeff(zeroinfl_negbin, modeltype = "zeros", digits = 3L)
+ZINB_selection <- tablelight::extract_coeff(zeroinfl_negbin, modeltype = "selection", digits = 3L)
 
 output_glm <- summary(zeroinfl_negbin)$coefficients
 
@@ -467,17 +467,17 @@ testthat::test_that("Coefficients are okay", {
 
   testthat::expect_equal(
     expected_coeff_modal0,
-    extract_coeff(logit, modality = "0")[,"text_coeff"]
+    extract_coeff(logit, modality = "0", digits = 3L)[,"text_coeff"]
   )
 
   testthat::expect_equal(
     expected_coeff_modal1,
-    extract_coeff(logit, modality = "1")[,"text_coeff"]
+    extract_coeff(logit, modality = "1", digits = 3L)[,"text_coeff"]
   )
 
   testthat::expect_equal(
     expected_coeff_modal2,
-    extract_coeff(logit, modality = "2")[,"text_coeff"]
+    extract_coeff(logit, modality = "2", digits = 3L)[,"text_coeff"]
   )
 
 })
@@ -487,17 +487,17 @@ testthat::test_that("Standard errors are okay", {
 
   testthat::expect_equal(
     expected_sd_modal0,
-    extract_coeff(logit, modality = "0")[,"text_sd"]
+    extract_coeff(logit, modality = "0", digits = 3L)[,"text_sd"]
   )
 
   testthat::expect_equal(
     expected_sd_modal1,
-    extract_coeff(logit, modality = "1")[,"text_sd"]
+    extract_coeff(logit, modality = "1", digits = 3L)[,"text_sd"]
   )
 
   testthat::expect_equal(
     expected_sd_modal2,
-    extract_coeff(logit, modality = "2")[,"text_sd"]
+    extract_coeff(logit, modality = "2", digits = 3L)[,"text_sd"]
   )
 
 })
@@ -533,17 +533,18 @@ testthat::test_that("Coefficients are okay", {
 
   testthat::expect_equal(
     expected_coeff_modal0,
-    extract_coeff(logit, modality = "0", type = "html")[,"text_coeff"]
+    extract_coeff(logit, modality = "0", type = "html", digits = 3L)[,"text_coeff"]
   )
 
   testthat::expect_equal(
     expected_coeff_modal1,
-    extract_coeff(logit, modality = "1", type = "html")[,"text_coeff"]
+    extract_coeff(logit, modality = "1", type = "html", digits = 3L)[,"text_coeff"]
   )
 
   testthat::expect_equal(
     expected_coeff_modal2,
-    extract_coeff(logit, modality = "2", type = "html")[,"text_coeff"]
+    extract_coeff(logit, modality = "2", type = "html", digits = 3L)[,"text_coeff"]
   )
 
 })
+
