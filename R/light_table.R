@@ -154,7 +154,7 @@ light_table.default <- function(
   omit = NULL,
   landscape = FALSE,
   adjustbox_width = c(NULL, 1.1),
-  visualize = FALSE,
+  visualize = TRUE,
   footprint = FALSE,
   ...){
 
@@ -268,10 +268,13 @@ light_table.default <- function(
   }
 
 
+  class(table_total) <- c(
+    "tablelight",
+    class(table_total)
+    )
+
+
   if (landscape && identical(type, "latex")) table_total <- c("\\begin{landscape}", table_total, "\\end{landscape}")
-
-  if (identical(type, "html") && isTRUE(visualize)) view_html(table_total)
-
 
   if (isTRUE(footprint)){
     if (type == "latex"){
@@ -289,6 +292,9 @@ light_table.default <- function(
     }
   }
 
+  if (identical(type, "html") && isTRUE(visualize)){
+    table_total
+  }
 
   return(table_total)
 }
