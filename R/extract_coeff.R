@@ -298,18 +298,17 @@ extract_coeff_nnet <- function(object, modality, digits = max(3L, getOption("dig
   coeff_list_red <- lapply(names(coeff_list), function(elem){
     coeff_list[[elem]][,as.character(modality)]
   })
-  coeff_list_red <- data.frame(coeff_list_red)
   names(coeff_list_red) <- names(coeff_list)
 
-  text_coeff <- paste0(format_number(coeff_list_red[,'Estimate'], digits = digits),
-                       sapply(coeff_list_red[,tstat_var], signif_stars, type = args[['type']])
+  text_coeff <- paste0(format_number(coeff_list_red[['Estimate']], digits = digits),
+                       sapply(coeff_list_red[[tstat_var]], signif_stars, type = args[['type']])
   )
   text_coeff <- gsub(x = text_coeff, pattern = " ", replacement = "")
 
-  text_sd <- sprintf("(%s)", format_number(coeff_list_red[,se_var], digits = digits))
+  text_sd <- sprintf("(%s)", format_number(coeff_list_red[[se_var]], digits = digits))
   text_sd <- gsub(x = text_sd, pattern = " ", replacement = "")
 
-  text_coeff <- data.frame("variable" = colnames(coeff_list_red),
+  text_coeff <- data.frame("variable" = names(coeff_list_red[[1]]),
                            "text_coeff" = text_coeff, "text_sd" = text_sd,
                            stringsAsFactors = FALSE)
   text_coeff[,'variable'] <- gsub("_","\\_",text_coeff[,'variable'],
