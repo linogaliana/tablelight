@@ -16,6 +16,7 @@ Suggests:
     pscl,
     nnet,
     gravity,
+    mindist,
     stringr,
     covr,
     qdap,
@@ -33,4 +34,5 @@ Imports:
     data.table,
     htmltools
 Remotes: 
-    linogaliana/gravity
+    linogaliana/gravity,
+    linogaliana/mindist
