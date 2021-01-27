@@ -18,11 +18,11 @@ summarize_data_ <- function(x, weights = NULL, digits = 3L,
   }
 
   l <- lapply(stats, function(st){
-    format(summarize_vector(x = x,
+    format_number(summarize_vector(x = x,
                      weights = weights,
                      type = st,
                      ...
-    ), digits = digits, big.mark = ",")}
+    ), digits = digits)}
   )
 
   names(l) <- data.table::data.table(
