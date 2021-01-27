@@ -8,6 +8,7 @@ df <- data.frame(
 tablelight:::stack_summary(df, x_vars = c("x"))
 tablelight:::stack_summary(list(df, df), x_vars = c("x","y"))
 
+
 testthat::expect_equal(
   tablelight:::stack_summary(df, x_vars = c("x"),
                            stats = c("1Q","mean",'median','3Q','P90','N')),

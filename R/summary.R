@@ -25,10 +25,15 @@ summarize_data_ <- function(x, weights = NULL, digits = 3L,
     ), digits = digits)}
   )
 
-  names(l) <- data.table::data.table(
+  correspondance <- data.table::data.table(
     nam = c('Min.', '1st Qu.', 'Median','Mean' ,'3rd Qu.',"P90", 'Max',"Num. obs."),
     val = c("min","1Q","median","mean","3Q","P90","max","N")
-  )[get('val') %in% stats][['nam']]
+  )[get('val') %in% stats]
+  # correspondance[, c('val') := factor(get('val'), levels = stats,
+  #                                     ordered = TRUE)]
+  # correspondance <- correspondance[order(get('val'))]
+
+  names(l) <- correspondance[['nam']]
 
   return(
     l
