@@ -15,7 +15,7 @@ stack_summary <- function(object, x_vars, type = c("latex","html", "md", "datafr
     x_vars <- rep(x_vars, times = length(object))
   }
 
-  if (inherits(object, "data.frame")) object <- list(EP_2015)
+  if (inherits(object, "data.frame")) object <- list(object)
 
 
   # COMPUTE SUMMARY STATS -------------------
