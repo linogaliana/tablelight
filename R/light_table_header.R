@@ -10,7 +10,8 @@ light_table_header <- function(ncols_models,
                                dep.var.labels = "Label dep.var.labels",
                                dep.var.separate = NULL,
                                column.labels = "blab",
-                               adjustbox_width = c(NULL, 1.1)){
+                               adjustbox_width = c(NULL, 1.1),
+                               reference_level_position = NULL){
 
   type <- match.arg(type)
 
@@ -22,7 +23,8 @@ light_table_header <- function(ncols_models,
                              dep.var.labels = dep.var.labels,
                              dep.var.separate = dep.var.separate,
                              column.labels = column.labels,
-                             adjustbox_width = adjustbox_width)
+                             adjustbox_width = adjustbox_width,
+                             reference_level_position = reference_level_position)
   )
   } else{
 
@@ -45,12 +47,15 @@ light_table_header_latex <- function(ncols_models,
                                dep.var.labels = "Label dep.var.labels",
                                dep.var.separate = NULL,
                                column.labels = "blab",
-                               adjustbox_width = c(NULL, 1.1)){
+                               adjustbox_width = c(NULL, 1.1),
+                               reference_level_position = reference_level_position){
 
   header <- sprintf("\\begin{table}[!htbp] \\centering
   \\caption{%s}
   \\label{%s}", title, label)
 
+  ncols_table <- ncols_models
+  if (!is.null(reference_level_position)) ncols_table <- ncols_table + 1L
 
   tabular_header <- sprintf(
     "\\begin{tabular}{@{\\extracolsep{5pt}}l%s}
