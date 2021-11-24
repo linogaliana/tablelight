@@ -3,6 +3,7 @@
 \name{strip}
 \alias{strip}
 \alias{strip.glm}
+\alias{strip.fastglm}
 \alias{strip.oglmx}
 \alias{strip.negbin}
 \alias{strip.lm}
@@ -17,6 +18,8 @@
 strip(object, ...)
 
 \method{strip}{glm}(object, ...)
+
+\method{strip}{fastglm}(object, ...)
 
 \method{strip}{oglmx}(object, ...)
 

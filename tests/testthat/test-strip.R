@@ -416,4 +416,63 @@ testthat::test_that("link_selection is empty", {
   )
 })
 
+# fastglm --------------------
 
+
+x <- matrix(rnorm(10000 * 100), ncol = 100)
+y <- 1 * (0.25 * x[,1] - 0.25 * x[,3] > rnorm(10000))
+object <- fastglm::fastglm(x, y, family = binomial(), method = 2)
+
+object_light <- strip(object)
+summary_light <- strip(summary(object))
+
+testthat::test_that("New class light.", {
+  testthat::expect_equal(class(object_light),
+                         c("light.glm", paste0("light.", class(object)),
+                           class(object)))
+})
+
+
+testthat::test_that('stripped summary is just summary without dev.res', {
+  testthat::expect_equal(
+    names(summary(object))[!(names(summary(object)) %in% c("weights","residuals", "fitted.values"))],
+    names(summary_light)
+  )
+})
+
+
+
+testthat::test_that("Observations field is same than nobs(.)", {
+  testthat::expect_equal(
+    object_light$n,
+    length(object$fitted.values)
+  )
+})
+
+testthat::test_that("loglikelihood field is same than Loglik(.)", {
+  testthat::expect_equal(
+    object_light$loglikelihood,
+    as.numeric(logLik(object))
+  )
+})
+
+testthat::test_that("bic field is same than BIC(.)", {
+  testthat::expect_equal(
+    object_light$bic,
+    BIC(object)
+  )
+})
+
+testthat::test_that("link_count is 'Gaussian'", {
+  testthat::expect_equal(
+    object_light$link_count,
+    Hmisc::capitalize(object$family$link)
+  )
+})
+
+testthat::test_that("link_selection is empty", {
+  testthat::expect_equal(
+    object_light$link_selection,
+    ""
+  )
+})

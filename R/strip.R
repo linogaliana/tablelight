@@ -31,6 +31,9 @@ strip.glm <- function(object, ...) {
   if (inherits(object, "negbin")) return(
     strip.negbin(object, ...)
   )
+  if (inherits(object, "fastglm")) return(
+    strip.fastglm(object, ...)
+  )
 
 
   summary_object <- summary(object)
@@ -65,12 +68,54 @@ strip.glm <- function(object, ...) {
   attr(object$terms,".Environment") = c()
   attr(object$formula,".Environment") = c()
 
-
   class(object) <- c("light.glm", class(object))
+
 
   return(object)
 }
 
+
+#' @rdname strip
+#' @export
+strip.fastglm <- function(object, ...) {
+
+  summary_object <- summary(object)
+
+  object$coefficients <- secoeff(summary_object)
+  object$n <- length(summary_object$deviance.resid)
+  llk <- stats::logLik(object)
+  object$loglikelihood <- as.numeric(llk)
+  object$bic <- as.numeric(BIC(llk))
+  object$link_count <- as.character(object$family$link)
+  object$link_selection <- ""
+
+  object$y = c()
+  object$model = c()
+
+  object$residuals = c()
+  object$fitted.values = c()
+  object$effects = c()
+  object$offset = c()
+  object$qr$qr = c()
+  object$linear.predictors = c()
+  object$weights = c()
+  object$prior.weights = c()
+  object$data = c()
+
+
+  object$family$variance = c()
+  #object$family$dev.resids = c()
+  #object$family$aic = c()
+  object$family$validmu = c()
+  object$family$simulate = c()
+  attr(object$terms,".Environment") = c()
+  attr(object$formula,".Environment") = c()
+
+
+  class(object) <- c("light.glm", "light.fastglm", class(object))
+
+  return(object)
+}
 
 #' @rdname strip
 #' @export
